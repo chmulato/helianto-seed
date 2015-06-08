@@ -1,17 +1,16 @@
 package com.iservport.testit.config;
 
+import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import org.helianto.core.config.HeliantoConfig;
+import org.helianto.core.config.HeliantoServiceConfig;
 import org.hibernate.ejb.HibernatePersistence;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -36,7 +35,7 @@ import com.fasterxml.jackson.datatype.hibernate3.Hibernate3Module;
  */
 @Configuration
 @EnableWebMvc
-@Import({HeliantoConfig.class})
+@Import({HeliantoServiceConfig.class})
 @ComponentScan(
 		basePackages = {
 				"com.iservport.*.repository"
@@ -49,22 +48,30 @@ import com.fasterxml.jackson.datatype.hibernate3.Hibernate3Module;
 		})
 public class RootContextConfig extends WebMvcConfigurerAdapter {
 	
+	@Inject
+	private DataSource dataSource;
+	
+	@Inject
+	private JpaVendorAdapter vendorAdapter;
+	
+	/**
+	 * Bean para codificar senhas com algorítimo BCrypt.
+	 */
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Autowired
-	private Environment env;
-	
-	@Autowired
-	private DataSource dataSource;
-	
-	@Autowired
-	private JpaVendorAdapter vendorAdapter;
+	/**
+	 * Bean para codificação de notificações com algorítimo Md5.
+	 */
+	@Bean
+	public Md5PasswordEncoder notificationEncoder() {
+		return new Md5PasswordEncoder();
+	}
 	
 	/**
-	 * Substitui a configuração original do <code>EntityManagerFactory</code>
+	 * Bean que substitui a configuração original do <code>EntityManagerFactory</code>
 	 * para incluir novos pacotes onde pesquisar por entidades persistentes.
 	 */
 	@Bean 
@@ -79,7 +86,7 @@ public class RootContextConfig extends WebMvcConfigurerAdapter {
 	}
 	
 	/**
-	 * Para conexão com fontes de dados via JNDI.
+	 * Bean para conexão com fontes de dados via JNDI.
 	 * 
 	 * @throws IllegalArgumentException
 	 * @throws NamingException
@@ -131,14 +138,6 @@ public class RootContextConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/assets/**").addResourceLocations("classpath:/assets/**").setCachePeriod(31556926);
         registry.addResourceHandler("/views/**").addResourceLocations("classpath:/views/**").setCachePeriod(31556926);
 	}	                    
-	
-	/**
-	 * Para codificação de senhas.
-	 */
-	@Bean
-	public Md5PasswordEncoder notificationEncoder() {
-		return new Md5PasswordEncoder();
-	}
 	
 	/**
 	 * Registra um interceptador para troca de Locale.

@@ -3,6 +3,7 @@
     <groupId>com.iservport</groupId>
     <artifactId>iservport-testit</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
   
     <name>iservport-testit</name>
   
@@ -366,10 +367,15 @@
 			</exclusions>
 		</dependency>
 
+   		<dependency>
+   			<groupId>org.helianto</groupId>
+   			<artifactId>helianto-security</artifactId>
+   			<version>0.4.3-SNAPSHOT</version>
+   		</dependency>
 	</dependencies>
 	
 	<build>
-		<finalName>iservport-ubivis</finalName>
+		<finalName>iservport-testit</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
