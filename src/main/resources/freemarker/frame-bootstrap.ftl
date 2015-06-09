@@ -89,7 +89,7 @@
 	    	<div class="row">
 	    	<div data-iservport-title  class="col-md-12"></div><!-- title -->
 	     	</div>
-	     	<div class="row" data-ng-include="'/ng/${baseName}/selection-${baseName}.html'"></div>
+	     	<div class="row" data-ng-include="'/assets/${baseName}/selection-${baseName}.html'"></div>
 	    	</div>
 		</div><!-- end of page -->
 	    <div id="info" class="panel panel-default">
@@ -123,13 +123,13 @@
 	<script type="text/javascript" src="/webjars/angular-ui-utils/0.1.1/ui-utils.min.js"></script>
     <!-- Redactor -->
     <script src="/redactor/redactor.min.js"></script>
-	<script type="text/javascript" src="/ng/angular-redactor.js"> </script>
+	<script type="text/javascript" src="/assets/angular-redactor.js"> </script>
 	<!-- i18n para linguagem--> 
-    <script type="text/javascript" src='/ng/_i18n/i18n-${locale!'pt-br'}.js'></script>
-    <script type="text/javascript" src='/ng/_i18n/i18n-${baseName}-${locale!'pt-br'}.js'></script>
+    <script type="text/javascript" src='/assets/_i18n/i18n-${locale!'pt-br'}.js'></script>
+    <script type="text/javascript" src='/assets/_i18n/i18n-${baseName}-${locale!'pt-br'}.js'></script>
     <!-- Services to apps-->
-	<script type="text/javascript" src="/ng/services.js"></script>
-	<script type="text/javascript" src="/ng/${baseName}/ng-${baseName}-module.js"></script>
+	<script type="text/javascript" src="/assets/services.js"></script>
+	<script type="text/javascript" src="/assets/${baseName}/ng-${baseName}-module.js"></script>
 	[#if customControllerBody??]
 	<script type="text/javascript" >
 		var app = angular.module(${baseName});
