@@ -26,8 +26,6 @@
 	<!--[if lte IE 7]>
 		<script src="/webjars/json3/3.3.2/json3.min.js"></script>
 	<![endif]-->
-    <!-- Redactor -->
-    <link rel="stylesheet" href="/redactor/redactor.css" />
 	<!-- iservport css extension -->
 	<link rel='stylesheet' href='/css/iservport.css'>
 	
@@ -45,11 +43,8 @@
     <!-- script type="text/javascript" src="/webjars/ckeditor/4.4.1/ckeditor.js"> </script-->
     <!-- Js padrão
     <script type="text/javascript" src='/js/defaut.js'></script>-->
-    <!-- L20N -->
-    <script type="text/javascript" src='/js/l20n.min.js'></script>
     <link rel="localization"  href="/locales/manifest.json">
     <!-- i18n para menu -->
-    <script type="text/javascript" src='/ng/_i18n/menu-pt-BR.js'></script>
     <script type="text/javascript">var externalId = ${externalId!0};</script>
     
 	<link type="image/x-icon" href="/images/favicon.ico" rel="shortcut icon">
@@ -76,7 +71,7 @@
 	<!-- 
 	 ! Conteúdo principal
 	 ! -->
-	<div class="main-container" data-ng-controller="ViewController as viewCtrl">
+	<div class="main-container" >
 	
 	    <aside id="nav-container" 
 	    	class="nav-container nav-fixed nav-vertical bg-white">
@@ -91,10 +86,13 @@
 	     	</div>
 	     	<div class="row" data-ng-include="'/assets/${baseName}/selection-${baseName}.html'"></div>
 	    	</div>
+	    	
+	    	
 		</div><!-- end of page -->
 	    <div id="info" class="panel panel-default">
 			<div class="panel-body" data-iservport-info ></div><!-- info -->
 		</div><!-- panel -->
+		
 		</section>
 	    </div><!--content-->
 		</div><!--main-container-->
@@ -117,16 +115,8 @@
 	<script type="text/javascript" src="/webjars/angularjs/1.3.1/angular-route.min.js"></script>
 	<script type="text/javascript" src="/webjars/angularjs/1.3.1/angular-cookies.min.js"></script>
 	<script type="text/javascript" src="/webjars/angularjs/1.3.1/angular-animate.min.js"></script>
-	<script type="text/javascript" src="/webjars/angularjs/1.3.1/i18n/angular-locale_${locale!'pt-br'}.js"></script>
-	<script type="text/javascript" src="/webjars/angular-loading-bar/0.7.1/loading-bar.min.js"></script>
 	<script type="text/javascript" src="/webjars/angular-ui-bootstrap/0.11.2/ui-bootstrap-tpls.js"></script>
 	<script type="text/javascript" src="/webjars/angular-ui-utils/0.1.1/ui-utils.min.js"></script>
-    <!-- Redactor -->
-    <script src="/redactor/redactor.min.js"></script>
-	<script type="text/javascript" src="/assets/angular-redactor.js"> </script>
-	<!-- i18n para linguagem--> 
-    <script type="text/javascript" src='/assets/_i18n/i18n-${locale!'pt-br'}.js'></script>
-    <script type="text/javascript" src='/assets/_i18n/i18n-${baseName}-${locale!'pt-br'}.js'></script>
     <!-- Services to apps-->
 	<script type="text/javascript" src="/assets/services.js"></script>
 	<script type="text/javascript" src="/assets/${baseName}/ng-${baseName}-module.js"></script>

@@ -1,3 +1,25 @@
+<!--  <div class="nav-wrapper">
+    <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 100%;">
+    <ul id="nav"
+        class="nav"
+		data-slim-scroll
+        data-collapse-nav
+        data-highlight-active
+        style="overflow: hidden; width: auto; height: 100%;">
+        -->
+		<!--
+		 ! Home
+		 !-->
+		 <!--  
+		<li role="presentation"  > 
+			<a href="/app/home">
+	        	<i class="fa fa-home"></i>  <span>Home</span>
+	    	</a>
+		</li>
+    </ul>
+	</div>
+	</div>
+-->	
 <div class="nav-wrapper">
     <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 100%;">
     <ul id="nav"
@@ -11,9 +33,130 @@
 		 !-->
 		<li role="presentation"  > 
 			<a href="/app/home">
-	        	<i class="fa fa-home"></i>  <span>Home</span>
+	        	<i class="fa fa-home"></i>  <!-- {{menu.dashboard}} --><span>Home</span>
 	    	</a>
 		</li>
+		<!--
+		 ! Ordens 
+		 ! -->
+		<li data-ng-show="showMenuItem('Y')" data-ng-class="{open: '${baseName}'=='order'}" >
+			<a data-ng-href="/app/order/" >
+	        	<i class="fa fa-cogs"></i>  <!-- {{menu.orders}} --><span>Ordens</span>
+			</a>
+			<ul data-ng-if="'${baseName}'=='order'" style="display: block;" >
+			   <li data-ng-class="{active:isSectionTabSet(1)}" > 
+			    	<a data-ng-click="setSectionTab(1)">
+			        	<i class="fa fa-angle-right"></i>
+			        	Serviços
+			       </a>
+			   </li>
+			   <li data-ng-class="{active:isSectionTabSet(2)}" > 
+			    	<a data-ng-click="setSectionTab(2)">
+			        	<i class="fa fa-angle-right"></i>
+						Produtos
+			       </a>
+			   </li>
+			</ul>
+		</li>
+		<!--
+		 ! Indicadores -> IndicatorSearchController
+		 !
+		<li >
+			<a data-ng-href="/app/indicator/" >
+	        	<i class="fa fa-home"></i> {{menu.indicators}}</a>
+		</li>-->
+		<!--
+		 ! Planos: tarefas -> ReportSearchController
+		 !-->
+		<li >
+			<a data-ng-href="/app/report/" >
+	        	<i class="fa fa-thumb-tack"></i> <span>Tarefas</span>
+	        </a>
+		</li>
+		<!--
+		 ! Conteúdo
+		 !-->
+		<li data-ng-class="{open: '${baseName}'=='content'}" >
+			<a data-ng-href="/app/content/" >
+	        	<i class="fa fa-book"></i>  <!-- {{menu.contents}} --><span>Conteúdo</span>
+			</a>
+			<!--  <ul data-ng-if="'${baseName}'=='content'" style="display: block;" >
+			   <li data-ng-repeat="qualifierItem in qualifiers"> 
+			    	<a data-ng-click="setQualifier(qualifierItem)">
+			        	<i class="fa fa-angle-right"></i> 
+			        	{{qualifierItem.qualifierName | i18n}}
+			       </a>
+			   </li>
+			</ul>
+			-->
+		</li>
+		<!--
+		 ! Instrumentos
+		 !-->
+		<li data-ng-show="showMenuItem('I')">
+			<a data-ng-href="{{isAuthorized('USER', 'READ') ? '/app/instrument/' : '#'}}" >
+	        	<i class="glyphicon glyphicon-scale"></i>  <!-- {{menu.instruments}} --><span>Instrumentos</span>
+			</a>
+		</li>
+		<!--
+		 ! Manutenção
+		 !-->
+		<li >
+			<a data-ng-href="{{isAuthorized('MAINT', 'READ') ? '/app/resource/' : '#'}}" >
+	        	<i class="fi-wrench"></i>  <!-- {{menu.maintenances}} --><span>Manutenção</span>
+			</a>
+		</li>
+		<!--
+		 ! Pessoas
+		 !-->
+		<li >
+			<a data-ng-href="{{isAuthorized('USER', 'READ') ? '/app/user/' : '#'}}" >
+	        	<i class="fi-torsos-all"></i>  <!-- {{menu.groups}} --><span>Pessoas</span>
+			</a>
+		</li>
+		<!--
+		 ! Ações
+		 !-->
+		<li data-ng-class="{open: '${baseName}'=='action'}" >
+			<a data-ng-href="{{isAuthorized('USER', 'READ') ? '/app/action/' : '#'}}" >
+	        	<i class="fa fa-tasks"></i>  <!-- {{menu.actionPlans}} --><span>Ações</span>
+			</a>
+			<ul data-ng-if="'${baseName}'=='action'" style="display: block;" >
+			   <li data-ng-repeat="qualifierItem in qualifiers"> 
+			    	<a data-ng-click="setQualifier(qualifierItem)">
+			        	<i class="fa fa-angle-right"></i> 
+			        	<!-- {{qualifierItem.qualifierName | i18n}}  -->
+			       </a>
+			   </li>
+			</ul>
+		</li>
+		<!--
+		 ! Análises
+		 !-->
+		<li >
+			<a data-ng-href="{{isAuthorized('REVIEW', 'READ') ? '/app/review/' : '#'}}" >
+	        	<i class="fi-results"></i>  <!-- {{menu.reviews}} --><span>Análises</span>
+			</a>
+		</li>
+		<!--
+		 ! Contatos -> PartnerSearchController
+		 !-->
+		<li >
+			<a data-ng-href="{{isAuthorized('USER', 'READ') ? '/app/partner/' : '#'}}" >
+	        	<i class="fi-address-book"></i>  <!-- {{menu.partner}} --><span>Contatos</span>
+			</a>
+		</li>
+		
+		<!--
+		 ! Categorias -> CategorySearchController
+		 !-->
+		<li >
+			<a data-ng-href="{{isAuthorized('USER', 'READ') ? '/app/category/' : '#'}}" >
+				<i class="fa fa-cog"></i>  <!-- {{menu.partner}} --><span>Categorias</span>
+			</a>
+		</li>
+		
     </ul>
 	</div>
 </div>
+

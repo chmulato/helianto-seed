@@ -20,7 +20,7 @@ public class LoginController {
 	 */
 	@RequestMapping(value={"/", ""}, method=RequestMethod.GET)
 	public String signin( String error, Model model, @RequestParam(required = false) String logout ) {
-	
+		model.addAttribute("baseName", "security");
 		if (error!=null && error.equals("1")) {
 			model.addAttribute("error", "1");
 		}

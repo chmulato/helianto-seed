@@ -41,12 +41,18 @@ import com.fasterxml.jackson.datatype.hibernate3.Hibernate3Module;
 				"com.iservport.*.repository"
 				, "com.iservport.*.service"
 				, "com.iservport.*.controller"
+				, "org.helianto.*.controller"
 		})
 @EnableJpaRepositories(
 		basePackages={
 				"com.iservport.*.repository"
 		})
 public class RootContextConfig extends WebMvcConfigurerAdapter {
+	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 	
 	@Inject
 	private DataSource dataSource;
@@ -55,23 +61,7 @@ public class RootContextConfig extends WebMvcConfigurerAdapter {
 	private JpaVendorAdapter vendorAdapter;
 	
 	/**
-	 * Bean para codificar senhas com algorítimo BCrypt.
-	 */
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
-	/**
-	 * Bean para codificação de notificações com algorítimo Md5.
-	 */
-	@Bean
-	public Md5PasswordEncoder notificationEncoder() {
-		return new Md5PasswordEncoder();
-	}
-	
-	/**
-	 * Bean que substitui a configuração original do <code>EntityManagerFactory</code>
+	 * Substitui a configuração original do <code>EntityManagerFactory</code>
 	 * para incluir novos pacotes onde pesquisar por entidades persistentes.
 	 */
 	@Bean 
@@ -86,7 +76,7 @@ public class RootContextConfig extends WebMvcConfigurerAdapter {
 	}
 	
 	/**
-	 * Bean para conexão com fontes de dados via JNDI.
+	 * Para conexão com fontes de dados via JNDI.
 	 * 
 	 * @throws IllegalArgumentException
 	 * @throws NamingException
@@ -106,7 +96,7 @@ public class RootContextConfig extends WebMvcConfigurerAdapter {
 	 * @throws NamingException 
 	 * @throws IllegalArgumentException 
 	 */
-	@Bean
+	@Bean(name="jdbc/ubivisDB")
 	public DataSource dataSource() throws IllegalArgumentException, NamingException {
 		return (DataSource) jndiObjectFactoryBean();
 	}
@@ -138,6 +128,14 @@ public class RootContextConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/assets/**").addResourceLocations("classpath:/assets/**").setCachePeriod(31556926);
         registry.addResourceHandler("/views/**").addResourceLocations("classpath:/views/**").setCachePeriod(31556926);
 	}	                    
+	
+	/**
+	 * Para codificação de senhas.
+	 */
+	@Bean
+	public Md5PasswordEncoder notificationEncoder() {
+		return new Md5PasswordEncoder();
+	}
 	
 	/**
 	 * Registra um interceptador para troca de Locale.

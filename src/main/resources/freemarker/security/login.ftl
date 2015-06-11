@@ -33,7 +33,7 @@
 		var email = [#if email??]'${email}' [#else]''[/#if];
 	</script>
 	
-	<h3 align="middle">Bem vindo ao <strong>iservport</strong></h3>
+	<h3 align="middle">Bem vindo ao <strong>Testit</strong></h3>
 	<p align="middle">O iservport é um aplicativo de produtividade para o seu sistema de gestão.</p>
 	<br/>
 	
@@ -154,12 +154,11 @@
 	<script type="text/javascript" src="/webjars/angularjs/1.3.1/angular-resource.js"></script>
 	<script type="text/javascript" src="/webjars/angularjs/1.3.1/angular-route.min.js"></script>
 	<script type="text/javascript" src="/webjars/angularjs/1.3.1/angular-cookies.min.js"></script>
-	<script type="text/javascript" src="/webjars/angularjs/1.3.1/i18n/angular-locale_${locale!'pt-br'}.js"></script>
 	<script type="text/javascript" src="/webjars/angular-ui-bootstrap/0.11.2/ui-bootstrap-tpls.js"></script>
 	<script type="text/javascript" src="/webjars/angular-ui-utils/0.1.1/ui-utils.min.js"></script>
 
-	<script type="text/javascript" src="/ng/security/ng-security-module.js"></script>
-	<script type="text/javascript" src="/ng/services.js"></script>
+	<script type="text/javascript" src="/assets/security/ng-security-module.js"></script>
+	<script type="text/javascript" src="/assets/services.js"></script>
 
 </body>
 </html>

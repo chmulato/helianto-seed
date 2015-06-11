@@ -51,39 +51,39 @@
 		}
 		
 		//form initializer
-//		$scope.create = function(){
-//			$scope.form =  $scope.signUpResource.get({create:true});
-//			$scope.form.$promise.then(function(data) {
-//				data.email = $scope.email;
-//				$scope.form = data;
-//			});
-//		} 
-//		$scope.create();
-//		$scope.signUp = function(){
-//			$scope.form.password = 'save';
-//			$scope.returnCode = $scope.signUpResource.save($scope.form);
-//			$scope.returnCode.$promise.then(function(data) {
-//				console.log(data);
-//			});
-//		};
+		$scope.create = function(){
+			$scope.form =  $scope.signUpResource.get({create:true});
+			$scope.form.$promise.then(function(data) {
+				data.email = $scope.email;
+				$scope.form = data;
+			});
+		} 
+		$scope.create();
+		$scope.signUp = function(){
+			$scope.form.password = 'save';
+			$scope.returnCode = $scope.signUpResource.save($scope.form);
+			$scope.returnCode.$promise.then(function(data) {
+				console.log(data);
+			});
+		};
 //		
-//		$scope.updateUser = function(){
-//			$scope.form.email = $scope.email;
-//			$scope.passwordResource.save($scope.form);
-//		};
-//		
-//		$scope.passwordEmail = function(val){
-//			$scope.passwordRecoveryResource.save({email:val});
-//		}
-//		
-//		$scope.updatePassword = function(){
-//			$scope.form.email = $scope.email;
-//			$scope.passwordRecoveryResource.update($scope.form);
-//		}
-//		
-//		$scope.passwordMatches = function(){
-//			return $scope.cpassword === $scope.form.password;
-//		}
+		$scope.updateUser = function(){
+			$scope.form.email = $scope.email;
+			$scope.passwordResource.save($scope.form);
+		};
+		
+		$scope.passwordEmail = function(val){
+			$scope.passwordRecoveryResource.save({email:val});
+		}
+		
+		$scope.updatePassword = function(){
+			$scope.form.email = $scope.email;
+			$scope.passwordRecoveryResource.update($scope.form);
+		}
+		
+		$scope.passwordMatches = function(){
+			return $scope.cpassword === $scope.form.password;
+		}
 
 		/**
 		 * email validator:

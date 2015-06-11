@@ -12,7 +12,7 @@ import org.helianto.security.resolver.CurrentUserHandlerMethodArgumentResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.format.Formatter;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
@@ -25,6 +25,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
@@ -40,8 +41,7 @@ import freemarker.template.TemplateException;
  */
 @Configuration
 @EnableTransactionManagement
-@Import({ RootContextConfig.class
-	, MultiHttpSecurityConfig.class })
+@Import({ RootContextConfig.class, SecurityWebConfig.class })
 public class ServletContextConfig extends WebMvcConfigurerAdapter {
 
 	public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
@@ -58,7 +58,9 @@ public class ServletContextConfig extends WebMvcConfigurerAdapter {
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
 		argumentResolvers.addAll(
-			Arrays.asList(currentUserHandlerMethodArgumentResolver())
+			Arrays.asList(
+					currentUserHandlerMethodArgumentResolver()
+			)
 		);
 	}
 	
@@ -96,21 +98,20 @@ public class ServletContextConfig extends WebMvcConfigurerAdapter {
 		return resolver;
 	}
 	
+	@Bean
+	public ViewResolver viewResolver() {
+		ContentNegotiatingViewResolver resolver = new ContentNegotiatingViewResolver();
+		resolver.setViewResolvers(Arrays.asList(freeMarkerViewResolver()));
+		return resolver;
+	}
+
     @Bean
-    public ResourceBundleMessageSource messageSource() {
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-
-        messageSource.setBasenames("_i18n/commons","_i18n/default");
-        messageSource.setUseCodeAsDefaultMessage(true);
-
-        return messageSource;
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+       return new PropertySourcesPlaceholderConfigurer();
     }
 
-//    @Bean
-//    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-//       return new PropertySourcesPlaceholderConfigurer();
-//    }
-//    
+
+    
 	/**
 	 * Formatadores.
 	 */
@@ -166,7 +167,7 @@ public class ServletContextConfig extends WebMvcConfigurerAdapter {
 		converters.add(mappingJackson2HttpMessageConverter());
 		super.configureMessageConverters(converters);
     }
-	
+
     
     /**
 	 * Commons multipart resolver.
