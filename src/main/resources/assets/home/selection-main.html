@@ -1,0 +1,69 @@
+<div class="row">
+
+<div class="col-md-7">
+<div class="panel panel-default">
+<div class="panel-body">
+<h4><small><span class="glyphicon glyphicon-envelope"></span></small> Mensagens</h4>
+<h4><small>10 mensagens.</small></h4>
+<hr/>
+
+<h4><small><span class="glyphicon glyphicon-star"></span></small> Favoritos</h4>
+<h4><small>Tarefas, documentos ou controles marcados como favoritos são apresentados aqui.</small></h4>
+</div>
+</div>
+
+<!-- Tab panes -->
+<div class="tab-content">
+	<div class="tab-pane" id="tool2">	
+		<!--<input type="search" ng-model="q" placeholder="filter favouriteContentList..." class="form-control"/>-->
+		<div class="list-group example-animate-container">
+			<a class="animate-repeat list-group-item" data-ng-repeat="content in favouriteContentList | filter:q as results" 
+				href="/app/content/view/published/{{content.id}}"> 
+				<div class="row">
+			  		 <div class="col-md-2">
+			  		 	<img src="/images/contentActivityCode/P.png" />
+					</div>
+					<div class="col-md-10">
+				  		<div class="h4"> {{content.name}}<small> v. {{content.formattedChange}}</small></div>
+						<div class="h5">
+						<small><i class="glyphicon glyphicon-star"></i> {{content.code}}</small>
+				       	<small class="pull-right"><i class="fa fa-folder-o"></i> {{content.folderName}}</small>
+				       	</div>
+			       	</div>
+			    </div>   
+			</a>
+			<a class="animate-repeat list-group-item" data-ng-if="results.length == 0">
+			  <strong>No results found...</strong>
+			</a>
+		</div>		 
+	</div>
+</div>
+</div><!-- col-md-7 -->
+
+<!-- 
+ ! Painel de estatísticas
+ !-->
+<div class="col-md-5">
+
+<div class="panel panel-default">
+<div class="panel-body">
+<div class="row">
+<div class="col-xs-6">
+<h4>Total de documentos publicados</h4>
+<hr/>
+<h1 class="text-center">{{contentStatsSum}}</h1>
+</div>
+<div class="col-xs-6">
+<h4>Total de documentos em seu treinamento</h4>
+<hr/>
+<h1 class="text-center">{{knowledgeStatsSum}}</h1>
+</div>
+</div>
+<hr/>
+<div data-knldg-stats-graph id="graph" data-options="knowledgeStatsList"></div>
+</div>
+</div>
+
+</div><!-- col-md-5 -->
+
+</div><!-- row -->
