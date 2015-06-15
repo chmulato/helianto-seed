@@ -1,0 +1,48 @@
+
+	<a class="list-group-item"  ng-click="selectReportFolder(reportFolderItem.id,0)"
+	ng-repeat="reportFolderItem in reportFolderList.content">
+	<div class="row">
+		<div class="col-md-2">
+			<img src="/images/folder/folder64.png" />
+		</div>
+		<div class="col-md-10">
+			<div class="h4">
+			{{reportFolderItem.folderCode}}
+			<span class="badge alert-danger" ng-show="reportFolderItem.countAlerts>0">{{reportFolderItem.countAlerts}}</span>
+			<span class="badge alert-warning" ng-show="reportFolderItem.countWarnings>0">{{reportFolderItem.countWarnings}}</span>
+			</div>
+			<small> {{reportFolderItem.folderName}}</small>
+			<span style="font-size: 70%; color: #aaa;">{{reportFolderItem.countItems}} </span>
+		</div>
+	</div>
+	</a>
+
+<div class="row">
+	<div class="col-md-1" >
+	<a class="btn btn-sm btn-default" 
+		ng-if="nextAndPrevious.hasNext" 
+		
+		ng-click="reportAdapter(qualifierType, reportResolution,nextAndPrevious.next,isSearch())">
+		
+		<i class="glyphicon glyphicon-chevron-down"></i>
+	</a>
+	</div>
+	<div class="col-md-10 text-center" >
+	<h4 ng-show="reportFolderList.numberOfElements > 0">
+		{{reportFolderList.number * reportFolderList.size}} 
+		- {{(reportFolderList.number * reportFolderList.size) + reportFolderList.numberOfElements}} 
+		/ {{reportFolderList.totalElements}}
+	</h4>
+	<h4 ng-show="reportFolderList.numberOfElements == 0">
+		 {{reportFolderList.totalElements}}
+	</h4>
+	</div>
+	<div class="col-md-1" >
+	<a class="btn btn-sm btn-default pull-right" 
+		ng-if="nextAndPrevious.hasPrevious" 
+		ng-click="reportAdapter(qualifierType, reportResolution,nextAndPrevious.previous,isSearch())">
+		<i class="glyphicon glyphicon-chevron-up"></i>
+	</a>
+	</div>
+</div>
+	

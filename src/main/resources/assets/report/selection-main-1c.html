@@ -1,0 +1,61 @@
+<!--
+ ! 1.c. Lista de reports. 
+ !-->
+</hr>
+<div  class="list-group-item" ng-hide="isSearch()">
+	<div class="row">
+		<div class="col-md-2">
+			<img src="/images/folder/folder64.png" />
+		</div>
+		<div class="col-md-10">
+			<div class="h4">
+			{{reportFolder.folderCode}}
+			<span class="badge alert-danger" ng-show="reportFolder.countAlerts>0">{{reportFolder.countAlerts}}</span>
+			<span class="badge alert-warning" ng-show="reportFolder.countWarnings>0">{{reportFolder.countWarnings}}</span>
+			</div>
+			<small> {{reportFolder.folderName}}</small>
+			<span style="font-size: 70%; color: #aaa;">{{reportFolder.countItems}} </span>
+		
+			<small class="pull-right" >			
+				<i class="fa fa-lock" data-ng-show="isExported(reportFolder.exporterId)"></i>
+				<div data-ng-hide="isExported(reportFolder.exporterId)" >
+				<a href ng-click="openForm('form-report-folder')" class="btn btn-sm btn-primary">
+					Editar
+				</a>
+				<a href ng-click="exportFolder()" class="btn btn-sm btn-primary">
+					Exportar
+				</a>
+				</div>
+			</small>
+		</div>
+	</div>
+</div>
+
+<a data-ng-click="getReport(reportItem.id)"
+	 data-ng-repeat="reportItem in reportList.content" 
+	 class="list-group-item col-md-12" >
+	<div class="media" >
+		<div class="media-left media-top">
+	 		<img data-ng-src="/images/resolution/resolution64-{{reportItem.resolution}}.png"
+				class="img-circle iserv-icon-{{reportItem.runLabel}}" />
+		</div>
+		<div class="media-body">
+			<span class="pull-right label label-{{reportItem.runLabel}} btn-default active">{{reportItem.nextCheckDate | date:'shortDate'}}</span>
+	   		<div class="h4" data-ng-bind-html="reportItem.taskDesc"></div>
+			<div class="h4">
+				<small>{{reportItem.reportCode}}</small>
+			</div>
+		</div>
+	</div>			
+</a>
+
+<div 
+	data-paging 
+	data-previous="listReports(folderValue, nextAndPrevious.previous)"
+	data-next="listReports(folderValue, nextAndPrevious.next)"
+	data-next-and-previous ="nextAndPrevious"
+	data-page-list ="reportList" > 
+</div>
+
+	
+

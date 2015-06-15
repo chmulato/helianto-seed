@@ -1,0 +1,124 @@
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	<span class="h4 modal-title" id="modalLabel" >Projetos:</span>
+	
+</div><!-- modal-header-->
+  		
+<div class="modal-body">
+<form  data-ng-submit="updateReportFolder()" 
+	class="form-horizontal" >
+
+	<div class="row">
+
+		<div class="col-md-8" >
+
+			<div id="form-group-folderCode"
+				class="form-group">
+				<label for="folderCode" class="col-sm-3 control-label">folderCode*</label>
+				<div class="col-sm-9">
+					<input id="folderCode" type="text" name="folderCode" required
+						data-ng-model="reportFolder.folderCode"
+						class="form-control" />
+				</div>
+			</div>
+
+			<div id="form-group-folderName" class="form-group">
+				<label for="folderName" class="col-sm-3 control-label">folderName</label>
+				<div class="col-sm-9">
+					<input id="folderName" type="text" required name="folderName"
+						maxlength="64"
+						data-ng-model="reportFolder.folderName"
+						placeholder=""
+					    class="form-control" />
+				</div>
+			</div>	
+			
+			<div id="form-group-prefix"
+				class="form-group">
+				<label for="prefix" class="col-sm-3 control-label">Prefixo</label>
+				<div class="col-sm-4">				
+					<input id="patternPrefix" type="text" name="patternPrefix" required
+						data-ng-model="reportFolder.patternPrefix"
+						class="form-control" />			
+				</div>
+				<label for="numberOfDigits" class="col-sm-2 control-label">Máximo de tarefas</label>
+				<div class="col-sm-3">		
+					<select id="numberOfDigits" name="numberOfDigits" class="form-control" data-ng-model="reportFolder.numberOfDigits">
+						<option value="2"> 99</option>
+						<option value="3"> 999</option>
+						<option value="4" > 9999</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label  class="col-sm-3 control-label">Cliente</label>
+				<div class="col-md-9" >
+					<select class="form-control" data-ng-model="review.resolution" >
+						<option value="T">Em análise</option>
+						<option value="P">Em andamento</option>
+						<option value="D">Encerrada</option>
+					</select>
+				</div>
+			</div>	
+			<div class="form-group" >	
+
+				<label for="issueDate" class="col-md-3 control-label">Previsto Para</label>
+				
+ 				<div class="col-sm-9">
+					<input type="hidden" name="issueDate"
+						value="{{review.issueDate.getTime()}}" />
+					<div data-ng-click="open($event,0)" id="issueDatePicker"
+						class="input-group"
+						data-ng-init="review.issueDate = ((review.issueDate>0 ? review.issueDate : dateNow.getTime()) | date:'shortDate')">
+						<input type="text" class="form-control" data-ng-model="review.issueDate"
+							data-is-open="datePicker[0]" data-datepicker-options="dateOptions"
+							data-datepicker-popup="shortDate" data-ng-required="true"
+							data-close-text="Close" /> <span class="input-group-btn">
+							<button type="button" class="btn btn-default">
+								<i class="glyphicon glyphicon-th"></i>
+							</button>
+						</span>
+					</div>
+				</div>	
+			</div>
+			<div id="form-group-taskDesc" class="form-group">
+				<label for="taskDesc" class="col-sm-3 control-label">Objetivos</label>
+				<div class="col-sm-9">
+					<textarea id="taskDesc" data-redactor name="taskDesc" class="form-control" data-ng-model="report.taskDesc"
+						rows="3"></textarea>
+				</div>
+			</div>
+		<!-- col-md-8 -->
+		<div class="col-md-4">
+			<div data-ng-show="message.exist" class="alert alert-danger" role="alert"> 
+						  Código Existente.
+						<a href data-ng-click="selectReportFolder(message.id,0)" class="btn btn-sm btn-primary">
+							Abrir pasta
+						</a>
+			</div>
+			<div data-ng-show="message.error" class="alert alert-danger" role="alert"> 
+						  Erro ao salvar pasta
+			</div>
+		</div><!--col-md-4  -->	 
+		
+
+	</div>
+	<!-- row -->
+
+	<hr />
+
+	<!-- ! Submit row !-->
+	<div class="row">
+		<div class="col-md-12">
+			<!-- ! Submit button !-->
+			<div class="pull-right"> 
+				<button type="submit" name="submit" value="0" class="btn btn-primary">Salvar
+				Pasta</button>
+				<a data-dismiss="modal"  class="btn btn-default">Fechar</a>
+			</div>
+		</div>
+	</div>
+	<!-- row -->
+</form>
+</div>

@@ -26,8 +26,11 @@
 	<!--[if lte IE 7]>
 		<script src="/webjars/json3/3.3.2/json3.min.js"></script>
 	<![endif]-->
+	<!-- Redactor -->
+    <link rel="stylesheet" href="/redactor/redactor.css" />
 	<!-- iservport css extension -->
 	<link rel='stylesheet' href='/css/iservport.css'>
+	
 	
     <!-- Javascript -->
     <!-- JQuery -->
@@ -44,9 +47,11 @@
     <!-- Js padrão
     <script type="text/javascript" src='/js/defaut.js'></script>-->
     <link rel="localization"  href="/locales/manifest.json">
+     <!-- Redactor -->
+    <script src="/redactor/redactor.min.js"></script>
+	<script type="text/javascript" src="/assets/angular-redactor.js"> </script>
     <!-- i18n para menu -->
     <script type="text/javascript">var externalId = ${externalId!0};</script>
-    
 	<link type="image/x-icon" href="/images/favicon.ico" rel="shortcut icon">
 	<link type="image/x-icon" href="/images/favicon.ico" rel="icon">
 
@@ -84,7 +89,7 @@
 	    	<div class="row">
 	    	<div data-iservport-title  class="col-md-12"></div><!-- title -->
 	     	</div>
-	     	<div class="row" data-ng-include="'/assets/${baseName}/selection-${baseName}.html'"></div>
+	    	<div class="row" data-ng-include="'/assets/${baseName}/selection-${baseName}.html'"></div>
 	    	</div>
 	    	
 	    	
@@ -105,6 +110,7 @@
 	   	<div class="modal-content">
 	    	<div data-ng-include="getFormUrl()" ></div>
 		</div>
+		
 		</div><!-- modal-dialog -->
 	</div><!-- modal-fade -->	
 	
@@ -117,6 +123,9 @@
 	<script type="text/javascript" src="/webjars/angularjs/1.3.1/angular-animate.min.js"></script>
 	<script type="text/javascript" src="/webjars/angular-ui-bootstrap/0.11.2/ui-bootstrap-tpls.js"></script>
 	<script type="text/javascript" src="/webjars/angular-ui-utils/0.1.1/ui-utils.min.js"></script>
+    <!-- Redactor -->
+    <script src="/redactor/redactor.min.js"></script>
+	<script type="text/javascript" src="/assets/angular-redactor.js"> </script>
     <!-- Services to apps-->
 	<script type="text/javascript" src="/assets/services.js"></script>
 	<script type="text/javascript" src="/assets/${baseName}/ng-${baseName}-module.js"></script>

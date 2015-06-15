@@ -1,0 +1,18 @@
+
+<div class="panel panel-default" data-ng-init="setSectionTab(-1)" >
+<!-- <ul class="nav nav-pills nav-stacked pull-left">
+   <li role="presentation" data-ng-class="{active:section=='{{qualifierItem.qualifierValue}}'}" data-ng-repeat="qualifierItem in qualifiers"> 
+    	<a class="list-group-item" data-ng-click="setQualifier(qualifierItem)">
+        	{{qualifierItem.qualifierName}}<i class="fa fa-lock" data-ng-show="isExported(qualifierItem.entityId)"></i> 
+       </a>
+   </li>
+</ul>
+ -->
+	<ul class="list-group" ">
+		<a class="list-group-item list-qualifiers" href="" 
+			data-ng-repeat="qualifierItem in qualifiers" 
+			data-ng-click="setQualifier(qualifierItem)">
+		</a>
+	</ul>
+
+</div>

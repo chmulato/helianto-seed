@@ -127,6 +127,7 @@ public class RootContextConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/js/**").addResourceLocations("classpath:/META-INF/js/**").setCachePeriod(31556926);
         registry.addResourceHandler("/assets/**").addResourceLocations("classpath:/assets/**").setCachePeriod(31556926);
         registry.addResourceHandler("/views/**").addResourceLocations("classpath:/views/**").setCachePeriod(31556926);
+        registry.addResourceHandler("/redactor/**").addResourceLocations("classpath:/META-INF/redactor/**").setCachePeriod(31556926);
 	}	                    
 	
 	/**
