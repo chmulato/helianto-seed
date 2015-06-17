@@ -6,18 +6,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
- * Controlador home.
+ * Controlador de ação.
  * 
  * @author mauriciofernandesdecastro
  */
 @Controller
-@RequestMapping("/app")
-public class ActionController {
+@RequestMapping("/api/action")
+public class ActionSearchController {
 	
-	@RequestMapping(value="/action", method=RequestMethod.GET)
-	public String action(Model model) {
-		model.addAttribute("baseName", "action");
-		return "frame-bootstrap";
-	}
-
 }

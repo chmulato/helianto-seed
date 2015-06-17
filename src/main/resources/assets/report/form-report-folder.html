@@ -10,7 +10,7 @@
 
 	<div class="row">
 
-		<div class="col-md-8" >
+		<div class="col-md-7" >
 
 			<div id="form-group-folderCode"
 				class="form-group">
@@ -62,7 +62,7 @@
 				</div>
 			</div>	
 			<div class="form-group" >	
-
+		
 				<label for="issueDate" class="col-md-3 control-label">Incluído em</label>
 				
  				<div class="col-sm-9">
@@ -134,59 +134,72 @@
 						rows="3"></textarea>
 				</div>
 		</div>
-		<!-- col-md-8 -->
+		<!-- col-md-7 -->
 	</div>
+	<div class="col-md-1">
+	</div>
+	<!-- col-md-1 -->
 	<div class="row">
 		<div class="col-md-4">
+			<div id="form-group-priority" class="form-group">
+				<label for="priority" class="col-sm-8 control-label">Categoria</label>
+			</div>	
+			<hr>
 			<div class="form-group" >	
-				<div id="uploadMsg" class="alert alert-warning"
-				role="alert">				
-				<strong>Categoria</strong>
-			</div>
-				
-			<div class="form-group" >	
-				<label for="ConcluidoDate" class="col-md-9 control-label">Concluído em</label>
- 				<div class="col-sm-9">
-					<input type="hidden" name="concluidoDate"
-						value="{{review.issueDate.getTime()}}" />
-					<div data-ng-click="open($event,0)" id="concluidoDatePicker"
+				<label for="issueDate" class="col-md-5 control-label">Concluído em</label>
+ 				<div class="col-sm-7">
+					<input type="hidden" name="concluidoEm"
+						value="{{review.concluidoEm.getTime()}}" />
+					<div data-ng-click="open($event,0)" id="concluidoEmPicker"
 						class="input-group"
-						data-ng-init="review.issueDate = ((review.issueDate>0 ? review.issueDate : dateNow.getTime()) | date:'shortDate')">
-						
+						data-ng-init="review.concluidoEm = ((review.concluidoEm>0 ? review.concluidoEm : dateNow.getTime()) | date:'shortDate')">
+						<input type="text" class="form-control" data-ng-model="review.concluidoEm"
+							data-is-open="datePicker[0]" data-datepicker-options="dateOptions"
+							data-datepicker-popup="shortDate" data-ng-required="true"
+							data-close-text="Close" /> <span class="input-group-btn">
 							<button type="button" class="btn btn-default">
 								<i class="glyphicon glyphicon-th"></i>
 							</button>
+						</span>
 					</div>
 				</div>	
-			</div>
+			</div>	 
 			
-			
-			<div class="form-group" >	
-				<label for="InicialDate" class="col-md-9 control-label">Iniciado em</label>
- 				<div class="col-sm-9">
-					<input type="hidden" name="inicialDate"
-						value="{{review.inicialDate.getTime()}}" />
-					<div data-ng-click="open($event,0)" id="inicialDatePicker"
+			<div class="form-group" >
+				<label for="issueDate" class="col-md-5 control-label">Iniciado em</label>
+				<div class="col-md-7">
+					<input type="hidden" name="issueDate"
+						value="{{review.nextCheckDate.getTime()}}" />
+					<div data-ng-click="open($event,1)" id="nextCheckDatePicker"
 						class="input-group"
-						data-ng-init="review.inicialDate = ((review.inicialDate>0 ? review.iDate : dateNow.getTime()) | date:'shortDate')">
-						
+						data-ng-init="review.nextCheckDate = ((review.nextCheckDate>0 || review.nextCheckDate!=null ? review.nextCheckDate : dateNow.getTime()) | date:'shortDate')">
+						<input type="text" class="form-control" data-ng-model="review.nextCheckDate"
+							data-is-open="datePicker[1]" data-datepicker-options="dateOptions"
+							data-datepicker-popup="shortDate" data-ng-required="true"
+							data-close-text="Close" /> <span class="input-group-btn">
 							<button type="button" class="btn btn-default">
 								<i class="glyphicon glyphicon-th"></i>
 							</button>
+						</span>
 					</div>
 				</div>	
-			</div>
+			</div>	
 			
 			 <!-- 
                  ! Equipe
                  -->
-               	<div id="form-group-equipe" class="form-group">
-				<label for="priority" class="col-sm-4 control-label">Equipe</label>
-				<div class="col-sm-8">
-					<div class="col-sm-12">
+         		  	<div id="form-group-priority" class="form-group">
+						<label for="priority" class="col-sm-8 control-label">Equipe</label>
+					</div>	
 					<hr>
-					<div id="form-group-member" class="form-group row">
-						<div class="col-sm-3">
+					<div data-ng-controller="MemberController as memberCtrl">
+					<div class="row" data-ng-hide="isAddMember()">
+						<div class="col-sm-3" >
+						      <img class="media-object img-circle" data-ng-click="setAddMember(true)" style="width:45px" src="/images/user/gender64-N.png">
+						</div>
+					</div>
+					<div id="form-group-member" class="form-group row" data-ng-show="isAddMember()">
+						<div class="col-sm-7">
 							<div class="input-group">
 								<input id="member" type="text" required="required" 
 									name="member" data-ng-model="valueOnTypeAhead"
@@ -198,12 +211,20 @@
 									data-ng-show="loadingMembers" class="glyphicon glyphicon-refresh"></i>
 							</div>
 						</div>
+						<div class="col-sm-5">
+							<div style="font-size: 12px; line-height: 1.5em;" data-ng-hide="identityMember.userId>0 || valueOnTypeAhead.length==0">
+								<i class="fa fa-angle-left"></i> Incluir Membro
+							</div>
+						</div>
+						<div  class="col-sm-4" data-ng-show="identityMember.userId>0 && valueOnTypeAhead.length>0">
+							<button class="btn btn-primary" data-ng-click="confirmStaffMember(identityMember.userId)"> Incluir {{identityMember.userName}} </button>
+						</div>
 					</div>
-					
+						
 	              	<!-- tabela com a equipe -->
 	              	<div class="row" >
 	              		<div data-ng-repeat="staffMember in staffMembers">
-	              		<div class="col-md-3" >
+	              		<div class="col-md-8" >
 		              	<div class="media" >
 						  <div class="media-left">
 						      <img class="media-object img-circle" style="width:45px" data-ng-src="{{staffMember.userImageUrl}}" data-err-src="/images/user/gender64-N.png">
@@ -214,23 +235,51 @@
 						  </div>
 						</div>
 						</div>
-						<div class="col-md-6">
+						<div class="col-md-4">
 						  <button type="button" class="btn btn-danger" data-toggle="modal" data-ng-click="memberToDelete(staffMember.id)" data-target="#myModal">
 							<i class="fa fa-remove"></i>						 
 						  </button>
 						</div>
 						<div class="col-md-12"><br></div>
 						</div>
-		            </div> 	          
-					
-					   
+		            </div>
+		            </div><!-- memberCtrl -->      
+					<div class="modal fade" id="myModal" tabindex="-1" 
+					role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					  <div class="modal-dialog">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					        <h4 class="modal-title alert alert-danger" id="myModalLabel">
+					        	 Área de Risco
+					        </h4>
+					      </div>
+					      <div class="modal-body">
+					      <div data-ng-show="message.error" class="alert alert-danger" role="alert"> 
+						 	 {{message.errorMessage}}
+						   </div>
+					      <div class="alert alert-warning" role="alert">
+					      	Esta ação não poderá ser desfeita. Deseja realmente excluir 
+					      	<img class="img-circle" style="width:45px" 
+					      		data-ng-src="{{member.userImageUrl}}" 
+					      		data-err-src="/images/user/gender64-N.png"> ({{member.displayName}}) do projeto?
+					      </div>
+					      	 <button type="button" class="btn btn-default" data-ng-click="hideModal()">{{'CLOSE'}}</button>
+					        <button type="button" class="btn btn-danger" data-ng-click="deleteMember(member.id)" >Confirmar Exclusão</button>
+					    
+					     </div>
+					    
+					    </div>
+					  </div>
 					</div>
-					
-				</div>
+	
 			
 			<div id="form-group-priority" class="form-group">
-				<label for="priority" class="col-sm-4 control-label">Ferramentas</label>
-				<div class="col-sm-8">
+				<label for="priority" class="col-sm-8 control-label">Ferramentas</label>
+			</div>	
+			<hr>
+				<div class="form-group">
+				
 					<div class="col-sm-12">
 						<label class="checkbox"> 
 							<input type="checkbox" name="enterprisetester" data-ng-model="report.enterprisetester" id="enterprisetester" value="0" checked="checked"> Enterprise Tester
@@ -257,11 +306,12 @@
 						</label>
 					</div>
 				</div>
-			</div>
-			
+		
 			<div id="form-group-tecnologiaempregada" class="form-group">
-					<label for="tecnologiaempregada" class="col-sm-4 control-label">Técnoligia Empregada</label>
-				<div class="col-sm-8">
+					<label for="tecnologiaempregada" class="col-sm-8 control-label">Técnologia Empregada</label>
+			</div>	
+			<hr>	
+				<div class="form-group">
 					<div class="col-sm-12">
 						<label class="checkbox"> 
 							<input type="checkbox" name="android" data-ng-model="report.android" id="android" value="0" checked="checked"> Android
@@ -274,19 +324,15 @@
 					</div>
 					
 				</div>
-				<div id="form-group-outros" class="col-sm-12">
-						<label for="outros" class="col-sm-4 control-label">Outros</label>
-						<div class="col-sm-8">
-							<input id="outros" type="text" required name="outros" />
-						</div>
+				<div class="form-group"><label class="col-md-3 text-left" for="folderName">Outros</label>
+					<div class="col-md-7">
+						<input type="text" id="outros" required="" name="folderName" maxlength="64" data-ng-model="reportFolder.folderName" placeholder="" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched">
+					</div></div>
 				</div>	
-			</div>
-		</div>		
-	</div>
-			</div>		
-		</div>
+	</div>	
+
+
 			<!--col-md-4  -->	 
-	</div>
 
 	<!-- row -->
 
@@ -304,5 +350,6 @@
 		</div>
 	</div>
 	<!-- row -->
+</div>
 </form>
 </div>

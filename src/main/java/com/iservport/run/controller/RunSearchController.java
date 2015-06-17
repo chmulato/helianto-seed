@@ -14,14 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author mauriciofernandesdecastro
  */
 @Controller
-@RequestMapping("/app")
-public class RunController {
+@RequestMapping("/api/run")
+public class RunSearchController {
 	
-	@RequestMapping(value="/run", method=RequestMethod.GET)
-	public String run(Model model) {
-		model.addAttribute("baseName", "run");
-		return "frame-bootstrap";
-	}
 
 	
 }

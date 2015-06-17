@@ -50,9 +50,14 @@
 		</div>
 		
 		<div class="panel-body">
-		<form  name="form" data-ng-submit="login(username,password)">
+		<form  name="form" data-ng-submit="login(username,password)" method="POST">
 		
 		
+			[#--
+			 # CSRF
+			 #--]
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				
 			<!-- Possíveis mensagens de sucesso e erro -->
 			[#if error?? ]
 				[#if user?? && !user.accountNonExpired  ]		

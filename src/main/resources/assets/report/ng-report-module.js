@@ -1,5 +1,5 @@
 (function() {
-	app = angular.module('report', ['ui.bootstrap', 'app.services', 'angular-redactor']);
+	app = angular.module('report', ['ui.bootstrap', 'app.services','angular-redactor']);
 //		return {
 //			restrict: 'E',
 //			templateUrl:'/assets/report/selection-main.html',
@@ -200,10 +200,10 @@
 			$scope.openForm('form-folder-export');
 		}
 		
-		//verifica se o item é pertencente a outra unidade.
-		$scope.isExported = function(targetId){
-			return $scope.authorizedEntity.id != targetId;
-		}
+//		//verifica se o item é pertencente a outra unidade.
+//		$scope.isExported = function(targetId){
+//			return $scope.authorizedEntity.id != targetId;
+//		}
 		
 		$scope.entitiesIds = [];
 		/**
@@ -811,6 +811,15 @@
 		}
 		
 			
+	}])
+	.controller('MemberController', ['$scope', function($scope) {
+		var addMember=false;
+		$scope.isAddMember=function() {
+			return addMember;
+		};
+		$scope.setAddMember = function(value) {
+			addMember = value;
+		};
 	}])
 	.controller('ViewController', ['$scope', function($scope) {
 	}])

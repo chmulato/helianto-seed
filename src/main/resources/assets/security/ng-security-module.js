@@ -1,7 +1,7 @@
 (function() {
 	app = angular.module('security', ['ui.bootstrap', 'app.services']);
 	
-	app.controller('SecurityController', ['$scope', '$window', '$http', '$resource' , 'genericServices', 'securityServices'
+	app.controller('LoginController', ['$scope', '$window', '$http', '$resource' , 'genericServices', 'securityServices'
 	                                  , function($scope, $window, $http, $resource, genericServices, securityServices) {
 	
 		$scope.baseName = "home";
@@ -66,7 +66,7 @@
 				console.log(data);
 			});
 		};
-//		
+	
 		$scope.updateUser = function(){
 			$scope.form.email = $scope.email;
 			$scope.passwordResource.save($scope.form);
