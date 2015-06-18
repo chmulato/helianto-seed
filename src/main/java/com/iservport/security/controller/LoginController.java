@@ -2,6 +2,7 @@ package com.iservport.security.controller;
 
 import org.helianto.core.domain.Entity;
 import org.helianto.core.repository.EntityRepository;
+
 import org.helianto.security.internal.UserAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,6 +40,7 @@ public class LoginController {
 
 	
 	/**
+
 	 * Logout.
 	 * 
 	 * GET		/logout
@@ -51,6 +53,7 @@ public class LoginController {
 	}
 	
 	/**
+      refs/remotes/iserv/master
 	 * Logotipo de abertura.
 	 * 
 	 * @param model

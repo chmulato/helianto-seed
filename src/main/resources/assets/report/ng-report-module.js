@@ -271,6 +271,7 @@
 			});
 		};
 		$scope.updateReportFolder = function() {
+			console.log($scope.reportFolder);
 
 			$scope.reportFolder = $scope.reportFolderResource.save($scope.reportFolder);
 			$scope.reportFolder.$promise.then(
