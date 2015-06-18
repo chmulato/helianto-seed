@@ -380,6 +380,11 @@
    			<artifactId>helianto-security</artifactId>
    			<version>0.4.3-SNAPSHOT</version>
    		</dependency>
+   		<dependency>
+   			<groupId>org.helianto</groupId>
+   			<artifactId>helianto-plan</artifactId>
+   			<version>0.4.3-SNAPSHOT</version>
+   		</dependency>
 	</dependencies>
 	
 	<build>
