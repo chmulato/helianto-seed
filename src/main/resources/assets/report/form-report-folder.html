@@ -25,6 +25,17 @@
 
 
 			<div id="form-group-folderName" class="form-group">
+				<label for="folderCode" class="col-sm-3 control-label">Código Teste</label>
+				<div class="col-sm-9">
+					<input id="folderCode" type="text" required name="folderCode"
+						maxlength="64"
+						data-ng-model="reportFolder.folderCode"
+						placeholder=""
+					    class="form-control" />
+				</div>
+			</div>	
+
+			<div id="form-group-folderName" class="form-group">
 				<label for="folderName" class="col-sm-3 control-label">Nome do Projeto</label>
 				<div class="col-sm-9">
 					<input id="folderName" type="text" required name="folderName"
@@ -35,17 +46,17 @@
 				</div>
 			</div>	
 			
-			<div id="form-group-prefix"
+			<div id="form-group-numberPrefix"
 				class="form-group">
-				<label for="prefix" class="col-sm-3 control-label">Prefixo</label>
+				<label for="numberPrefix" class="col-sm-3 control-label">Prefixo</label>
 				<div class="col-sm-4">				
-					<input id="patternPrefix" type="text" name="patternPrefix" required
-						data-ng-model="reportFolder.patternPrefix"
+					<input id="numberPrefix" type="text" name="numberPrefix" required
+						data-ng-model="reportFolder.numberPrefix"
 						class="form-control" />			
 				</div>
-				<label for="numberOfDigits" class="col-sm-2 control-label">Máximo de tarefas</label>
+				<label for="numberSuffix" class="col-sm-2 control-label">Máximo de tarefas</label>
 				<div class="col-sm-3">		
-					<select id="numberOfDigits" name="numberOfDigits" class="form-control" data-ng-model="reportFolder.numberOfDigits">
+					<select id="numberSuffix" name="numberSuffix" class="form-control" data-ng-model="reportFolder.numberSuffix">
 						<option value="2"> 99</option>
 						<option value="3"> 999</option>
 						<option value="4" > 9999</option>
@@ -136,12 +147,12 @@
 						rows="3"></textarea>
 				</div>
 		</div>
+	</div>	
 		<!-- col-md-7 -->
-	</div>
 	<div class="col-md-1">
 	</div>
 	<!-- col-md-1 -->
-	<div class="row">
+
 		<div class="col-md-4">
 			<div id="form-group-priority" class="form-group">
 				<label for="priority" class="col-sm-8 control-label">Categoria</label>
@@ -355,7 +366,8 @@
 			</div>
 		</div>
 	</div>
+
 	<!-- row -->
-</div>
 </form>
 </div>
+

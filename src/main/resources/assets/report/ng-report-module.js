@@ -1,5 +1,5 @@
 (function() {
-	app = angular.module('report', ['ui.bootstrap', 'app.services','angular-redactor']);
+	app = angular.module('report', ['ui.bootstrap', 'app.services','angular-redactor' ,'ngResource']);
 //		return {
 //			restrict: 'E',
 //			templateUrl:'/assets/report/selection-main.html',
