@@ -1,7 +1,10 @@
 package com.iservport.report.controller;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
+import org.helianto.core.internal.QualifierAdapter;
 import org.helianto.security.internal.UserAuthentication;
 import org.helianto.task.repository.FolderReadAdapter;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -49,4 +52,20 @@ public class ReportSearchController {
 		return  reportCommandService.folder(command, userAuthentication);
 	}
 
+	
+	
+	/**
+	 * Lista qualificadores.
+	 * 
+	 * GET		/app/report/qualifier
+	 */
+	@PreAuthorize("isAuthenticated()")
+	@RequestMapping(value={"/qualifier"}, method=RequestMethod.GET)
+	@ResponseBody                                                           
+	public List<QualifierAdapter> qualifier(UserAuthentication userAuthentication) {
+		return reportQueryService.qualifier(userAuthentication.getEntityId());
+	
+	}
+	
+	
 }

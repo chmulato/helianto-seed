@@ -26,9 +26,9 @@
 		/*
 		 * Recursos
 		 */
-		var baseUrl = '/app/report/';
-		$scope.qualifierResource = $resource("/app/category/qualifier");
-		$scope.categoryResource = $resource("/app/category/", { categoryId:"@categoryId" });
+		var baseUrl = '/api/report/';
+		$scope.qualifierResource = $resource("/api/category/qualifier");
+		$scope.categoryResource = $resource("/api/category/", { categoryId:"@categoryId" });
 		$scope.qualifierResource = $resource(baseUrl + "qualifier");
 		$scope.reportFolderResource = $resource(baseUrl + "folder", { qualifierValue:"@qualifierValue",folderId:"@folderId"}, {
 			save: { method: 'PUT' },

@@ -350,48 +350,38 @@ public class ReportCommandService {
 			if (report==null || identity ==null) {
 				throw new SaveEntityException(0,"Report and identity required",202);
 			}
-
 			reportReview = new ReportReview(report, identity);
 			
 			
-
-
 		//	Integer existing 
 		//	= 		reportReviewTempRepository.findByReportIdAndTimeKey(report.getId(), (int)reportReview.getTimeKey());
 		//	if (existing!=null)  {
 		//		throw new SaveEntityException(existing, "ReportReviw not unique.",0);
 		//	}
-
 		}
 		else {
 			reportReview = reportReviewTempRepository.findOne(command.getId());
 		}
-
 		Entity entity = entityRepository.findOne(entityid);
 		reportReview.setEntity(entity);
 		command.setAdaptee(reportReview);
 		return command;
 	}
-
 	public ParticipantReadAdapter participantNew(Integer reportId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 	public ParticipantReadAdapter participant(ParticipantReadAdapter command) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 	public FollowUpReadAdapter followUpNew(Integer reportId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 	public FollowUpReadAdapter followUp(FollowUpReadAdapter command) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }
 **/

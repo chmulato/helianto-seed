@@ -390,4 +390,3 @@ var myMod = angular.module('app.services', ['ngResource'])
 	};
 })
 ;
-

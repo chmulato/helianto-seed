@@ -1,10 +1,14 @@
 package com.iservport.report.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.helianto.core.def.CategoryGroup;
+import org.helianto.core.internal.QualifierAdapter;
+import org.helianto.core.repository.CategoryReadAdapter;
 import org.helianto.core.repository.CategoryRepository;
 import org.helianto.core.repository.EntityRepository;
 import org.helianto.core.repository.IdentityRepository;
@@ -24,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+//import com.iservport.report.repository.CategoryReportTmpRepository;
 import com.iservport.report.repository.StaffMemberReadAdapter;
 import com.iservport.report.repository.StaffMemberTempRepository;
 
@@ -65,10 +70,35 @@ public class ReportQueryService {
 	protected StaffMemberTempRepository staffMemberTempRepository;
 	
 //	@Inject 
+//	protected CategoryReportTmpRepository categoryReportTmpRepository;
+	
+//	@Inject 
 //	protected UserTmpRepository userTmpRepository;
 	
 	//qualifier
 
+	//qualifier
+	/**
+	 * Lista categorias de relatórios.
+	 * 
+	 * @param entityId
+	 */
+	public List<QualifierAdapter> qualifier(Integer entityId) {
+		// listamos categorias
+		List<CategoryReadAdapter> categoryList 
+		= new ArrayList<CategoryReadAdapter>();
+		// A classe QualifierAdapter é conveniente para construir uma 
+		// lista a partir de classes que implementam o tipo KeyNameAdapter.
+		List<QualifierAdapter> qualifierList 
+		= QualifierAdapter.categoryAdapterList(categoryList, false);
+
+		// realiza a contagem
+		//count(entityId, qualifierList);
+
+		return qualifierList;
+	}
+	
+	
 	
 	//Folder
 	
@@ -158,7 +188,6 @@ public class ReportQueryService {
 		return userList.getContent();
 <<<<<<< HEAD
 	}getUserList
-
 	public UserReadAdapter getUser(Integer userId) {
 		return userTmpRepository.findByIdentityId(userId);
 	}
@@ -166,11 +195,9 @@ public class ReportQueryService {
 /**	public List<UserReadAdapter> getUserListSearch(UserAuthentication userAuthentication, String search, Integer searchFolderId) {
 =======
 	}
-
 	public UserReadAdapter getUser(Integer userId) {
 		return userTmpRepository.findByIdentityId(userId);
 	}
-
 	public List<UserReadAdapter> getUserListSearch(UserAuthentication userAuthentication, String search, Integer searchFolderId) {
 >>>>>>> refs/remotes/mauricio/master
 		List<Integer> exclusions = staffMemberTempRepository.findIdentityIdsByReportFolderOnStaffMember(searchFolderId);
@@ -182,7 +209,6 @@ public class ReportQueryService {
 						, "USER", new char[] {'A'}, exclusions, search, page);
 		return userList.getContent();
 	}
-
 	/**
 	 * Listar monitoramento.
 	 * 
@@ -192,7 +218,6 @@ public class ReportQueryService {
 /**	public Page<ReportReviewReadAdapter> reportReview(Integer reportId, Integer pageNumber) {
 		Page<ReportReviewReadAdapter> reportReviewList = reportReviewTempRepository.findByReportId(reportId, 
 				new PageRequest(pageNumber, 100, Direction.ASC, "id"));
-
 		return reportReviewList;
 	}
 **/
@@ -205,24 +230,20 @@ public class ReportQueryService {
 		ReportReviewReadAdapter reportReviewReadAdapter = reportReviewTempRepository.findById(reportReviewId);
 		return reportReviewReadAdapter;
 	}
-
 	public Page<ParticipantReadAdapter> participant(Integer reportId,
 			Integer pageNumber) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 	public ParticipantReadAdapter participantOpen(Integer participantId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 	public Page<FollowUpReadAdapter> followUp(Integer reportId,
 			Integer pageNumber) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 	public FollowUpReadAdapter followUpOpen(Integer followUpId) {
 		// TODO Auto-generated method stub
 		return null;

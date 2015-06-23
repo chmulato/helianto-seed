@@ -9,7 +9,7 @@
 	
 		// Métodos do controlador Angular para Catagorias
 
-		var baseUrl = '/app/category/';
+		var baseUrl = '/api/category/';
 
 	
 		$scope.showMenuItem =  function(code){
@@ -24,7 +24,7 @@
 
 	//	$scope.menu = menu;
 		$scope.baseName = "category";
-	//	$scope.menuName = "categories";
+    //	$scope.menuName = "categories";
 
 		$scope.categoryNotExists = true;
 
