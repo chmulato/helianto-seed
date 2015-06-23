@@ -31,7 +31,7 @@
 		<spring-security.version>3.2.3.RELEASE</spring-security.version>
     	<spring-social.version>1.1.0.RELEASE</spring-social.version>
     	<org.aspectj-version>1.8.1</org.aspectj-version>
-		<helianto.version>0.4.2-SNAPSHOT</helianto.version>
+		<helianto.version>0.4.3-SNAPSHOT</helianto.version>
 	</properties>
 
 	<dependencies>
