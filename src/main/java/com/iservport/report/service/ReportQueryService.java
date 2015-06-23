@@ -156,6 +156,15 @@ public class ReportQueryService {
 				userTmpRepository.findByParentUserKey(userAuthentication.getEntityId()
 						, "USER", new char[] {'A'}, null);
 		return userList.getContent();
+<<<<<<< HEAD
+	}getUserList
+
+	public UserReadAdapter getUser(Integer userId) {
+		return userTmpRepository.findByIdentityId(userId);
+	}
+**/
+/**	public List<UserReadAdapter> getUserListSearch(UserAuthentication userAuthentication, String search, Integer searchFolderId) {
+=======
 	}
 
 	public UserReadAdapter getUser(Integer userId) {
@@ -163,6 +172,7 @@ public class ReportQueryService {
 	}
 
 	public List<UserReadAdapter> getUserListSearch(UserAuthentication userAuthentication, String search, Integer searchFolderId) {
+>>>>>>> refs/remotes/mauricio/master
 		List<Integer> exclusions = staffMemberTempRepository.findIdentityIdsByReportFolderOnStaffMember(searchFolderId);
 		//previne que dê erro.
 		exclusions.add(0);

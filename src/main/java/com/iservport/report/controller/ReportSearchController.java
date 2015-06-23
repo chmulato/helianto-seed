@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.iservport.report.service.ReportCommandService;
+import com.iservport.report.service.ReportQueryService;
 
 
 /**
@@ -20,12 +21,12 @@ import com.iservport.report.service.ReportCommandService;
  * @author mauriciofernandesdecastro
  */
 @Controller
-@RequestMapping("/app/report")
+@RequestMapping("/api/report")
 public class ReportSearchController {
 	
 	@Inject ReportCommandService reportCommandService;
 	
-//	@Inject ReportQueryService reportQueryService;
+	@Inject ReportQueryService reportQueryService;
 	
 	
 	/**

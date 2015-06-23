@@ -1,6 +1,9 @@
 [#ftl]
 <!DOCTYPE html >
-<html id="ng-app" xmlns:ng="http://angularjs.org" data-ng-app="${baseName}" data-ng-cloak>
+<html id="ng-app" xmlns:ng="http://angularjs.org" 
+    data-ng-app="${baseName}" 
+    data-ng-controller="ViewController as ViewCtrl" 
+    data-ng-cloak>
 
 <head>
     <meta content="text/html; iso-8859-1" http-equiv="content-type">

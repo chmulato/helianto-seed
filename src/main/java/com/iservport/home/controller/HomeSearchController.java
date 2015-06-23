@@ -1,12 +1,12 @@
 package com.iservport.home.controller;
 
+import org.helianto.core.repository.EntityReadAdapter;
 import org.helianto.security.internal.UserAuthentication;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Controlador home.
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author mauriciofernandesdecastro
  */
 @Controller
-@RequestMapping("/api/home")
-public class HomeController {
+@RequestMapping("/app/home")
+public class HomeSearchController {
 	
 }

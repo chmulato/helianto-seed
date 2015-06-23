@@ -56,14 +56,14 @@ var myMod = angular.module('app.services', ['ngResource'])
 		});
 	}
 	var roleList = [];
-//	var getAuthorizedRoles = function(userId) {
-//		return $http.get('/app/user/role'+((userId!=null && userId!='null')?'?userId='+userId:''))
-//		.success(function(data, status, headers, config) {
-//			roleList = data.content;
-//		});
-//	}
+	var getAuthorizedRoles = function(userId) {
+		return $http.get('/entity/auth'+((userId!=null && userId!='null')?'?userId='+userId:''))
+		.success(function(data, status, headers, config) {
+			roleList = data.content;
+		});
+	}
 	return {
-		//getAuthorizedRoles : (getAuthorizedRoles) ,
+		getAuthorizedRoles : (getAuthorizedRoles) ,
 		isAuthorized: function(role, extension) {
 			var result = false;
 			roleList.forEach(function(entry) {
@@ -268,7 +268,7 @@ var myMod = angular.module('app.services', ['ngResource'])
 		return {
 			restrict: 'A',			
 			link:function(scope, element, attrs) {
-				$http.get('/app/home/entity')
+				$http.get('/entity')
 				.success(function(data, status, headers, config) {
 					scope.authorizedEntity = data;
 				});		
@@ -287,7 +287,7 @@ var myMod = angular.module('app.services', ['ngResource'])
 		return {
 			restrict: 'EA',
 			link:function(scope, element, attrs) {
-				$http.get('/app/home/user')
+				$http.get('/entity/user')
 				.success(function(data, status, headers, config) {
 					
 					scope.userLabel = data.userKey; 

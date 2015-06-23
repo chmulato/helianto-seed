@@ -264,70 +264,7 @@ public class ReportCommandService {
 	 * 
 	 * @param command
 	 */
-	@Transactional
-	public StaffMemberReadAdapter staffMember(StaffMemberReadAdapter command) {
-		StaffMember target = null;
-		ReportFolder reportFolder = null;
-		Identity identity = null;
-		if (command.getId()==0) {
-			if (command.getReportFolderId()==null || command.getIdentityId()==null) {
-			//	throw new SaveEntityException(0,"Report Folder and identity required",202);
-			}
-			reportFolder = reportFolderRepository.findOne(command.getReportFolderId());
-			identity = identityRepository.findOne(command.getIdentityId());
-			if (reportFolder==null || identity ==null) {
-			//	throw new SaveEntityException(0,"Report Folder and identity required",202);
-			}
 
-			target = new StaffMember(reportFolder, identity);
-
-			Integer existing 
-			= 		staffMemberTempRepository.findByReportFolderIdAndIdentityId(reportFolder.getId(), identity.getId());
-			if (existing!=null)  {
-			//	throw new SaveEntityException(existing, "StaffMember not unique.",0);
-			}
-
-		}
-		else {
-			target = staffMemberRepository.findOne(command.getId());
-		}
-		System.err.println(reportFolder.getId()+"; "+ identity.getId());
-		System.out.println(target.getReportFolder().getId()+"; "+target.getIdentity().getId());
-		System.err.println("target    "+target.getId());
-		target = staffMemberRepository.saveAndFlush(target);
-		return staffMemberTempRepository.findById(target.getId());
-	}
-
-
-/**	public String staffMemberDelete(Integer staffMemberId) {
-			//TODO id direto deu erro pq? erro: java.lang.IllegalArgumentException: Not an entity:class java.lang.Integer
-//			at org.hibernate.ejb.AbstractEntityManagerImpl.contains(AbstractEntityManagerImpl.java:924)
-//			at sun.reflect.NativeMethodAccessorImpl.invoke
-			//staffMemberTempRepository.delete(staffMemberId);
-			StaffMember member = staffMemberRepository.findOne(staffMemberId);
-			if (member!=null) {
-				try {
-					staffMemberTempRepository.delete(member);	
-				} catch (Exception e) {
-					throw new DeleteClassException(0, "STAFF_MEMBER_CANNOT_DELETE", 404);	
-				}
-			}else{
-				throw new DeleteClassException(0, "STAFF_MEMBER_NOT_FOUND", 404);	
-			}			
-			return "{\"deleted\":true}";
-	}
-**/
-/**	public  class DeleteClassException extends SaveEntityException{
-
-		
-		private static final long serialVersionUID = 1L;
-
-		public DeleteClassException(int id, String errorMessage, int errorCode) {
-			super(id, errorMessage, errorCode);
-		}		
-	}
-
-**/	
 	//reportPhase
 	
 	/**
