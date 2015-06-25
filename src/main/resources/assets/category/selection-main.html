@@ -7,7 +7,7 @@
    		<ul class="nav navbar-nav" data-ng-cloak >
 			<li >
 				<a  data-ng-click="newCategory(qualifierValue)" >
-					Nova categoria para {{'CATEGORY_'+qualifierName}}
+					Nova categoria para {{qualifierName}}
 				</a>
 			</li>
 		</ul>
@@ -26,7 +26,7 @@
 			data-tooltip-placement="left"
 			data-tooltip="{{'FILL_FOLDER'}}"
 			data-ng-click="searchFilter(1)">
-			Pesquisando na categoria {{'CATEGORY_'+qualifierName}}
+			Pesquisando na categoria {{qualifierName}}
 			<i class="fa fa-toggle-on fa-3"></i>
 		</a>  
 		<div class="input-group input-group-sm">
@@ -38,22 +38,6 @@
 		<div class="alert alert-success col-sm-12" id="searchMsg" style="display: none;"  role="alert"> {{'NO_RESULT'}}</div>
 		</form>	
 	</div>
-	
-	<div >
-	 
-	 <div class="panel panel-default" data-ng-init="setSectionTab(1)">
- 	<div class="list-group">
-		<a class="list-group-item" data-ng-repeat="qualifierItem in qualifiers" data-ng-show="qualifierValue!=qualifierItem.qualifierValue" data-ng-click="setExternalId(0);setQualifier(qualifierItem)" >
-			<span class="h4">{{'CATEGORY_'+qualifierItem.qualifierName}}</span>
-			<span class="badge alert-danger" data-ng-show="qualifierItem.countAlerts>0">{{qualifierItem.countAlerts}}</span>
-			<span class="badge alert-warning" data-ng-show="qualifierItem.countWarnings>0 && qualifierItem.countAlerts==0">{{qualifierItem.countWarnings}}</span>
-			<br/><span style="font-size: 70%; color: #aaa;">{{qualifierItem.countItems}} itens</span>
-		</a>
-	</div>
-</div>
-	
-</div>
-
 
 <!--
  ! 1. Principal

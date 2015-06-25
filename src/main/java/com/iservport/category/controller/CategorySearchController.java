@@ -27,9 +27,6 @@ import com.iservport.category.service.CategoryQueryService;
 import com.iservport.home.controller.SearchForm;
 
 
-
-
-
 /**
  * Controlador de categorias.
  * 
@@ -116,7 +113,7 @@ public class CategorySearchController {
 					, command.getPageNumber(), command.getSearchString()
 					, command.getOrderString());
 		}
-	//	
+	
 		/**
 		 * Atualiza categoria.
 		 *
@@ -175,6 +172,7 @@ public class CategorySearchController {
 			@Override
 			public String getName() {
 				return caption;
+
 			}
 			
 			public static char[] valuesAsArray(){
@@ -188,8 +186,6 @@ public class CategorySearchController {
 			
 		}
 		
-
-
 	
 }
 

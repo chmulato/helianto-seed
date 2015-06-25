@@ -35,6 +35,7 @@ public class CategoryQueryService {
 	@Inject 
 	protected EntityRepository entityRepository;
 	
+
 	public List<QualifierAdapter> qualifier(int entityId) {
 		List<QualifierAdapter> qualifierList 
 			= QualifierAdapter.qualifierAdapterList(InternalCategoryGroup.values());

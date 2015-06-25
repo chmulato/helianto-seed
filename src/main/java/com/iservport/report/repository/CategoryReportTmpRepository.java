@@ -1,25 +1,27 @@
-package com.iservport.category.repository;
+package com.iservport.report.repository;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.helianto.core.domain.Category;
-import org.helianto.core.internal.SimpleCounter;
 import org.helianto.core.repository.CategoryReadAdapter;
+import org.helianto.query.data.QueryRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import java.util.List;
 
 /**
  * Repositório de categorias temporário.
  * 
  * @author Eldevan Nery Junior.
  */
-public interface CategoryTmpRepository 
+public interface CategoryReportTmpRepository 
 	extends JpaRepository<Category, Serializable>
 {
 
+
+	
 	@Query("select new "
 			+ "org.helianto.core.repository.CategoryReadAdapter"
 			+ "(category.id"
@@ -39,20 +41,22 @@ public interface CategoryTmpRepository
 	Page<CategoryReadAdapter> findByEntityIdAndCategoryGroupAndCategoryCodeLikeOrCategoryNameLike(int entityId, char[] categoryGroup
 			, String search, Pageable page);
 	
-	/**
-	 * Conta lista de categorias por entidade, agrupadas por grupo.
-	 * 
-	 * @param entityId
-	 */
-	@Query("select new " +
-			"org.helianto.core.internal.SimpleCounter" +
-			"(category.categoryGroup, count(category)) " +
-			"from Category category " +
-			"where category.entity.id = ?1 " +
-			"group by category.categoryGroup")
-	List<SimpleCounter> countCategoriesByEntityIdGroupByGroup(int entityId);
-
-
-	
+	@Query("select new "
+			+ "org.helianto.core.repository.CategoryReadAdapter"
+			+ "(category.id"
+			+ ", category.entity.id"
+			+ ", category.categoryGroup"
+			+ ", category.categoryCode"
+			+ ", category.categoryName"
+			+ ", category.categoryIcon"
+			+ ", category.scriptItems"
+			+ ", category.customProperties"
+			+ ", category.content"
+			+ ") "
+			+ "from Category category "
+			+ "where category.entity.id = ?1 "
+			+ "and category.categoryGroup = ?2 "
+			+ "OR category.id in(select e.reportFolder.category.id from ReportFolderExported e where e.exportedEntity.id = ?1)")
+	List<CategoryReadAdapter> findByEntityIdAndCategoryGroup(int entityId, char categoryGroup);
 
 }

@@ -15,7 +15,7 @@
 	
 			<div class="col-md-8" >
 				<div id="form-group-categoryCode" class="form-group">
-					<label for="categoryCode" class="col-sm-3 control-label">{{'CATEGORY_CODE'}}*</label>
+					<label for="categoryCode" class="col-sm-3 control-label">{{'Código da categoria'}}*</label>
 					<div class="col-sm-9">
 					<input id="categoryCode" type="text"  required="" name="categoryCode" maxlength="24" 
 					       placeholder="max 24 char" 
@@ -25,7 +25,7 @@
 				</div>
 					
 				<div id="form-group-categoryName" class="form-group">
-					<label for="categoryName" class="col-sm-3 control-label">{{'CATEGORY_NAME'}}*</label>
+					<label for="categoryName" class="col-sm-3 control-label">{{'Nome da categoria'}}*</label>
 					<div class="col-sm-9">
 					<input id="categoryName" type="text"  required="" name="categoryName" maxlength="64" 
 					       placeholder="max 64 char" 
@@ -35,10 +35,10 @@
 				</div>
 				
 				<div id="form-group-categoryGroup" class="form-group">
-					<label for="categoryGroup" class="col-sm-3 control-label">{{'CATEGORY'}}</label>
+					<label for="categoryGroup" class="col-sm-3 control-label">{{'Categoria'}}</label>
 					<div class="col-sm-9">
 					<select id="categoryGroup" class="form-control" name="categoryGroup"  data-ng-model="category.categoryGroup">
-						<option data-ng-repeat="qualifierItem in qualifiers" value="{{qualifierItem.qualifierValue}}">{{'CATEGORY_'+qualifierItem.qualifierName}}</option>
+						<option data-ng-repeat="qualifierItem in qualifiers" value="{{qualifierItem.qualifierValue}}">{{'Categoria_'+qualifierItem.qualifierName}}</option>
 					</select>
 					</div>
 				</div>
@@ -48,7 +48,7 @@
 			<div class="col-md-4">
 			
 				<div class="h4" data-ng-show="qualifierItem.qualifierValue==qualifierValue" data-ng-repeat="qualifierItem in qualifiers" >
-					{{'CATEGORY_'+qualifierItem.qualifierName}}
+					{{'Categoria_'+qualifierItem.qualifierName}}
 				</div>
 			
 				<div data-ng-show="message.exist" class="alert alert-danger" role="alert"> 
