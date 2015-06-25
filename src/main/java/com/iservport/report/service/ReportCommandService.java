@@ -29,10 +29,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.iservport.report.repository.StaffMemberReadAdapter;
 import com.iservport.report.repository.StaffMemberTempRepository;
+//import com.iservport.report.repository.StaffMemberTempRepository;
 
 /**
  * Report command service.
@@ -175,7 +174,7 @@ public class ReportCommandService {
 			try {
 				report.setReportCode(new DecimalFormat(report.getNumberPattern()).format(internalNumber));
 			}catch (Exception e){
-			//	throw new SaveEntityException(report.getId(), "REPORT NOT UNIQUE" , 404);
+				throw new RuntimeException("REPORT NOT UNIQUE");
 			}
 			return new ReportAdapter(report).build();
 		}
@@ -194,14 +193,14 @@ public class ReportCommandService {
 			target = reportNew(command.getReportFolderId(), entityId).merge();
 			Report existing = reportRepository.findByEntity_idAndReportCode(entityId, command.getReportCode());
 			if (existing!=null) {
-			//	throw new SaveEntityException(0, "REPORT NOT UNIQUE" , 404);
+				throw new RuntimeException("REPORT NOT UNIQUE");
 			}
 		}
 		else {
 			target = reportRepository.findOne(command.getId());
 		}
 		if (target==null ) {
-			//throw new SaveEntityException(0, "Report cannot be null", 404);	
+			throw new RuntimeException("Report cannot be null");	
 		}
 		if(command.getIdentityId()==null){
 			command.setIdentityId(identityId);	
@@ -259,11 +258,6 @@ public class ReportCommandService {
 		throw new UnsupportedOperationException("staffMemberId required.");
 	}
 **/
-	/**
-	 * Atualiza.
-	 * 
-	 * @param command
-	 */
 
 	//reportPhase
 	
@@ -279,94 +273,37 @@ public class ReportCommandService {
 		adapter.setReportFolderId(folderId);
 		return adapter;
 	}
-}
+
 	/**
 	 * Save reportPhase.
 	 * 
 	 * @param command
 	 * @param entityId
 	 */
-/**	public ReportPhaseAdapter reportPhase(ReportPhaseAdapter command) {
+	public ReportPhaseAdapter reportPhase(ReportPhaseAdapter command) {
 		ReportPhase target = null;
 		if (command.getId()==0) {
 			target = reportPhaseNew(command.getReportFolderId()).merge();
 			ReportPhase existing = reportPhaseRepository.findByReportFolderAndLiteral(target.getReportFolder(), command.getLiteral());
 			if (existing!=null) {
-				throw new SaveEntityException(0, "REPORT_PHASE NOT UNIQUE" , 404);
+				throw new RuntimeException("REPORT_PHASE NOT UNIQUE");
 			}
 		}
 		else {
 			target = reportPhaseRepository.findOne(command.getId());
 		}
 		if (target==null ) {
-			throw new SaveEntityException(0, "REPORT_PHASE CANNOT BE NULL", 404);	
+			throw new RuntimeException("REPORT_PHASE CANNOT BE NULL");	
 		}
 		target = reportPhaseRepository.saveAndFlush(command.setAdaptee(target).merge());
 		return reportPhaseRepository.findById(target.getId());
 		
 	}
-**/
-	/**
-	 * Novo monitoramento.
-	 *  
-	 * @param reportId
-	 */
-/**	public ReportReviewReadAdapter reportReviewNew(Integer reportId, Integer identityId) {
-		Identity identity = identityRepository.findOne(identityId);
-		Report report = reportRepository.findOne(reportId);
-		return new ReportReviewReadAdapter(new ReportReview()).build(report, identity);
-	}
-**/
-	/**
-	 * Atualiza monitoramento.
-	 * 
-	 * @param command
-	 */
-/**	public ReportReviewReadAdapter reportReview(ReportReviewReadAdapter command, Integer entityid) {
-		ReportReviewReadAdapter reportReview = validate(command, entityid);
-		reportReviewTempRepository.saveAndFlush(reportReview.merge());
-		//update nextCheckDate on report
-		Report report = reportRepository.findOne(command.getReportId());
-		report.setNextCheckDate(command.getNextCheckDate());
-		reportRepository.saveAndFlush(report);
-		return reportReview ;
-	}
-**/
-	/**
-	 * Validador.
-	 * 
-	 * @param command
-	 */
-/**	protected  ReportReviewReadAdapter validate(ReportReviewReadAdapter command, Integer entityid){
-		ReportReview reportReview = null;
-		Report report = null;
-		Identity identity = null;
-		if (command.getId()==0) {
-			if (command.getReportId()==null || command.getIdentityId()==null) {
-				throw new SaveEntityException(0,"Report  and identity required",202);
-			}
-			report = reportRepository.findOne(command.getReportId());
-			identity = identityRepository.findOne(command.getIdentityId());
-			if (report==null || identity ==null) {
-				throw new SaveEntityException(0,"Report and identity required",202);
-			}
-			reportReview = new ReportReview(report, identity);
-			
-			
-		//	Integer existing 
-		//	= 		reportReviewTempRepository.findByReportIdAndTimeKey(report.getId(), (int)reportReview.getTimeKey());
-		//	if (existing!=null)  {
-		//		throw new SaveEntityException(existing, "ReportReviw not unique.",0);
-		//	}
-		}
-		else {
-			reportReview = reportReviewTempRepository.findOne(command.getId());
-		}
-		Entity entity = entityRepository.findOne(entityid);
-		reportReview.setEntity(entity);
-		command.setAdaptee(reportReview);
-		return command;
-	}
+	
+}
+
+/**
+
 	public ParticipantReadAdapter participantNew(Integer reportId) {
 		// TODO Auto-generated method stub
 		return null;

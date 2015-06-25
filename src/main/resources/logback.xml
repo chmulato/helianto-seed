@@ -20,14 +20,14 @@
   <logger name="org.springframework.security" level="OFF"/>
   <logger name="org.springframework.validation" level="OFF"/>
   <logger name="org.springframework.web.servlet.config" level="OFF"/>
-  <logger name="org.springframework.web" level="OFF"/>
+  <logger name="org.springframework.web" level="ON"/>
   
   <logger name="org.hibernate" level="OFF"/>
   <logger name="org.hibernate.SQL" level="ON"/>
   <logger name="org.hibernate.jdbc" level="OFF"/>
   <logger name="org.hibernate.jdbc.AbstractBatcher" level="OFF"/>
-  <logger name="org.hibernate.impl" level="OFF"/>
-  <logger name="org.aopalliance" level="OFF"/>
+  <logger name="org.hibernate.impl" level="ON"/>
+  <logger name="org.aopalliance" level="ON"/>
   
   <logger name="com.iservport.home" level="OFF"/>
   

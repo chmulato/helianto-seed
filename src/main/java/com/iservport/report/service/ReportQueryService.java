@@ -1,6 +1,5 @@
 package com.iservport.report.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -8,18 +7,19 @@ import javax.inject.Inject;
 
 import org.helianto.core.def.CategoryGroup;
 import org.helianto.core.internal.QualifierAdapter;
+import org.helianto.core.internal.SimpleCounter;
 import org.helianto.core.repository.CategoryReadAdapter;
 import org.helianto.core.repository.CategoryRepository;
 import org.helianto.core.repository.EntityRepository;
 import org.helianto.core.repository.IdentityRepository;
-import org.helianto.security.internal.UserAuthentication;
 import org.helianto.task.repository.FolderReadAdapter;
 import org.helianto.task.repository.ReportAdapter;
 import org.helianto.task.repository.ReportFolderRepository;
+import org.helianto.task.repository.ReportPhaseAdapter;
 import org.helianto.task.repository.ReportPhaseRepository;
 import org.helianto.task.repository.ReportRepository;
-import org.helianto.user.repository.UserReadAdapter;
 import org.helianto.user.repository.UserRepository;
+import org.joda.time.DateMidnight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -28,9 +28,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-//import com.iservport.report.repository.CategoryReportTmpRepository;
+import com.iservport.report.repository.CategoryReportTmpRepository;
+import com.iservport.report.repository.ReportStatsRepository;
 import com.iservport.report.repository.StaffMemberReadAdapter;
 import com.iservport.report.repository.StaffMemberTempRepository;
+//import com.iservport.user.repository.UserTmpRepository;
 
 /**
  * Report query service.
@@ -69,14 +71,15 @@ public class ReportQueryService {
 	@Inject 
 	protected StaffMemberTempRepository staffMemberTempRepository;
 	
-//	@Inject 
-//	protected CategoryReportTmpRepository categoryReportTmpRepository;
+	@Inject 
+	protected CategoryReportTmpRepository categoryReportTmpRepository;
+	
+	@Inject
+	protected ReportStatsRepository reportStatsRepository;
 	
 //	@Inject 
 //	protected UserTmpRepository userTmpRepository;
 	
-	//qualifier
-
 	//qualifier
 	/**
 	 * Lista categorias de relatórios.
@@ -86,17 +89,51 @@ public class ReportQueryService {
 	public List<QualifierAdapter> qualifier(Integer entityId) {
 		// listamos categorias
 		List<CategoryReadAdapter> categoryList 
-		= new ArrayList<CategoryReadAdapter>();
+		= categoryReportTmpRepository.findByEntityIdAndCategoryGroup(entityId
+				, CategoryGroup.PROJECT.getValue());
 		// A classe QualifierAdapter é conveniente para construir uma 
 		// lista a partir de classes que implementam o tipo KeyNameAdapter.
 		List<QualifierAdapter> qualifierList 
 		= QualifierAdapter.categoryAdapterList(categoryList, false);
 
 		// realiza a contagem
-		//count(entityId, qualifierList);
+		count(entityId, qualifierList);
 
 		return qualifierList;
 	}
+
+	/**
+	 * Método auxiliar para contar os qualificadores.
+	 * 
+	 * @param entityId
+	 * @param qualifierList
+	 */
+	public void count(Integer entityId, List<QualifierAdapter> qualifierList) {
+
+		// conta o relatórios agrupados por categoria
+		List<SimpleCounter> counterListAll 
+		= reportStatsRepository.countActiveReportsGroupByCategory(entityId);
+
+		// conta relatórios atrasados agrupados por categoria
+		List<SimpleCounter> counterListLate 
+		= reportStatsRepository.countLateReportsGroupByCategory(entityId
+				, new DateMidnight().toDate());
+
+		// conta relatórios a vencer em DAYS_TO_WARN (30) dias agrupados por categoria
+		List<SimpleCounter> counterListWarn 
+		= reportStatsRepository.countLateReportsGroupByCategory(entityId
+				, new DateMidnight().plusDays(DAYS_TO_WARN).toDate());
+	
+		// para cada qualificador preenchemos as contagens
+		for (QualifierAdapter qualifier: qualifierList) {
+			qualifier
+			.setCountItems(counterListAll)
+			.setCountAlerts(counterListLate)
+			.setCountWarnings(counterListWarn);
+		}
+	 
+	}
+
 	
 	
 	
@@ -164,14 +201,14 @@ public class ReportQueryService {
 	 * @param reportPhaseId
 	 * 
 	 */
-/**	public ReportPhaseAdapter reportPhaseOpen(Integer reportPhaseId) {
+	public ReportPhaseAdapter reportPhaseOpen(Integer reportPhaseId) {
 		return reportPhaseRepository.findById(reportPhaseId);
 	}
 	
 	public List<ReportPhaseAdapter> reportPhaseList(Integer reportFolderId) {
 		return reportPhaseRepository.findByReportFolderId(reportFolderId);
 	}
-**/	
+	
 	public StaffMemberReadAdapter staffMemberOpen(Integer staffMemberId) {
 		return staffMemberTempRepository.findById(staffMemberId);
 	}
