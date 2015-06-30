@@ -29,7 +29,6 @@
 		  <li data-ng-class="{active:isReportSection(2),disabled:report.id==-1}">
 		    <a class="list-group-item" data-ng-click="setReportSection(2)">Conteúdo</a>
 		  </li>
-		  
 		</ul>
 	</div>
 	<!-- 
@@ -73,7 +72,7 @@
 				</table>
 				</div>
             <!-- tarefas -->
-            <div class="col-md-6 col-xs-12 "data-ng-hide="isReportSection(0)">
+            <div class="col-md-6 col-xs-12 "data-ng-hide="isReportSection(-1)">
             	<div class="col-md-12">
 	            	<div class="btn-group">
 					  <button type="button" class="btn btn-default">Fases</button>
@@ -127,7 +126,7 @@
           !
           ! SEÇÃO -1 Pastas 
           ! -->
-            <div class="col-md-6 col-xs-12" data-ng-show="isReportSection(1)">
+            <div class="col-md-6 col-xs-12" data-ng-show="isReportSection(-1)">
                 <!-- 
                  ! Descrição do projeto.
                  -->
@@ -437,14 +436,11 @@
 				<a href="" data-ng-click="newReport(reportFolder.id)" data-ng-hide="isExported(reportFolder.exporterId)">
 					Nova Tarefa
 				</a>
-				<button class="btn btn-default" data-ng-click="newReportFolder()">Novo Projeto</button>
-				<!--   <button  class="btn btn-default navbar-btn"
+				<button  class="btn btn-default navbar-btn"
 						 data-ng-click="newReportFolder();clearReportFolder()"
 						 data-ng-hide="isExported(qualifier.entityId)">
-					{{'FOLDER_NEW'}}
-					
-				</button>	
-			-->				
+					Novo Projeto
+				</button>				
         </div><!-- panel-footer folders -->
 
         <!--panel-footer  rodapé -->

@@ -613,6 +613,7 @@
 			});
 			
 		}
+		
 		/**
 		 * Chamada de pesquisa de usuário para typeAhead
 		 * 
@@ -629,6 +630,7 @@
 				return items;
 			});
 		}
+		
 		
 		
 		

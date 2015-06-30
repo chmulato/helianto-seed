@@ -9,6 +9,7 @@ import org.helianto.security.internal.UserAuthentication;
 import org.helianto.task.repository.FolderReadAdapter;
 import org.helianto.task.repository.ReportAdapter;
 import org.helianto.task.repository.ReportPhaseAdapter;
+import org.helianto.user.repository.UserReadAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -20,8 +21,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.iservport.report.repository.StaffMemberReadAdapter;
 import com.iservport.report.service.ReportCommandService;
 import com.iservport.report.service.ReportQueryService;
+import com.iservport.user.service.UserQueryService;
 
 
 /**
@@ -39,10 +42,12 @@ public class ReportSearchController {
 	
 	@Inject ReportQueryService reportQueryService;
 	
+	@Inject UserQueryService userQueryService;
+	
 	/**
 	 * Atualizar pasta.
 	 *
-	 * PUT 	/app/report/folder
+	 * PUT 	/api/report/folder
 	 */
 	
 	@PreAuthorize("isAuthenticated()")
@@ -58,7 +63,7 @@ public class ReportSearchController {
 	/**
 	 * Lista qualificadores.
 	 * 
-	 * GET		/app/report/qualifier
+	 * GET		/api/report/qualifier
 	 */
 	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value={"/qualifier"}, method=RequestMethod.GET)
@@ -72,7 +77,7 @@ public class ReportSearchController {
 		/**
 		 * Lista pastas por qualificador.
 		 *
-		 * GET       /app/report/folder?qualifierValue
+		 * GET       /api/report/folder?qualifierValue
 		 */
 		@PreAuthorize("isAuthenticated()")
 		@RequestMapping(value={"/folder"}, method=RequestMethod.GET, params={"qualifierValue"})
@@ -84,7 +89,7 @@ public class ReportSearchController {
 		/**
 		 * Nova pasta.
 		 *
-		 * POST		/app/report/folder?qualifierValue
+		 * POST		/api/report/folder?qualifierValue
 		 */
 		@PreAuthorize("isAuthenticated()")
 		@RequestMapping(value={"/folder"}, method=RequestMethod.POST , params={"qualifierValue"})
@@ -96,7 +101,7 @@ public class ReportSearchController {
 		/**
 		 * Pasta.
 		 *
-		 * GET 	/app/report/folder?folderId
+		 * GET 	/api/report/folder?folderId
 		 */
 		@PreAuthorize("isAuthenticated()")
 		@RequestMapping(value={"/folder"}, method=RequestMethod.GET, params={"folderId"})
@@ -108,7 +113,7 @@ public class ReportSearchController {
 		/**
 		 * Lista reports por pastas.
 		 *
-		 * GET       /app/report?id
+		 * GET       /api/report?id
 		 */
 		@PreAuthorize("isAuthenticated()")
 		@RequestMapping(value={"/", ""}, method=RequestMethod.GET, params={"id"})
@@ -120,7 +125,7 @@ public class ReportSearchController {
 		/**
 		 * return reporter from report.
 		 *
-		 * GET       /app/report?reportId
+		 * GET       /api/report?reportId
 		 */
 		@PreAuthorize("isAuthenticated()")
 		@RequestMapping(value={"/", ""}, method=RequestMethod.GET, params={"reportId"})
@@ -132,7 +137,7 @@ public class ReportSearchController {
 		/**
 		 * seleciona reportPhase por id.
 		 *
-		 * GET       /app/report/phase?id
+		 * GET       /api/report/phase?id
 		 */
 		@PreAuthorize("isAuthenticated()")
 		@RequestMapping(value={"/phase"}, method=RequestMethod.GET, params={"id"})
@@ -144,7 +149,7 @@ public class ReportSearchController {
 		/**
 		 * Atualiza reportPhase.
 		 *
-		 * PUT		/app/report
+		 * PUT		/api/report
 		 */
 		@PreAuthorize("isAuthenticated()")
 		@RequestMapping(value={"/phase"}, method=RequestMethod.PUT , consumes="application/json")
@@ -156,7 +161,7 @@ public class ReportSearchController {
 		/**
 		 * Novo reportPhase.
 		 *
-		 * POST		/app/report/phase?folderId
+		 * POST		/api/report/phase?folderId
 		 */
 		@PreAuthorize("isAuthenticated()")
 		@RequestMapping(value={"/phase"}, method=RequestMethod.POST , params={"folderId"})
@@ -165,5 +170,90 @@ public class ReportSearchController {
 			return reportCommandService.reportPhaseNew(folderId);
 		}
 		
-	
+		// Membros da equipe
+
+		/**
+		 * Lista membros da equipe.
+		 *
+		 * GET		/api/report/staffMember?folderId
+		 */
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/staffMember"}, method=RequestMethod.GET, params={"folderId"})
+		@ResponseBody
+		public Page<StaffMemberReadAdapter> staffMember(@RequestParam Integer folderId, 
+				@RequestParam(required = false, defaultValue = "0") Integer pageNumber) {
+			return reportQueryService.staffMemberList(folderId, pageNumber);
+		}
+		
+		/**
+		 * Novo membro da equipe.
+		 *
+		 * POST		/api/report/staffMember?folderId
+		 */
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/staffMember"}, method=RequestMethod.POST , params={"folderId"})
+		@ResponseBody
+		public StaffMemberReadAdapter staffMemberNew(@RequestParam Integer folderId) {
+			return reportCommandService.staffMemberNew(folderId);
+		}
+
+		/**
+		 * Membro da equipe.
+		 *
+		 * GET 	/app/report/staffMember?staffMemberId
+		 */
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/staffMember"}, method=RequestMethod.GET, params={"staffMemberId"})
+		@ResponseBody
+		public StaffMemberReadAdapter staffMemberOpen(@RequestParam Integer staffMemberId) {
+			return reportQueryService.staffMemberOpen(staffMemberId);
+		}
+
+		/**
+		 * Remove membro da equipe.
+		 *
+		 * DELETE 	/api/report/staffMember?staffMemberId
+		 */
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/staffMember"}, method=RequestMethod.DELETE, params={"targetId"})
+		@ResponseBody
+		public String staffMemberDelete(@RequestParam Integer targetId) {
+			return reportCommandService.staffMemberDelete(targetId);
+		}
+
+		/**
+		 * Atualizar membro da equipe.
+		 *
+		 * PUT 	/api/report/staffMember
+		 */
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/staffMember"}, method=RequestMethod.PUT, consumes="application/json")
+		@ResponseBody
+		public StaffMemberReadAdapter staffMember(@RequestBody StaffMemberReadAdapter command) {
+			return reportCommandService.staffMember(command);
+		}
+		
+		//
+		
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/staffMember"}, method=RequestMethod.GET, params={"users"})
+		@ResponseBody
+		public List<UserReadAdapter> getUserList(UserAuthentication userAuthentication) {
+			return userQueryService.getUserList(userAuthentication);
+		}
+		
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/staffMember"}, method=RequestMethod.GET, params={"users", "search", "searchFolderId"})
+		@ResponseBody
+		public List<UserReadAdapter> getUserList(UserAuthentication userAuthentication, @RequestParam String search, @RequestParam Integer searchFolderId) {
+			return reportQueryService.getUserListSearch(userAuthentication, search, searchFolderId);
+		}
+		
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/staffMember"}, method=RequestMethod.GET, params={"users", "userId"})
+		@ResponseBody
+		public UserReadAdapter getUser(@RequestParam Integer userId) {
+			return userQueryService.getUser(userId);
+		}
+		
 }

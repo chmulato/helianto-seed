@@ -88,8 +88,7 @@ public class StaffMemberReadAdapter extends AbstractReadAdapter
 					identity.getId(), identity.getIdentityFirstName() ,
 					identity.getIdentityLastName(), identity.getDisplayName(), identity.getImageUrl());
 		}
-	//	throw new SaveEntityException(0, "Null adaptee will not be persisted.", 0);
-		return null;
+		throw new RuntimeException("Null adaptee will not be persisted.");
 	}
 	
 	public StaffMember merge(){

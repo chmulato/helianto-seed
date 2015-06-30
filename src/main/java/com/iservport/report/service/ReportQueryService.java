@@ -12,12 +12,14 @@ import org.helianto.core.repository.CategoryReadAdapter;
 import org.helianto.core.repository.CategoryRepository;
 import org.helianto.core.repository.EntityRepository;
 import org.helianto.core.repository.IdentityRepository;
+import org.helianto.security.internal.UserAuthentication;
 import org.helianto.task.repository.FolderReadAdapter;
 import org.helianto.task.repository.ReportAdapter;
 import org.helianto.task.repository.ReportFolderRepository;
 import org.helianto.task.repository.ReportPhaseAdapter;
 import org.helianto.task.repository.ReportPhaseRepository;
 import org.helianto.task.repository.ReportRepository;
+import org.helianto.user.repository.UserReadAdapter;
 import org.helianto.user.repository.UserRepository;
 import org.joda.time.DateMidnight;
 import org.slf4j.Logger;
@@ -29,10 +31,12 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.iservport.report.repository.CategoryReportTmpRepository;
+import com.iservport.report.repository.ReportReviewReadAdapter;
+import com.iservport.report.repository.ReportReviewTempRepository;
 import com.iservport.report.repository.ReportStatsRepository;
 import com.iservport.report.repository.StaffMemberReadAdapter;
 import com.iservport.report.repository.StaffMemberTempRepository;
-//import com.iservport.user.repository.UserTmpRepository;
+import com.iservport.user.repository.UserTmpRepository;
 
 /**
  * Report query service.
@@ -50,6 +54,9 @@ public class ReportQueryService {
 	protected ReportFolderRepository reportFolderRepository;
 
 	@Inject
+	protected ReportStatsRepository reportStatsRepository;
+	
+	@Inject
 	protected ReportRepository reportRepository;
 	
 	@Inject
@@ -58,28 +65,27 @@ public class ReportQueryService {
 	@Inject
 	protected UserRepository userRepository;
 	
-	
 	@Inject
 	protected IdentityRepository identityRepository;
 	
 	@Inject
 	protected CategoryRepository categoryRepository;
-
-	@Inject
-	protected ReportPhaseRepository reportPhaseRepository;
-
-	@Inject 
-	protected StaffMemberTempRepository staffMemberTempRepository;
 	
 	@Inject 
 	protected CategoryReportTmpRepository categoryReportTmpRepository;
 	
 	@Inject
-	protected ReportStatsRepository reportStatsRepository;
+	protected ReportPhaseRepository reportPhaseRepository;
 	
-//	@Inject 
-//	protected UserTmpRepository userTmpRepository;
+	@Inject 
+	protected StaffMemberTempRepository staffMemberTempRepository;
 	
+	@Inject 
+	protected UserTmpRepository userTmpRepository;
+
+	@Inject
+	protected ReportReviewTempRepository reportReviewTempRepository;  
+
 	//qualifier
 	/**
 	 * Lista categorias de relatórios.
@@ -123,7 +129,7 @@ public class ReportQueryService {
 		List<SimpleCounter> counterListWarn 
 		= reportStatsRepository.countLateReportsGroupByCategory(entityId
 				, new DateMidnight().plusDays(DAYS_TO_WARN).toDate());
-	
+
 		// para cada qualificador preenchemos as contagens
 		for (QualifierAdapter qualifier: qualifierList) {
 			qualifier
@@ -131,11 +137,8 @@ public class ReportQueryService {
 			.setCountAlerts(counterListLate)
 			.setCountWarnings(counterListWarn);
 		}
-	 
-	}
 
-	
-	
+	}
 	
 	//Folder
 	
@@ -209,34 +212,16 @@ public class ReportQueryService {
 		return reportPhaseRepository.findByReportFolderId(reportFolderId);
 	}
 	
-	public StaffMemberReadAdapter staffMemberOpen(Integer staffMemberId) {
-		return staffMemberTempRepository.findById(staffMemberId);
-	}
-	
 	public Page<StaffMemberReadAdapter> staffMemberList(Integer folderId, Integer pageNumber) {
 		Pageable page = new PageRequest(pageNumber, 100, Direction.ASC, "identity.displayName", "identity.personalData.firstName");
 		return staffMemberTempRepository.findByFolderId(folderId, page );
 	}
 	
-/**	public List<UserReadAdapter> getUserList(UserAuthentication userAuthentication) {
-		Page<UserReadAdapter> userList = 
-				userTmpRepository.findByParentUserKey(userAuthentication.getEntityId()
-						, "USER", new char[] {'A'}, null);
-		return userList.getContent();
-<<<<<<< HEAD
-	}getUserList
-	public UserReadAdapter getUser(Integer userId) {
-		return userTmpRepository.findByIdentityId(userId);
+	public StaffMemberReadAdapter staffMemberOpen(Integer staffMemberId) {
+		return staffMemberTempRepository.findById(staffMemberId);
 	}
-**/
-/**	public List<UserReadAdapter> getUserListSearch(UserAuthentication userAuthentication, String search, Integer searchFolderId) {
-=======
-	}
-	public UserReadAdapter getUser(Integer userId) {
-		return userTmpRepository.findByIdentityId(userId);
-	}
+	
 	public List<UserReadAdapter> getUserListSearch(UserAuthentication userAuthentication, String search, Integer searchFolderId) {
->>>>>>> refs/remotes/mauricio/master
 		List<Integer> exclusions = staffMemberTempRepository.findIdentityIdsByReportFolderOnStaffMember(searchFolderId);
 		//previne que dê erro.
 		exclusions.add(0);
@@ -246,45 +231,51 @@ public class ReportQueryService {
 						, "USER", new char[] {'A'}, exclusions, search, page);
 		return userList.getContent();
 	}
+
 	/**
 	 * Listar monitoramento.
 	 * 
 	 * @param reportId
 	 * @param pageNumber
 	 */
-/**	public Page<ReportReviewReadAdapter> reportReview(Integer reportId, Integer pageNumber) {
+	public Page<ReportReviewReadAdapter> reportReview(Integer reportId, Integer pageNumber) {
 		Page<ReportReviewReadAdapter> reportReviewList = reportReviewTempRepository.findByReportId(reportId, 
 				new PageRequest(pageNumber, 100, Direction.ASC, "id"));
+
 		return reportReviewList;
 	}
-**/
+
 	/**
 	 * Recupera um monitoramento.
 	 * 
 	 * @param reportReviewId
 	 */
-/**	public ReportReviewReadAdapter reportReviewOpen(Integer reportReviewId) {
+	public ReportReviewReadAdapter reportReviewOpen(Integer reportReviewId) {
 		ReportReviewReadAdapter reportReviewReadAdapter = reportReviewTempRepository.findById(reportReviewId);
 		return reportReviewReadAdapter;
 	}
-	public Page<ParticipantReadAdapter> participant(Integer reportId,
+
+/**	public Page<ParticipantReadAdapter> participant(Integer reportId,
 			Integer pageNumber) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	public ParticipantReadAdapter participantOpen(Integer participantId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	public Page<FollowUpReadAdapter> followUp(Integer reportId,
 			Integer pageNumber) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	public FollowUpReadAdapter followUpOpen(Integer followUpId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-**/
 
+**/
 }

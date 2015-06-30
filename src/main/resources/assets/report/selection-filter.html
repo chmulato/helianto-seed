@@ -1,10 +1,12 @@
-
-<div class="panel panel-default" data-ng-init="setSectionTab(-1)" >
- <ul class="list-group">
-   <li class="list-group-item" role="presentation" data-ng-class="{active:section=='{{qualifierItem.qualifierValue}}'}" data-ng-repeat="qualifierItem in qualifiers"> 
-    	<a  data-ng-click="setQualifier(qualifierItem)">
-        	{{qualifierItem.qualifierName}}<i class="fa fa-lock" data-ng-show="isExported(qualifierItem.entityId)"></i> 
-       </a>
-   </li>
-</ul>
+  <div class="panel panel-default" data-ng-init="setSectionTab(-1)">
+ 	<div class="list-group">
+		<a class="list-group-item" data-ng-repeat="qualifierItem in qualifiers" data-ng-class="qualifierValue!=qualifierItem.qualifierValue" data-ng-click="setQualifier(qualifierItem)" >
+			<span class="h4">{{qualifierItem.qualifierName}}</span>
+		 	<span class="badge alert-danger" data-ng-show="qualifierItem.countAlerts>0">{{qualifierItem.countAlerts}}</span>  
+			<span class="badge alert-warning" data-ng-show="qualifierItem.countWarnings>0 && qualifierItem.countAlerts==0">{{qualifierItem.countWarnings}}</span> 
+		 	<br/><span style="font-size: 70%; color: #aaa;">{{qualifierItem.countItems}} itens</span> 
+		</a>
+	</div>
 </div>
+
+ 
