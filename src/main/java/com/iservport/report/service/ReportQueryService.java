@@ -216,9 +216,17 @@ public class ReportQueryService {
 		Pageable page = new PageRequest(pageNumber, 100, Direction.ASC, "identity.displayName", "identity.personalData.firstName");
 		return staffMemberTempRepository.findByFolderId(folderId, page );
 	}
-	
+
+	public List<UserReadAdapter> getUserList(UserAuthentication userAuthentication) {
+		Page<UserReadAdapter> userList = 
+				userTmpRepository.findByParentUserKey(userAuthentication.getEntityId()
+						, "USER", new char[] {'A'}, null);
+		return userList.getContent();
+	}
+
 	public StaffMemberReadAdapter staffMemberOpen(Integer staffMemberId) {
 		return staffMemberTempRepository.findById(staffMemberId);
+
 	}
 	
 	public List<UserReadAdapter> getUserListSearch(UserAuthentication userAuthentication, String search, Integer searchFolderId) {

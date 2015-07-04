@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.iservport.report.repository.ProjectReadAdapter;
+import com.iservport.report.repository.ReportReviewReadAdapter;
 import com.iservport.report.repository.StaffMemberReadAdapter;
 import com.iservport.report.service.ReportCommandService;
 import com.iservport.report.service.ReportQueryService;
@@ -53,10 +55,13 @@ public class ReportSearchController {
 	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value={"/folder"}, method=RequestMethod.PUT, consumes="application/json")
 	@ResponseBody
-	public FolderReadAdapter folder(UserAuthentication userAuthentication, @RequestBody FolderReadAdapter command) {
-	
-		return  reportCommandService.folder(command, userAuthentication);
+	public ProjectReadAdapter project(UserAuthentication userAuthentication, @RequestBody ProjectReadAdapter command) {
+		return  reportCommandService.project( command, userAuthentication);
 	}
+	
+	
+	
+	
 
 	// Qualificadores
 	
@@ -106,9 +111,23 @@ public class ReportSearchController {
 		@PreAuthorize("isAuthenticated()")
 		@RequestMapping(value={"/folder"}, method=RequestMethod.GET, params={"folderId"})
 		@ResponseBody
+		public ProjectReadAdapter folderOpen(@RequestParam Integer folderId) {
+			return  reportCommandService.folderOpen(folderId);
+		}
+	
+
+		/**
+		 * Pasta.
+		 *
+		 * GET 	/api/report/folder?folderId
+		 */
+	/**	@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/folder"}, method=RequestMethod.GET, params={"folderId"})
+		@ResponseBody
 		public FolderReadAdapter folderOpen(@RequestParam Integer folderId) {
 			return reportCommandService.folderOpen(folderId);
 		}
+	**/	
 
 		/**
 		 * Lista reports por pastas.
@@ -185,6 +204,7 @@ public class ReportSearchController {
 			return reportQueryService.staffMemberList(folderId, pageNumber);
 		}
 		
+		
 		/**
 		 * Novo membro da equipe.
 		 *
@@ -255,5 +275,59 @@ public class ReportSearchController {
 		public UserReadAdapter getUser(@RequestParam Integer userId) {
 			return userQueryService.getUser(userId);
 		}
+		
+		
+		// Monitoramentos
+		//Correto /report/report em review???
+
+		/**
+		 * Lista monitoramento.
+		 *
+		 * GET		/api/report/report/review?reportId
+		 */
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/review"}, method=RequestMethod.GET, params={"reportId"})
+		@ResponseBody
+		public Page<ReportReviewReadAdapter> reportReview(@RequestParam Integer reportId, @RequestParam(required = false, defaultValue = "0") Integer pageNumber) {
+			return reportQueryService.reportReview(reportId, pageNumber);
+		}
+
+		/**
+		 * Novo monitoramento.
+		 *
+		 * POST		/api/report/report/review?reportId
+		 */
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/review"}, method=RequestMethod.POST , params={"reportId"})
+		@ResponseBody
+		public ReportReviewReadAdapter reportReviewNew(UserAuthentication userAuthentication, @RequestParam Integer reportId) {
+			return reportCommandService.reportReviewNew(reportId, userAuthentication.getIdentityId());
+		}
+
+		/**
+		 * Monitoramento.
+		 *
+		 * GET 	/api/report/report/review?reportReviewId
+		 */
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/review"}, method=RequestMethod.GET, params={"reportReviewId"})
+		@ResponseBody
+		public ReportReviewReadAdapter reportReviewOpen(@RequestParam Integer reportReviewId) {
+			return reportQueryService.reportReviewOpen(reportReviewId);
+		}
+
+		/**
+		 * Atualizar monitoramento.
+		 *
+		 * PUT 	/api/report/report/review
+		 */
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/review"}, method=RequestMethod.PUT, consumes="application/json")
+		@ResponseBody
+		public ReportReviewReadAdapter reportReview(UserAuthentication userAuthentication, @RequestBody ReportReviewReadAdapter command) {
+			return reportCommandService.reportReview(command, userAuthentication.getEntityId());
+		}
+		
+		
 		
 }

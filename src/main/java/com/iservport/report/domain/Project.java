@@ -32,6 +32,9 @@ public class Project
 	@Lob
 	private String constraints;
 	
+	@Lob
+	private String tools;
+	
 	/**
 	 * Default constructor.
 	 */
@@ -77,7 +80,15 @@ public class Project
 	public void setConstraints(String constraints) {
 		this.constraints = constraints;
 	}
+	
+	// Tarefas
+     public String getTools(){
+    	 return tools;
+     }
     
-    
+     public void setTools(String tools){
+    	 this.tools = tools;
+    	 
+     }
     
 }

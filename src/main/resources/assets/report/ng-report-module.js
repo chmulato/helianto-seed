@@ -189,21 +189,9 @@
 		$scope.folderValue = 0;
 		$scope.reportFolder= {};
 		
-		/**
-		 * Exportação
-		 */
 		
-		//abre o modal para exportação e lista entidades à exportar e já exportadas.
-		$scope.exportFolder = function(){
-			$scope.entityList = $scope.reportFolderExportResource.get({reportFolderId:$scope.reportFolder.id});
-			$scope.entityListExported = $scope.reportFolderExportResource.get({reportFolderId:$scope.reportFolder.id, selected:true});
-			$scope.openForm('form-folder-export');
-		}
-		
-//		//verifica se o item é pertencente a outra unidade.
-//		$scope.isExported = function(targetId){
-//			return $scope.authorizedEntity.id != targetId;
-//		}
+	
+
 		
 		$scope.entitiesIds = [];
 		/**
@@ -216,18 +204,14 @@
 			var idx = $scope.entitiesIds.indexOf(id);
 
 			if (idx > -1) {
-				$scope.entitiesIds.splice(idx, 1);
+				$scope.entitiesIds.splice(idx ,1);
+		
 			}
 			else {
 				$scope.entitiesIds.push(id);
 			}
+			console.log($scope.entitiesIds);
 		};
-		//salva exportação
-		$scope.saveExport = function(){
-			$scope.save =  $scope.reportFolderExportResource.exportFolder({reportFolderId:$scope.reportFolder.id,entitiesIds:$scope.entitiesIds});
-			$scope.entitiesIds = [];
-			$("#modalBody").modal('hide');
-		}
 		
 		//end export
 		
@@ -272,7 +256,7 @@
 		};
 		$scope.updateReportFolder = function() {
 			console.log($scope.reportFolder);
-
+			$scope.reportFolder.tools = $scope.entitiesIds;
 			$scope.reportFolder = $scope.reportFolderResource.save($scope.reportFolder);
 			$scope.reportFolder.$promise.then(
 					function(data, getReponseHeaders) {
@@ -857,7 +841,7 @@
 		$scope.isAuthorized =function(role, ext){
 			return securityServices.isAuthorized($scope.authList, role, ext);
 		}
-		 
+		
 	}]);
 
 })();

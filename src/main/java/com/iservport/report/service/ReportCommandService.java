@@ -15,6 +15,7 @@ import org.helianto.security.internal.UserAuthentication;
 import org.helianto.task.domain.Report;
 import org.helianto.task.domain.ReportFolder;
 import org.helianto.task.domain.ReportPhase;
+import org.helianto.task.domain.ReportReview;
 import org.helianto.task.domain.StaffMember;
 import org.helianto.task.repository.FolderReadAdapter;
 import org.helianto.task.repository.ReportAdapter;
@@ -28,12 +29,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.iservport.report.domain.Project;
+import com.iservport.report.repository.FollowUpReadAdapter;
+import com.iservport.report.repository.FollowUpTempRepository;
+import com.iservport.report.repository.ParticipantReadAdapter;
+import com.iservport.report.repository.ParticipantTempRepository;
+import com.iservport.report.repository.ProjectReadAdapter;
+import com.iservport.report.repository.ProjectRepository;
+import com.iservport.report.repository.ReportReviewReadAdapter;
+import com.iservport.report.repository.ReportReviewTempRepository;
+import com.iservport.report.repository.ReportStatsRepository;
 import com.iservport.report.repository.StaffMemberReadAdapter;
 import com.iservport.report.repository.StaffMemberTempRepository;
-//import com.iservport.report.repository.StaffMemberTempRepository;
 
 /**
  * Report command service.
@@ -54,22 +65,37 @@ public class ReportCommandService {
 	protected ReportRepository reportRepository;
 
 	@Inject
+	protected ProjectRepository projectRepository;
+
+	@Inject
 	protected ReportFolderRepository reportFolderRepository;
+	
+	@Inject
+	protected ReportStatsRepository reportStatsRepository;
 
 	@Inject
 	protected EntityRepository entityRepository;
+
+	@Inject 
+	protected StaffMemberTempRepository staffMemberTempRepository;
 
 	@Inject 
 	protected StaffMemberRepository staffMemberRepository;
 
 	@Inject 
 	protected IdentityRepository identityRepository;
+
+	@Inject
+	protected ReportReviewTempRepository reportReviewTempRepository;  
+
+	@Inject
+	protected ParticipantTempRepository participantTempRepository;
+
+	@Inject 
+	protected FollowUpTempRepository followUpTempRepository;
 	
 	@Inject
 	protected ReportPhaseRepository reportPhaseRepository;
-	
-	@Inject 
-	protected StaffMemberTempRepository staffMemberTempRepository;
 	
 	//PASTA
 
@@ -78,10 +104,10 @@ public class ReportCommandService {
 	 * 
 	 * @param categoryId
 	 */
-	public FolderReadAdapter folderNew(Integer categoryId) {
+	public ProjectReadAdapter folderNew(Integer categoryId) {
 		Category category = categoryRepository.findOne(categoryId);
 		if (category!=null) {
-			FolderReadAdapter adapter = new FolderReadAdapter(0, category.getId(), "", "", "", ' ');
+			ProjectReadAdapter adapter = new ProjectReadAdapter(0, category.getId(), "", "", "", "", "", ' ', "", "", "", "", "");
 			return adapter;
 		}
 		throw new UnsupportedOperationException("Category required.");
@@ -92,13 +118,13 @@ public class ReportCommandService {
 	 * 
 	 * @param folderId
 	 */
-	public FolderReadAdapter folderOpen(Integer folderId) {
+	public ProjectReadAdapter folderOpen(Integer folderId) {
 
-		FolderReadAdapter reportFolder 	= reportFolderRepository.findById(folderId);
-		if (reportFolder!=null) {
-			return reportFolder;
+		ProjectReadAdapter project 	= projectRepository.findById(folderId);
+		if (project!=null) {
+			return project;
 		}
-		throw new UnsupportedOperationException("Report folder required.");
+		throw new UnsupportedOperationException("Project required.");
 	}
 
 	/**
@@ -106,40 +132,43 @@ public class ReportCommandService {
 	 * 
 	 * @param command
 	 */
-	public FolderReadAdapter folder(FolderReadAdapter command, UserAuthentication authentication) {
-		ReportFolder reportFolder = validate(command, authentication);
-		reportFolder.setFolderName(command.getFolderName());
-		reportFolder.setFolderCode(command.getFolderCode());
-		reportFolder = reportFolderRepository.saveAndFlush(reportFolder);
-		// caso não haja categoria mante o categoryId = 0;
-		int categoryId = 0;
-		if (reportFolder.getCategory()!=null) {
-			categoryId = reportFolder.getCategory().getId();
-		}
-		return new FolderReadAdapter(reportFolder.getId(), categoryId,
-				reportFolder.getFolderCode(), reportFolder.getFolderName(), 
-				reportFolder.getFolderDecorationUrl(), reportFolder.getContentType());
-	}
-
+	public ProjectReadAdapter project(ProjectReadAdapter command, UserAuthentication authentication) {
+		Project project = validate(command, authentication);
+		project.setFolderName(command.getFolderName());
+		project.setFolderCode(command.getFolderCode());
+		project.setFolderDecorationUrl(command.getFolderDecorationUrl());
+		project.setBenefits(command.getBenefits());
+		project.setAssumptions(command.getAssumptions());
+		project.setDeliverables(command.getDeliverables());
+		project.setConstraints(command.getConstraints());
+		project.setTools(command.arrayToString(command.getTools()));
+		project = projectRepository.saveAndFlush(project);
+		return new ProjectReadAdapter(project.getId(), project.getCategory().getId(),
+				project.getFolderName(), project.getFolderCode(), 
+				project.getFolderDecorationUrl(), project.getPatternPrefix(),
+				project.getPatternSuffix(),project.getEntityId(), project.getBenefits(),
+				project.getAssumptions(), project.getDeliverables(),
+				project.getConstraints(), project.getTools());
+	}  
+	
 	/**
 	 * Método auxiliar para validar a pasta.
 	 * 
 	 * @param command
 	 */
-	protected ReportFolder validate(FolderReadAdapter command, UserAuthentication authentication) {
-		ReportFolder reportFolder = null;
+	protected Project validate(ProjectReadAdapter command, UserAuthentication authentication) {
+		Project project = null;
 		if (command.getId()==0) {
 			if (command.getFolderCode()==null || command.getFolderCode().isEmpty()) {
 
-				System.err.printf(command.getFolderCode());
-				
-				throw new RuntimeException("Report folder code not valid.");
+				throw new RuntimeException("Project code not valid.");
 			}
 			Category category = categoryRepository.findOne(command.getCategoryId());
 			if (category!=null) {
 				Entity entity = entityRepository.findOne(authentication.getEntityId());
-				reportFolder = new ReportFolder(entity, category);
-
+				project = new Project(); //(entity, category)
+				project.setEntity(entity);
+				project.setCategory(category);
 				List<Integer> existing 
 				= reportFolderRepository.
 				findIdsByCategoryIdAndFolderCodeLike(command.getCategoryId(), command.getFolderCode().toLowerCase());
@@ -150,12 +179,12 @@ public class ReportCommandService {
 
 		}
 		else {
-			reportFolder = reportFolderRepository.findOne(command.getId());
+		 project = (Project) reportFolderRepository.findOne(command.getId());
 		}
-		if (reportFolder==null) {
+		if (project==null) {
 			throw new RuntimeException("Null report folder cannot be persisted.");
 		}
-		return reportFolder;
+		return project;
 	}
 	
 	//Report
@@ -165,12 +194,12 @@ public class ReportCommandService {
 	 * @param folderId
 	 */
 	public ReportAdapter reportNew(Integer folderId, Integer entityId) {
-		ReportFolder folder = reportFolderRepository.findOne(folderId);
+		Project project = (Project) reportFolderRepository.findOne(folderId);
 		Entity entity = entityRepository.findOne(entityId);
-		if (folder!=null && entity!=null) {
+		if (project!=null && entity!=null) {
 			Report report = new Report(entity, "");
-			report.setSeries(folder);
-			Long internalNumber =  reportRepository.findLastInternalNumberByReportFolderId(folder.getId());
+			report.setSeries(project);
+			Long internalNumber =  reportRepository.findLastInternalNumberByReportFolderId(project.getId());
 			internalNumber = internalNumber!=null?internalNumber+1:1;
 			report.setInternalNumber(internalNumber);
 			try {
@@ -306,81 +335,143 @@ public class ReportCommandService {
 			return "{\"deleted\":true}";
 	}
 
-
-/**public  class DeleteClassException extends SaveEntityException{
-
-	/**
-	 * 
-	 */
-/**	private static final long serialVersionUID = 1L;
-
-	public DeleteClassException(int id, String errorMessage, int errorCode) {
-		super(id, errorMessage, errorCode);
-	}		
-}
+/**	public  class DeleteClassException extends RuntimeException{
+		/**
+		 * 
+		 */
+/**		private static final long serialVersionUID = 1L;
+		public DeleteClassException(int id, String errorMessage, int errorCode) {
+			super(id, errorMessage, errorCode);
+		}		
+	}
 **/
-
-
+	
 	//reportPhase
 	
+		/**
+		 * Cria uma instância de reportPhase
+		 * 
+		 * @param folderId
+		 * 
+		 */
+		public ReportPhaseAdapter reportPhaseNew(Integer folderId) {
+			ReportFolder folder = reportFolderRepository.findOne(folderId);
+			ReportPhaseAdapter adapter =  new ReportPhaseAdapter(new ReportPhase(folder));
+			adapter.setReportFolderId(folderId);
+			return adapter;
+		}
+
+		/**
+		 * Save reportPhase.
+		 * 
+		 * @param command
+		 * @param entityId
+		 */
+		public ReportPhaseAdapter reportPhase(ReportPhaseAdapter command) {
+			ReportPhase target = null;
+			if (command.getId()==0) {
+				target = reportPhaseNew(command.getReportFolderId()).merge();
+				ReportPhase existing = reportPhaseRepository.findByReportFolderAndLiteral(target.getReportFolder(), command.getLiteral());
+				if (existing!=null) {
+					throw new RuntimeException("REPORT_PHASE NOT UNIQUE");
+				}
+			}
+			else {
+				target = reportPhaseRepository.findOne(command.getId());
+			}
+			if (target==null ) {
+				throw new RuntimeException("REPORT_PHASE CANNOT BE NULL");	
+			}
+			target = reportPhaseRepository.saveAndFlush(command.setAdaptee(target).merge());
+			return reportPhaseRepository.findById(target.getId());
+			
+		}
+
 	/**
-	 * Cria uma instância de reportPhase
-	 * 
-	 * @param folderId
-	 * 
+	 * Novo monitoramento.
+	 *  
+	 * @param reportId
 	 */
-	public ReportPhaseAdapter reportPhaseNew(Integer folderId) {
-		ReportFolder folder = reportFolderRepository.findOne(folderId);
-		ReportPhaseAdapter adapter =  new ReportPhaseAdapter(new ReportPhase(folder));
-		adapter.setReportFolderId(folderId);
-		return adapter;
+	public ReportReviewReadAdapter reportReviewNew(Integer reportId, Integer identityId) {
+		Identity identity = identityRepository.findOne(identityId);
+		Report report = reportRepository.findOne(reportId);
+		return new ReportReviewReadAdapter(new ReportReview()).build(report, identity);
 	}
 
 	/**
-	 * Save reportPhase.
+	 * Atualiza monitoramento.
 	 * 
 	 * @param command
-	 * @param entityId
 	 */
-	public ReportPhaseAdapter reportPhase(ReportPhaseAdapter command) {
-		ReportPhase target = null;
+	public ReportReviewReadAdapter reportReview(ReportReviewReadAdapter command, Integer entityid) {
+		ReportReviewReadAdapter reportReview = validate(command, entityid);
+		reportReviewTempRepository.saveAndFlush(reportReview.merge());
+		//update nextCheckDate on report
+		Report report = reportRepository.findOne(command.getReportId());
+		report.setNextCheckDate(command.getNextCheckDate());
+		reportRepository.saveAndFlush(report);
+		return reportReview ;
+	}
+
+	/**
+	 * Validador.
+	 * 
+	 * @param command
+	 */
+	protected  ReportReviewReadAdapter validate(ReportReviewReadAdapter command, Integer entityid){
+		ReportReview reportReview = null;
+		Report report = null;
+		Identity identity = null;
 		if (command.getId()==0) {
-			target = reportPhaseNew(command.getReportFolderId()).merge();
-			ReportPhase existing = reportPhaseRepository.findByReportFolderAndLiteral(target.getReportFolder(), command.getLiteral());
-			if (existing!=null) {
-				throw new RuntimeException("REPORT_PHASE NOT UNIQUE");
+			if (command.getReportId()==null || command.getIdentityId()==null) {
+				throw new RuntimeException("Report  and identity required");
 			}
+			report = reportRepository.findOne(command.getReportId());
+			identity = identityRepository.findOne(command.getIdentityId());
+			if (report==null || identity ==null) {
+				throw new RuntimeException("Report and identity required");
+			}
+
+			reportReview = new ReportReview(report, identity);
+			
+			
+
+
+		//	Integer existing 
+		//	= 		reportReviewTempRepository.findByReportIdAndTimeKey(report.getId(), (int)reportReview.getTimeKey());
+		//	if (existing!=null)  {
+		//		throw new SaveEntityException(existing, "ReportReviw not unique.",0);
+		//	}
+
 		}
 		else {
-			target = reportPhaseRepository.findOne(command.getId());
+			reportReview = reportReviewTempRepository.findOne(command.getId());
 		}
-		if (target==null ) {
-			throw new RuntimeException("REPORT_PHASE CANNOT BE NULL");	
-		}
-		target = reportPhaseRepository.saveAndFlush(command.setAdaptee(target).merge());
-		return reportPhaseRepository.findById(target.getId());
-		
-	}
-	
-}
 
-/**
+		Entity entity = entityRepository.findOne(entityid);
+		reportReview.setEntity(entity);
+		command.setAdaptee(reportReview);
+		return command;
+	}
 
 	public ParticipantReadAdapter participantNew(Integer reportId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	public ParticipantReadAdapter participant(ParticipantReadAdapter command) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	public FollowUpReadAdapter followUpNew(Integer reportId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	public FollowUpReadAdapter followUp(FollowUpReadAdapter command) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }
-**/
