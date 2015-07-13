@@ -1,39 +1,27 @@
-<div class="modal-header">
-	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	<span class="h4 modal-title" id="modalLabel" >Projetos:</span>
-	
-</div><!-- modal-header-->
+<div data-modal-header-wrapper>Projeto</div>
   		
 <div class="modal-body">
 <form  data-ng-submit="updateReportFolder()" 
 	class="form-horizontal" >
 
 	<div class="row">
+	<div class="col-md-8" >
 
-		<div class="col-md-7" >
+		<!--  Código do projeto -->
+		<div data-control-id="reportCode" data-form-group-wrapper data-label="Código do Projeto">
+		<input id="reportCode" type="text" 
+			name="reportCode" data-ng-model="reportFolder.reportCode" 
+			class="form-control" maxlength="128" readonly="readonly" />
+		</div>
+		<hr/>
 
-			<div id="form-group-reportCode"
-				class="form-group">
-				<label for="reportCode" class="col-sm-3 control-label">Código do Projeto</label>
-				<div class="col-sm-9">
-					<input id="reportCode" type="text" readonly="readonly" name="reportCode"
-						maxlength="128"
-						placeholder="128"
-						data-ng-model="reportFolder.reportCode" class="form-control" />
-				</div>
-			</div>
-
-
-			<div id="form-group-folderName" class="form-group">
-				<label for="folderCode" class="col-sm-3 control-label">Código Teste</label>
-				<div class="col-sm-9">
-					<input id="folderCode" type="text" required name="folderCode"
-						maxlength="64"
-						data-ng-model="reportFolder.folderCode"
-						placeholder=""
-					    class="form-control" />
-				</div>
-			</div>	
+		<!--  Código do projeto -->
+		<div data-control-id="folderCode" data-form-group-wrapper data-label="Código Teste">
+		<input id="folderCode" type="text"  
+			name="folderCode" data-ng-model="reportFolder.folderCode"
+			placeholder=""
+		    class="form-control" maxlength="64" required/>
+		</div>
 
 			<div id="form-group-folderName" class="form-group">
 				<label for="folderName" class="col-sm-3 control-label">Nome do Projeto</label>
@@ -148,10 +136,8 @@
 				</div>
 		</div>
 	</div>	
-		<!-- col-md-7 -->
-	<div class="col-md-1">
-	</div>
-	<!-- col-md-1 -->
+	<!-- col-md-8 -->
+	<!-- col-md-4 -->
 
 		<div class="col-md-4">
 			<div id="form-group-priority" class="form-group">
@@ -295,39 +281,9 @@
 					</div>
 				<hr>
 		 -->
-			<div id="form-group-priority" class="form-group">
-				<label for="priority" class="col-sm-8 control-label">Ferramentas</label>
-			</div>	
-			<hr>
-				<div class="form-group">
-				
-					<div class="col-sm-12">
-						<label class="checkbox"> 
-							<input data-ng-click="toggleSelection(0)" type="checkbox" name="enterprisetester"  id="enterprisetester" value="0" checked="checked"> Enterprise Tester
-						</label> 
-					</div>
-					<div class="col-sm-12">
-						<label class="checkbox" > 
-							<input data-ng-click="toggleSelection(1)" type="checkbox" name="redmine"  id="redmine" value="1"> Redmine
-						</label> 
-					</div>
-					<div class="col-sm-12">
-						<label class="checkbox"> 
-							<input data-ng-click="toggleSelection(2)" type="checkbox" name="testmanager" id="testmanager" value="2"> Test Manager
-						</label> 
-					</div>
-					<div class="col-sm-12">
-						<label class="checkbox">
-							<input data-ng-click="toggleSelection(3)" type="checkbox" name="perfectmobile" id="perfectmobile" value="3"> PerfectMobile
-						</label>
-					</div>
-					<div class="col-sm-12">
-						<label class="checkbox">
-							<input data-ng-click="toggleSelection(4)" type="checkbox" name="ferramentasoffice" id="ferramentasoffice" value="4"> Ferramentas Office
-						</label>
-					</div>
-				</div>
-			<hr>
+		 <div data-tools-wrapper data-parsed-model="reportFolder.tools"></div>
+		 <div data-tech-wrapper data-parsed-model="reportFolder.tools"></div>
+		 
 			<div id="form-group-tecnologiaempregada" class="form-group">
 					<label for="tecnologiaempregada" class="col-sm-8 control-label">Técnologia Empregada</label>
 			</div>	

@@ -843,5 +843,114 @@
 		}
 		
 	}]);
+	
+	/**
+	 * Prime control
+	 */
+	app.directive('toolsWrapper', function() {
+		  return {
+		    restrict: "A",
+		    scope: { parsedModel: '@' },
+		    link: function(scope, element, attrs) {
+		    	scope.checkList = {
+			    	 '0':'Enterprise Tester'
+					,'1':'Redmine'
+					,'2':'Test Manager'
+					,'3':'PerfectMobile'
+					,'4':'Ferramentas Office'
+		    	}
+		    },
+		    template: '<div data-panel-wrapper data-label="Ferramentas">'+
+		    		  '<div class="checkbox" data-ng-repeat="(key, value) in checkList" >' + 
+		              '<label>' +
+		              '<input data-ng-model="parsedModel" name="tools" type="checkbox" value="{{key}}">' +
+		              '{{value}}' +
+		              '</label>' +
+		              '</div>' +
+		              '</div>'
+		  }
+	})
+	.directive('techWrapper', function() {
+		  return {
+		    restrict: "A",
+		    scope: { parsedModel: '@' },
+		    link: function(scope, element, attrs) {
+		    	scope.checkList = {
+			    	 'A':'Android'
+					,'B':'PDV'
+		    	}
+		    },
+		    template: '<div data-panel-wrapper data-label="Tecnologia empregada">'+
+		    		  '<div class="checkbox" data-ng-repeat="(key, value) in checkList" >' + 
+		              '<label>' +
+		              '<input data-ng-model="parsedModel" name="tools" type="checkbox" value="{{key}}">' + 
+		              '{{value}}' +
+		              '</label>' +
+		              '</div>' +
+		              '</div>'
+		  }
+	});
+	
+	/**
+	 * Layout
+	 */
+	
+	/**
+	 * Form group wrapper
+	 * 
+	 * Example:
+	 * <div data-control-id="x" data-form-group-wrapper data-label="y">...</div>
+	 */
+	app.directive('formGroupWrapper', function() {
+		  return {
+		    restrict: "A", 
+		    transclude: true,
+		    scope: { controlId:'@', label:'@' },
+		    template: '<div class="form-group">'+
+		              '<label for="{{controlId}}" class="col-sm-3 control-label">{{label}}</label>' +
+		              '<div class="col-sm-9">' +
+		              '<ng-transclude></ng-transclude>' +
+		              '</div>' +
+		              '</div>'
+		  }
+	})
+	/**
+	 * Panel wrapper
+	 * 
+	 * Example:
+	 * <div data-panel-wrapper data-label="x">...</div>
+	 */
+	.directive('panelWrapper', function() {
+		  return {
+		    restrict: "A", 
+		    transclude: true,
+		    scope: { label:'@' },
+		    template: '<div class="panel panel-default">'+
+		              '<div class="panel-heading" >{{label}}</div>' +
+		              '<div class="panel-body" >' +
+		              '<ng-transclude></ng-transclude>' +
+		              '</div>' +
+		              '</div>'
+		  }
+	})
+	/**
+	 * Modal header wrapper
+	 * 
+	 * Example:
+	 * <div data-modal-header-wrapper>...</div>
+	 */
+	.directive('modalHeaderWrapper', function() {
+		  return {
+		    restrict: "A", 
+		    transclude: true,
+		    template: '<div class="modal-header">'+
+		              '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+		              '<span class="h4 modal-title" id="modalLabel" >' +
+		              '<ng-transclude></ng-transclude>' +
+		              '</span>' +
+		              '</div>'
+		  }
+	});
+
 
 })();
