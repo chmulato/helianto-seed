@@ -268,12 +268,12 @@ var myMod = angular.module('app.services', ['ngResource'])
 		return {
 			restrict: 'A',			
 			link:function(scope, element, attrs) {
-				$http.get('/entity')
+				$http.get(attrs.src)
 				.success(function(data, status, headers, config) {
 					scope.authorizedEntity = data;
 				});		
 			},
-			template :'<div id="authorizedEntity">{{authorizedEntity.entityAlias.length>0?authorizedEntity.entityAlias:"UBIVIS"}}</div>'
+			template :'<div id="authorizedEntity" data-entity-id="{{authorizedEntity.id}}">{{authorizedEntity.entityAlias.length>0?authorizedEntity.entityAlias:"???"}}</div>'
 		}
 
 }])

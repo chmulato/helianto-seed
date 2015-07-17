@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import org.helianto.core.internal.KeyNameAdapter;
 import org.helianto.core.internal.QualifierAdapter;
 import org.helianto.core.repository.CategoryReadAdapter;
+import org.helianto.home.controller.SearchForm;
 import org.helianto.security.internal.UserAuthentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.iservport.category.service.CategoryCommandService;
 import com.iservport.category.service.CategoryQueryService;
-import com.iservport.home.controller.SearchForm;
 
 
 /**
@@ -44,10 +44,8 @@ public class CategorySearchController {
 		@Inject 
 		private CategoryCommandService categoryCommandService;
 		
-		// Qualificadores
-
 		/**
-		 * Lista qualificadores.
+		 * List qualifiers
 		 *
 		 * GET		/app/category/qualifier
 		 */
@@ -59,7 +57,7 @@ public class CategorySearchController {
 		}
 		
 		/**
-		 * Lista categorias por grupo.
+		 * List qualifiers by group.
 		 *
 		 * GET       /app/category?categoryGroup
 		 */

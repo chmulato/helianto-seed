@@ -3,7 +3,6 @@ package com.iservport.user.repository;
 import java.io.Serializable;
 import java.util.List;
 
-import org.helianto.query.data.QueryRepository;
 import org.helianto.user.domain.User;
 import org.helianto.user.domain.UserAssociation;
 import org.helianto.user.domain.UserGroup;

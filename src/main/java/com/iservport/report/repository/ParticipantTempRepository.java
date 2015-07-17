@@ -2,7 +2,6 @@ package com.iservport.report.repository;
 
 import java.io.Serializable;
 
-import org.helianto.query.data.QueryRepository;
 import org.helianto.task.domain.Participant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

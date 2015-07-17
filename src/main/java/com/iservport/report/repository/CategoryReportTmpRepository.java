@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.helianto.core.domain.Category;
 import org.helianto.core.repository.CategoryReadAdapter;
-import org.helianto.query.data.QueryRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

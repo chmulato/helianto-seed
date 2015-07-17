@@ -1,4 +1,4 @@
-package com.iservport.testit.config;
+package com.iservport.swimit.config;
 
 import javax.servlet.ServletContext;
 

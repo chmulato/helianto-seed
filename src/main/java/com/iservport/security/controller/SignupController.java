@@ -1,10 +1,15 @@
 package com.iservport.security.controller;
 
+import javax.inject.Inject;
+
+import org.helianto.core.domain.Identity;
+import org.helianto.security.controller.AbstractSignUpController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import com.iservport.testit.sender.UserConfirmationSender;
 
 /**
  * Controlador de login.
@@ -12,28 +17,28 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author mauriciofernandesdecastro
  */
 @Controller
-@RequestMapping(value={"/signup"})
-public class SignupController {
+@RequestMapping("/signup")
+public class SignupController
+	extends AbstractSignUpController
+{
 	
+	private static final Logger logger = LoggerFactory.getLogger(SignupController.class);
+	
+	@Inject 
+	private UserConfirmationSender userConfirmationSender;
+
 	/**
-	 * Apresenta tela de signup.
+	 * Send user confirmation e-mail.
+	 * 
+	 * @param identity
 	 */
-	@RequestMapping(value={"/", ""}, method=RequestMethod.GET)
-	public String signin( String error, Model model, @RequestParam(required = false) String logout ) {
-		model.addAttribute("baseName", "security");
-		if (error!=null && error.equals("1")) {
-			model.addAttribute("error", "1");
+	@Override
+	protected String sendConfirmation(Identity identity) {
+		if (userConfirmationSender.send(identity, "", encryptToken(identity))) {
+			return "true";
 		}
-		return "/security/signup";
+		return "false";
 	}
 
-	@RequestMapping(value={"/license"}, method=RequestMethod.GET)
-	public String license() {
-		return "/security/license";
-	}
 	
-	@RequestMapping(value={"/privacy"}, method=RequestMethod.GET)
-	public String privacy() {
-		return "/security/privacy";
-	}
 }

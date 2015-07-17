@@ -17,6 +17,8 @@ public class TestItProperties {
     
     private final String rootPrincipal;
     
+    private final String noReplyEmail;
+    
     private final String rootFirstName;
     
     private final String rootLastName;
@@ -30,6 +32,7 @@ public class TestItProperties {
     public TestItProperties(Environment env) {
 		this.defaultAlias = env.getProperty("iservport.defaultAlias", "primecontrol.com.br");
 		this.rootPrincipal = env.getProperty("iservport.rootPrincipal", "everton@primecontrol.com.br");
+		this.noReplyEmail = env.getProperty("iservport.noReplyEmail", "everton@primecontrol.com.br");
 		this.rootFirstName = env.getProperty("iservport.rootFirstName", "Everton");
 		this.rootLastName = env.getProperty("iservport.rootLastName", "Arantes");
 		this.initialSecret = env.getProperty("iservport.initialSecret", "123456");
@@ -42,6 +45,10 @@ public class TestItProperties {
 	public String getRootPrincipal() {
 		return rootPrincipal;
 	}
+	
+	public String getNoReplyEmail() {
+		return noReplyEmail;
+	}
 
 	public String getRootFirstName() {
 		return rootFirstName;
@@ -53,6 +60,10 @@ public class TestItProperties {
     
 	public String getInitialSecret() {
 		return initialSecret;
+	}
+    
+	public String getRootFullName() {
+		return rootFirstName.trim()+" "+rootLastName;
 	}
     
 }

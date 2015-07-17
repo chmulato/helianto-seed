@@ -1,4 +1,4 @@
-package com.iservport.testit.config;
+package com.iservport.swimit.config;
 
 import java.util.EnumSet;
 
@@ -15,6 +15,8 @@ import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
+
+import com.iservport.swimit.config.DispatcherServletConfig.SessionListener;
 
 /**
  * Configuracao do servlet.
