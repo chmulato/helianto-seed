@@ -22,6 +22,8 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.iservport.user.service.UserKeyNameAdapterArray;
+
 /**
  * Configurações Java em geral.
  * 
@@ -88,7 +90,6 @@ public class RootContextConfig extends AbstractRootContextConfig {
 	 * Cria lista de categorias da rede de negócios.
 	 */
 	@Bean
-	@KeyNameArray
 	public KeyNameAdapterArray keyNameAdapterArray() {
 		return new KeyNameAdapterArray() {
 			@Override
@@ -99,7 +100,20 @@ public class RootContextConfig extends AbstractRootContextConfig {
 	}
 	
 	/**
-	 * Internal types.
+	 * Cria lista de categorias de usuários.
+	 */
+	@Bean
+	public UserKeyNameAdapterArray userKeyNameAdapterArray() {
+		return new UserKeyNameAdapterArray() {
+			@Override
+			public KeyNameAdapter[] values() {
+				return InternalUserType.values();
+			}
+		};
+	}
+	
+	/**
+	 * Internal entity types.
 	 * 
 	 * @author mauriciofernandesdecastro
 	 */
@@ -117,6 +131,44 @@ public class RootContextConfig extends AbstractRootContextConfig {
 		 * @param value
 		 */
 		private InternalEntityType(char value, String desc) {
+			this.value = value;
+			this.desc = desc;
+		}
+		
+		public Serializable getKey() {
+			return this.value;
+		}
+		
+		@Override
+		public String getCode() {
+			return value+"";
+		}
+		
+		@Override
+		public String getName() {
+			return desc;
+		}
+	}
+
+	/**
+	 * Internal user types.
+	 * 
+	 * @author mauriciofernandesdecastro
+	 */
+	static enum InternalUserType implements KeyNameAdapter {
+		
+		USER('A', "Usuários")
+		, ADMIN('G', "Administradores");
+		
+		private char value;
+		private String desc;
+		
+		/**
+		 * Constructor.
+		 * 
+		 * @param value
+		 */
+		private InternalUserType(char value, String desc) {
 			this.value = value;
 			this.desc = desc;
 		}

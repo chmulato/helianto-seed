@@ -4,14 +4,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.helianto.core.internal.QualifierAdapter;
+import org.helianto.core.internal.SimpleCounter;
 import org.helianto.security.internal.UserAuthentication;
 import org.helianto.user.repository.UserReadAdapter;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.iservport.user.repository.UserStatsRepository;
 import com.iservport.user.repository.UserTmpRepository;
 
 /**
@@ -23,10 +23,48 @@ import com.iservport.user.repository.UserTmpRepository;
 public class UserQueryService {
 
 	@Inject 
-	protected UserTmpRepository userTmpRepository;
+	private UserTmpRepository userTmpRepository;
 
+	@Inject
+	private UserKeyNameAdapterArray keyNameAdapterArray;
+
+	@Inject 
+	protected UserStatsRepository userStatsRepository;
+	
 	/**
-	 * Lista usuários ativos.
+	 * List qualifiers.
+	 * 
+	 * @param userAuthentication
+	 */
+	public List<QualifierAdapter> qualifierList(int entityId) {
+		List<QualifierAdapter> qualifierList 
+			= QualifierAdapter.qualifierAdapterList(keyNameAdapterArray.values());
+		qualifierCount(entityId, qualifierList);
+		return qualifierList;
+	}
+	
+	/**
+	 * Método auxiliar para contar os qualificadores.
+	 * 
+	 * @param entityId
+	 * @param qualifierList
+	 */
+	public void qualifierCount(int entityId, List<QualifierAdapter> qualifierList) {
+		
+		// conta os usuários ativos agrupados por tipo
+		List<SimpleCounter> counterListAll 
+			= userStatsRepository.countActiveUsersGroupByType(entityId);
+
+		// para cada qualificador preenchemos as contagens
+		for (QualifierAdapter qualifier: qualifierList) {
+			qualifier
+			.setCountItems(counterListAll);
+		}
+						
+	}
+	
+	/**
+	 * List active users.
 	 * 
 	 * @param userAuthentication
 	 */
@@ -40,5 +78,5 @@ public class UserQueryService {
 	public UserReadAdapter getUser(Integer userId) {
 		return userTmpRepository.findByIdentityId(userId);
 	}
-	
+
 }
