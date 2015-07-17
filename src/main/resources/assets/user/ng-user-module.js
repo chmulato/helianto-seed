@@ -9,6 +9,7 @@
 	.factory('resources', ['$resource', function($resource) {
 		var service = {};
 		service.qualifier = $resource("/api/user/qualifier");
+		service.user = $resource("/api/user/");
 		return service;
 	}]) 
 	/**
@@ -18,16 +19,17 @@
 	                                  , function($scope, $window, resources, qualifierService, genericServices, securityServices) {
 	
 		$scope.baseName = "user";
+		$scope.userStates = "A";
 		
 		/**
-		 * Qualifier
+		 * Qualifiers
 		 */
 		$scope.setQualifier = function(value, data) {
 			if (Array.isArray(data)) {
 				$scope.qualifiers = data;
 			}
 			$scope.qualifierValue = value;
-			$scope.userList = [];
+			$scope.userList = {};
 			$scope.listUsers(value);
 		}
 		qualifierService.run(resources.qualifier, $scope.setQualifier, 0);
@@ -36,6 +38,7 @@
 		 * Users
 		 */
 		$scope.listUsers = function(value) {
+			$scope.userList = resources.user.get({userType: value, userStates: $scope.userStates})
 		}
 		
 	}]); // userController

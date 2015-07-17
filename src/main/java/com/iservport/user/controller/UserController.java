@@ -51,7 +51,7 @@ public class UserController {
 	 * 
 	 * GET		/api/user/?userType&userStates&pageNumber
 	 */
-	@RequestMapping(value={"/"}, method=RequestMethod.GET, params={"userType"})
+	@RequestMapping(value={"/", ""}, method=RequestMethod.GET, params={"userType", "userStates"})
 	@ResponseBody                                                           
 	public Page<UserReadAdapter> userList(UserAuthentication userAuthentication, @RequestParam Character userType
 			, @RequestParam String userStates, @RequestParam(defaultValue="0") Integer pageNumber) {

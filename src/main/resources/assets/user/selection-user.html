@@ -7,5 +7,9 @@
 
 <!-- Main -->
 <div class="col-md-9 col-sm-12">
-    <div class="panel panel-default"></div>
+    <div class="panel panel-default">
+    <ul>
+    <li data-ng-repeat="user in userList.content">{{user.userKey}} {{user.userName}}</li>
+    </ul>
+    </div>
 </div>
