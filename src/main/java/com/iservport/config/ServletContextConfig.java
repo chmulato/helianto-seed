@@ -16,5 +16,5 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @Import({ RootContextConfig.class, SecurityWebConfig.class })
 public class ServletContextConfig extends AbstractServletContextConfig {
-
+	
 }

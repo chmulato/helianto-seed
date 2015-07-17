@@ -1,11 +1,15 @@
 package com.iservport.config;
 
+import java.io.Serializable;
+
 import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.helianto.core.config.HeliantoServiceConfig;
+import org.helianto.core.internal.KeyNameAdapter;
+import org.helianto.network.service.KeyNameAdapterArray;
 import org.helianto.seed.config.AbstractRootContextConfig;
 import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.context.annotation.Bean;
@@ -80,4 +84,56 @@ public class RootContextConfig extends AbstractRootContextConfig {
 		return jndiFactory.getObject();
 	}
 	
+	/**
+	 * Cria lista de categorias da rede de negócios.
+	 */
+	@Bean
+	@KeyNameArray
+	public KeyNameAdapterArray keyNameAdapterArray() {
+		return new KeyNameAdapterArray() {
+			@Override
+			public KeyNameAdapter[] values() {
+				return InternalEntityType.values();
+			}
+		};
+	}
+	
+	/**
+	 * Internal types.
+	 * 
+	 * @author mauriciofernandesdecastro
+	 */
+	static enum InternalEntityType implements KeyNameAdapter {
+		
+		CUSTOMER('C', "Clientes")
+		, AGENT('A', "Agentes");
+		
+		private char value;
+		private String desc;
+		
+		/**
+		 * Constructor.
+		 * 
+		 * @param value
+		 */
+		private InternalEntityType(char value, String desc) {
+			this.value = value;
+			this.desc = desc;
+		}
+		
+		public Serializable getKey() {
+			return this.value;
+		}
+		
+		@Override
+		public String getCode() {
+			return value+"";
+		}
+		
+		@Override
+		public String getName() {
+			return desc;
+		}
+	}
+
 }
