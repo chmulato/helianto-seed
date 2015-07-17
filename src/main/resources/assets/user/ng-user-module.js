@@ -1,43 +1,43 @@
 (function() {
-	app = angular.module('user', ['ui.bootstrap', 'app.services', 'angular-redactor']);
-	
-	app.controller('UserController', ['$scope', '$window', '$http', '$resource' , 'genericServices', 'securityServices'
-	                                  , function($scope, $window, $http, $resource, genericServices, securityServices) {
+	/**
+	 * Angular user module.
+	 */
+	app = angular.module('user', ['ui.bootstrap', 'app.services', 'angular-redactor'])
+	/**
+	 * Resources service.
+	 */
+	.factory('resources', ['$resource', function($resource) {
+		var service = {};
+		service.qualifier = $resource("/api/user/qualifier");
+		return service;
+	}]) 
+	/**
+	 * Angular user controller
+	 */
+	.controller('UserController', ['$scope', '$window', 'resources', 'qualifierService', 'genericServices', 'securityServices'
+	                                  , function($scope, $window, resources, qualifierService, genericServices, securityServices) {
 	
 		$scope.baseName = "user";
 		
-	}]); // userController
-	
-	/**
-	 * View Controller
-	 */
-	app.controller('ViewController', ['$scope', '$http', 'securityServices', function($scope, $http, securityServices) {
+		/**
+		 * Qualifier
+		 */
+		$scope.setQualifier = function(value, data) {
+			if (Array.isArray(data)) {
+				$scope.qualifiers = data;
+			}
+			$scope.qualifierValue = value;
+			$scope.userList = [];
+			$scope.listUsers(value);
+		}
+		qualifierService.run(resources.qualifier, $scope.setQualifier, 0);
 		
 		/**
-		 * Abas
+		 * Users
 		 */
-		$scope.sectionTab = 1;
-		$scope.setSectionTab = function(value) {
-			this.sectionTab = value;
-	    };
-	    $scope.isSectionTabSet = function(value) {
-	      return this.sectionTab === value;
-	    };
-
-		/**
-		 * Autorização
-		 */
-		$scope.authList =[];
-		defineAuthorities();
-		function defineAuthorities(){
-			securityServices.getAuthorizedRoles(null).success(function(data, status, headers, config) {
-				$scope.authList = data.content;
-			});
+		$scope.listUsers = function(value) {
 		}
-		$scope.isAuthorized =function(role, ext){
-			return securityServices.isAuthorized($scope.authList, role, ext);
-		}
-		 
-	}]);
-
+		
+	}]); // userController
+	
 } )();

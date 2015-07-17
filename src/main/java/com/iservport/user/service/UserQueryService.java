@@ -7,8 +7,12 @@ import javax.inject.Inject;
 import org.helianto.core.internal.QualifierAdapter;
 import org.helianto.core.internal.SimpleCounter;
 import org.helianto.security.internal.UserAuthentication;
+import org.helianto.user.domain.User;
 import org.helianto.user.repository.UserReadAdapter;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.iservport.user.repository.UserStatsRepository;
@@ -73,6 +77,11 @@ public class UserQueryService {
 				userTmpRepository.findByParentUserKey(userAuthentication.getEntityId()
 						, "USER", new char[] {'A'}, null);
 		return userList.getContent();
+	}
+
+	public Page<UserReadAdapter> userList(int entityId, Character userType, String userStates, Integer pageNumber) {
+		Pageable page = new PageRequest(pageNumber, 20, Direction.ASC, "userName");
+		return userTmpRepository.findByParentUserType(entityId, userType, userStates.toCharArray(), page);
 	}
 
 	public UserReadAdapter getUser(Integer userId) {
