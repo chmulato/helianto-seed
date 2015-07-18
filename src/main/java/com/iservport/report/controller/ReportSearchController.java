@@ -9,7 +9,9 @@ import org.helianto.security.internal.UserAuthentication;
 import org.helianto.task.repository.FolderReadAdapter;
 import org.helianto.task.repository.ReportAdapter;
 import org.helianto.task.repository.ReportPhaseAdapter;
+import org.helianto.user.domain.User;
 import org.helianto.user.repository.UserReadAdapter;
+import org.helianto.user.service.UserQueryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -26,7 +28,6 @@ import com.iservport.report.repository.ReportReviewReadAdapter;
 import com.iservport.report.repository.StaffMemberReadAdapter;
 import com.iservport.report.service.ReportCommandService;
 import com.iservport.report.service.ReportQueryService;
-import com.iservport.user.service.UserQueryService;
 
 
 /**
@@ -258,8 +259,8 @@ public class ReportSearchController {
 		@PreAuthorize("isAuthenticated()")
 		@RequestMapping(value={"/staffMember"}, method=RequestMethod.GET, params={"users"})
 		@ResponseBody
-		public List<UserReadAdapter> getUserList(UserAuthentication userAuthentication) {
-			return userQueryService.getUserList(userAuthentication);
+		public List<User> getUserList(UserAuthentication userAuthentication) {
+			return reportQueryService.getUserList(userAuthentication);
 		}
 		
 		@PreAuthorize("isAuthenticated()")

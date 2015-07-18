@@ -19,8 +19,10 @@ import org.helianto.task.repository.ReportFolderRepository;
 import org.helianto.task.repository.ReportPhaseAdapter;
 import org.helianto.task.repository.ReportPhaseRepository;
 import org.helianto.task.repository.ReportRepository;
+import org.helianto.user.domain.User;
 import org.helianto.user.repository.UserReadAdapter;
 import org.helianto.user.repository.UserRepository;
+import org.helianto.user.service.UserQueryService;
 import org.joda.time.DateMidnight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +38,6 @@ import com.iservport.report.repository.ReportReviewTempRepository;
 import com.iservport.report.repository.ReportStatsRepository;
 import com.iservport.report.repository.StaffMemberReadAdapter;
 import com.iservport.report.repository.StaffMemberTempRepository;
-import com.iservport.user.repository.UserTmpRepository;
 
 /**
  * Report query service.
@@ -81,7 +82,7 @@ public class ReportQueryService {
 	protected StaffMemberTempRepository staffMemberTempRepository;
 	
 	@Inject 
-	protected UserTmpRepository userTmpRepository;
+	private UserQueryService userQueryService;
 
 	@Inject
 	protected ReportReviewTempRepository reportReviewTempRepository;  
@@ -217,11 +218,8 @@ public class ReportQueryService {
 		return staffMemberTempRepository.findByFolderId(folderId, page );
 	}
 
-	public List<UserReadAdapter> getUserList(UserAuthentication userAuthentication) {
-		Page<UserReadAdapter> userList = 
-				userTmpRepository.findByParentUserKey(userAuthentication.getEntityId()
-						, "USER", new char[] {'A'}, null);
-		return userList.getContent();
+	public List<User> getUserList(UserAuthentication userAuthentication) {
+		return userQueryService.userList(userAuthentication.getEntityId(), 'G', "A", 0).getContent();
 	}
 
 	public StaffMemberReadAdapter staffMemberOpen(Integer staffMemberId) {
