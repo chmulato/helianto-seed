@@ -219,7 +219,7 @@ public class ReportQueryService {
 	}
 
 	public List<User> getUserList(UserAuthentication userAuthentication) {
-		return userQueryService.userList(userAuthentication.getEntityId(), 'G', "A", 0).getContent();
+		return userQueryService.userList(userAuthentication.getEntityId(), 'G', "A", 0, 1000).getContent();
 	}
 
 	public StaffMemberReadAdapter staffMemberOpen(Integer staffMemberId) {
@@ -227,14 +227,15 @@ public class ReportQueryService {
 
 	}
 	
-	public List<UserReadAdapter> getUserListSearch(UserAuthentication userAuthentication, String search, Integer searchFolderId) {
+	public List<User> getUserListSearch(UserAuthentication userAuthentication, String searchString, Integer searchFolderId) {
 		List<Integer> exclusions = staffMemberTempRepository.findIdentityIdsByReportFolderOnStaffMember(searchFolderId);
-		//previne que dê erro.
+		// não há exclusões
 		exclusions.add(0);
 		Pageable page = new PageRequest(0, 1000, Direction.ASC, "userName", "userKey");
-		Page<UserReadAdapter> userList = 
-				userTmpRepository.findByParentUserKeyAndSearch(userAuthentication.getEntityId()
-						, "USER", new char[] {'A'}, exclusions, search, page);
+		Page<User> userList = 
+				userRepository.searchByParentUserType(userAuthentication.getEntityId(), exclusions
+				, searchString, 'A', "A".toCharArray(), page);
+		
 		return userList.getContent();
 	}
 

@@ -1,7 +1,7 @@
 package com.iservport.config;
 
-import org.helianto.seed.config.AbstractServletContextConfig;
-import org.helianto.seed.config.SecurityWebConfig;
+import org.helianto.config.AbstractServletContextConfig;
+import org.helianto.config.SecurityWebConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.EnableTransactionManagement;

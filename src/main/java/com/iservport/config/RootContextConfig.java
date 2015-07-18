@@ -7,10 +7,11 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import org.helianto.config.AbstractRootContextConfig;
 import org.helianto.core.config.HeliantoServiceConfig;
 import org.helianto.core.internal.KeyNameAdapter;
 import org.helianto.network.service.KeyNameAdapterArray;
-import org.helianto.seed.config.AbstractRootContextConfig;
+import org.helianto.user.repository.UserKeyNameAdapterArray;
 import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -21,8 +22,6 @@ import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import com.iservport.user.service.UserKeyNameAdapterArray;
 
 /**
  * Configurações Java em geral.

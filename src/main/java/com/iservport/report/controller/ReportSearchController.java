@@ -266,15 +266,15 @@ public class ReportSearchController {
 		@PreAuthorize("isAuthenticated()")
 		@RequestMapping(value={"/staffMember"}, method=RequestMethod.GET, params={"users", "search", "searchFolderId"})
 		@ResponseBody
-		public List<UserReadAdapter> getUserList(UserAuthentication userAuthentication, @RequestParam String search, @RequestParam Integer searchFolderId) {
+		public List<User> getUserList(UserAuthentication userAuthentication, @RequestParam String search, @RequestParam Integer searchFolderId) {
 			return reportQueryService.getUserListSearch(userAuthentication, search, searchFolderId);
 		}
 		
 		@PreAuthorize("isAuthenticated()")
 		@RequestMapping(value={"/staffMember"}, method=RequestMethod.GET, params={"users", "userId"})
 		@ResponseBody
-		public UserReadAdapter getUser(@RequestParam Integer userId) {
-			return userQueryService.getUser(userId);
+		public User getUser(UserAuthentication userAuthentication, @RequestParam Integer userId) {
+			return userQueryService.user(userAuthentication.getEntityId(), userId);
 		}
 		
 		
