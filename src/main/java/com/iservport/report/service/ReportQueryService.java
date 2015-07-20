@@ -2,6 +2,7 @@ package com.iservport.report.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -20,7 +21,6 @@ import org.helianto.task.repository.ReportPhaseAdapter;
 import org.helianto.task.repository.ReportPhaseRepository;
 import org.helianto.task.repository.ReportRepository;
 import org.helianto.user.domain.User;
-import org.helianto.user.repository.UserReadAdapter;
 import org.helianto.user.repository.UserRepository;
 import org.helianto.user.service.UserQueryService;
 import org.joda.time.DateMidnight;
@@ -260,6 +260,11 @@ public class ReportQueryService {
 	public ReportReviewReadAdapter reportReviewOpen(Integer reportReviewId) {
 		ReportReviewReadAdapter reportReviewReadAdapter = reportReviewTempRepository.findById(reportReviewId);
 		return reportReviewReadAdapter;
+	}
+
+	public List<Map<String,Object>> reportBaseLine(Integer baseLineId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 /**	public Page<ParticipantReadAdapter> participant(Integer reportId,

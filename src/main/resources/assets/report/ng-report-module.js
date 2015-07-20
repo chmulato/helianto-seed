@@ -9,6 +9,9 @@
 	app.controller('ReportController', ['$scope', '$window', '$http', '$resource' , 'genericServices', 'securityServices'
 	                              	                                  , function($scope, $window, $http, $resource, genericServices, securityServices) {
 	
+		$scope.burnUpExecution = [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 17 }, { x: 3, y: 42 } ];
+		$scope.renderer = 'line';
+		
 		securityServices.getCategoryMap();
 		$scope.showMenuItem =  function(code){
 			return securityServices.showMenuItem(code);
@@ -950,6 +953,47 @@
 		              '</span>' +
 		              '</div>'
 		  }
+	})
+	/**
+	 * Gráfico
+	 */
+	.directive('rickshawChart', function () {
+		return {
+			scope: {
+				data: '=',
+				renderer: '='
+			},
+			template: '<div></div>',
+			restrict: 'EA',
+			link: function postLink(scope, element, attrs) {
+				scope.$watchCollection('[data, renderer]', function(newVal, oldVal){
+					if(!newVal[0]){
+						return;
+					}
+//					scope.data = scope.data.sort(function(a, b) {
+//						if (a.x > b.x) { return 1; }
+//						if (a.x < b.x) { return -1; }
+//						return 0;
+//					});
+					element[0].innerHTML ='';
+
+					var graph = new Rickshaw.Graph({
+						element: element[0],
+						width: 'auto',
+						height: attrs.height,
+						interpolation: 'linear',
+						series: [{data: scope.data, color: attrs.color}],
+						renderer: scope.renderer
+					});
+					
+					var hoverDetail = new Rickshaw.Graph.HoverDetail( {
+						graph: graph
+					} );
+					
+					graph.render();
+				});
+			}
+		}
 	});
 
 

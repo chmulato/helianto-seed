@@ -1,6 +1,7 @@
 package com.iservport.report.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -329,6 +330,17 @@ public class ReportSearchController {
 			return reportCommandService.reportReview(command, userAuthentication.getEntityId());
 		}
 		
+		/**
+		 * Gráfico de burn-up.
+		 *
+		 * GET 	/api/report/graph/?baseLineId
+		 */
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/graph"}, method=RequestMethod.GET, params={"baseLineId"})
+		@ResponseBody
+		public List<Map<String,Object>>  graph(@RequestParam Integer baseLineId) {
+			return reportQueryService.reportBaseLine(baseLineId);
+		}
 		
 		
 }
