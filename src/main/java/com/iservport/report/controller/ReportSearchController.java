@@ -32,10 +32,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.iservport.report.domain.ReportBaseLine;
+import com.iservport.report.domain.ReportData;
 import com.iservport.report.repository.ProjectReadAdapter;
 import com.iservport.report.repository.ReportReviewReadAdapter;
 import com.iservport.report.repository.StaffMemberReadAdapter;
+import com.iservport.report.service.ReportBaseLineCommandService;
+import com.iservport.report.service.ReportBaseLineQueryService;
 import com.iservport.report.service.ReportCommandService;
+import com.iservport.report.service.ReportDataCommandService;
+import com.iservport.report.service.ReportDataQueryService;
 import com.iservport.report.service.ReportQueryService;
 
 
@@ -55,6 +61,18 @@ public class ReportSearchController {
 	@Inject ReportQueryService reportQueryService;
 	
 	@Inject UserQueryService userQueryService;
+	
+	@Inject
+	private ReportBaseLineCommandService reportBaseLineCommandService;
+	
+	@Inject
+	private ReportDataCommandService reportDataCommandService;
+	
+	@Inject
+	private ReportBaseLineQueryService reportBaseLineQueryService;
+	
+	@Inject
+	private ReportDataQueryService reportDataQueryService;
 	
 	/**
 	 * Atualizar pasta.
@@ -376,6 +394,105 @@ public class ReportSearchController {
 				graph.add(aux);
 			}
 			return graph;
+		}
+		
+		//baseLine
+		
+		/**
+		 *
+		 * GET 	/api/report/baseLine?baseLineId
+		 */
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/baseLine"}, method=RequestMethod.GET, params={"baseLineId"})
+		@ResponseBody
+		public ReportBaseLine baseLineOpen(@RequestParam Integer baseLineId) {
+			return reportBaseLineQueryService.getOne(baseLineId);
+		}
+		
+		/**
+		 *
+		 * PUT 	/api/report/baseLine
+		 */
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/baseLine"}, method=RequestMethod.PUT, consumes="application/json")
+		@ResponseBody
+		public ReportBaseLine reportReview(UserAuthentication userAuthentication, @RequestBody ReportBaseLine command) {
+			return reportBaseLineCommandService.baseLine(userAuthentication, command);
+		}
+		
+		/**
+		 *
+		 * GET		/api/report/
+		 */
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/baseLine"}, method=RequestMethod.GET, params={"reportFolderId"})
+		@ResponseBody
+		public Page<ReportBaseLine> baseLine(
+				@RequestParam Integer reportFolderId
+				, @RequestParam(defaultValue = "1") Integer pageNumber
+				, @RequestParam(defaultValue = "20") Integer size) {
+			return reportBaseLineQueryService.list(reportFolderId, pageNumber, size);
+		}
+
+		/**
+		 *
+		 * POST		/api/report/
+		 */
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/baseLine"}, method=RequestMethod.POST , params={"reportFolderId"})
+		@ResponseBody
+		public ReportBaseLine baseLineNew(UserAuthentication userAuthentication, @RequestParam Integer reportFolderId) {
+			return reportBaseLineCommandService.newReportBaseLine(reportFolderId);
+		}
+
+	//Data
+		
+		
+		/**
+		 *
+		 * GET 	/api/report/data?dataId
+		 */
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/data"}, method=RequestMethod.GET, params={"dataId"})
+		@ResponseBody
+		public ReportData dataOpen(@RequestParam Integer dataId) {
+			return reportDataQueryService.getOne(dataId);
+		}
+		
+		/**
+		 *
+		 * GET		/api/data/
+		 */
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/data"}, method=RequestMethod.GET, params={"reportBaseLineId"})
+		@ResponseBody
+		public Page<ReportData> dataList(
+				@RequestParam Integer reportBaseLineId
+				, @RequestParam(defaultValue = "1") Integer pageNumber
+				, @RequestParam(defaultValue = "20") Integer size) {
+			return reportDataQueryService.list(reportBaseLineId, pageNumber, size);
+		}
+
+		/**
+		 *
+		 * POST		/api/data/
+		 */
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/data"}, method=RequestMethod.POST , params={"reportBaseLineId"})
+		@ResponseBody
+		public ReportData dataNew(UserAuthentication userAuthentication, @RequestParam Integer reportBaseLineId) {
+			return reportDataCommandService.newReportData(reportBaseLineId);
+		}
+
+		/**
+		 *
+		 * PUT 	/api/report/data
+		 */
+		@PreAuthorize("isAuthenticated()")
+		@RequestMapping(value={"/data"}, method=RequestMethod.PUT, consumes="application/json")
+		@ResponseBody
+		public ReportData reportReview(UserAuthentication userAuthentication, @RequestBody ReportData command) {
+			return reportDataCommandService.reportData(command);
 		}
 		
 		

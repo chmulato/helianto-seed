@@ -17,7 +17,6 @@ import org.helianto.task.domain.ReportFolder;
 import org.helianto.task.domain.ReportPhase;
 import org.helianto.task.domain.ReportReview;
 import org.helianto.task.domain.StaffMember;
-import org.helianto.task.repository.FolderReadAdapter;
 import org.helianto.task.repository.ReportAdapter;
 import org.helianto.task.repository.ReportFolderRepository;
 import org.helianto.task.repository.ReportPhaseAdapter;
@@ -29,7 +28,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
