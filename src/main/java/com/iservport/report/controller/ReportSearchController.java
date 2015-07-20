@@ -1,5 +1,11 @@
 package com.iservport.report.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,10 +17,12 @@ import org.helianto.task.repository.FolderReadAdapter;
 import org.helianto.task.repository.ReportAdapter;
 import org.helianto.task.repository.ReportPhaseAdapter;
 import org.helianto.user.domain.User;
-import org.helianto.user.repository.UserReadAdapter;
 import org.helianto.user.service.UserQueryService;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -339,7 +347,35 @@ public class ReportSearchController {
 		@RequestMapping(value={"/graph"}, method=RequestMethod.GET, params={"baseLineId"})
 		@ResponseBody
 		public List<Map<String,Object>>  graph(@RequestParam Integer baseLineId) {
-			return reportQueryService.reportBaseLine(baseLineId);
+			try {
+				return testGraph();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			throw new IllegalArgumentException();
+//			return reportQueryService.reportBaseLine(baseLineId);
+		}
+		
+		private List<Map<String,Object>> testGraph() throws IOException {
+			Resource testResource = new ClassPathResource("/testData.txt");
+			InputStream input = testResource.getInputStream();
+			BufferedReader buffer = new BufferedReader(new InputStreamReader(input));
+			List<String> lines = new ArrayList<>();
+			while (true) {
+				String line = buffer.readLine();
+				if (line==null) break;
+				lines.add(line);
+			}
+			List<Map<String,Object>> graph = new ArrayList<>();
+			DateTime start = new DateTime();
+			for (int i = 0; i<lines.size(); i++) {
+				Map<String,Object> aux = new HashMap<>();
+				aux.put("x", start.plus(i).getMillis());
+				aux.put("y", Integer.parseInt(lines.get(i)));
+				graph.add(aux);
+			}
+			return graph;
 		}
 		
 		

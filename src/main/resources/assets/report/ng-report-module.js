@@ -9,7 +9,14 @@
 	app.controller('ReportController', ['$scope', '$window', '$http', '$resource' , 'genericServices', 'securityServices'
 	                              	                                  , function($scope, $window, $http, $resource, genericServices, securityServices) {
 	
-		$scope.burnUpExecution = [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 17 }, { x: 3, y: 42 } ];
+		var baseUrl = '/api/report/';
+		$scope.graphResource = $resource(baseUrl + "/graph");
+		$scope.listGraph = function(value) {
+			$scope.burnUpExecution = $scope.graphResource.query({baseLineId: value});
+		};
+		$scope.listGraph(1);
+		
+//		$scope.burnUpExecution = [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 17 }, { x: 3, y: 42 } ];
 		$scope.renderer = 'line';
 		
 		securityServices.getCategoryMap();
@@ -29,7 +36,6 @@
 		/*
 		 * Recursos
 		 */
-		var baseUrl = '/api/report/';
 		$scope.qualifierResource = $resource("/api/category/qualifier");
 		$scope.categoryResource = $resource("/api/category/", { categoryId:"@categoryId" });
 		$scope.qualifierResource = $resource(baseUrl + "qualifier");
@@ -979,7 +985,7 @@
 
 					var graph = new Rickshaw.Graph({
 						element: element[0],
-						width: 'auto',
+						width: attrs.width,
 						height: attrs.height,
 						interpolation: 'linear',
 						series: [{data: scope.data, color: attrs.color}],
