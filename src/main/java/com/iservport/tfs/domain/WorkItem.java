@@ -125,4 +125,11 @@ public class WorkItem
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "WorkItem [id=" + id + ", rev=" + rev + ", fields=" + fields
+				+ ", _links=" + _links + ", relations=" + relations + ", url="
+				+ url + "]";
+	}
+
 }

@@ -46,6 +46,7 @@ public class DefaultCollectionSearchController {
 				, @PathVariable Integer workItemId
 				, @RequestParam(defaultValue="") String expand
 				, @RequestParam(defaultValue="1.0") String apiVersion) {
+			System.out.println("Test workItem");
 			return null;
 		}
 		
