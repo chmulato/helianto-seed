@@ -3,8 +3,6 @@ package com.iservport.tfs.controller;
 import java.util.List;
 
 import org.helianto.security.internal.UserAuthentication;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,14 +22,6 @@ import com.iservport.tfs.domain.WorkItem;
 @RequestMapping("/defaultCollection")
 @PreAuthorize("isAuthenticated()")
 public class DefaultCollectionSearchController {
-
-	private static final Logger logger = LoggerFactory.getLogger(DefaultCollectionSearchController.class);
-
-	// @Autowired
-	// private CategoryQueryService categoryQueryService;
-	//
-	// @Inject
-	// private CategoryCommandService categoryCommandService;
 
 	/**
 	 * Get a work item fully expanded
