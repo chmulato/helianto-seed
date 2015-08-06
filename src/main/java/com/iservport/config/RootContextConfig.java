@@ -1,6 +1,7 @@
 package com.iservport.config;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import javax.inject.Inject;
 import javax.naming.NamingException;
@@ -18,10 +19,22 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.ResourceHttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.web.client.RestOperations;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Configurações Java em geral.
@@ -185,6 +198,46 @@ public class RootContextConfig extends AbstractRootContextConfig {
 		public String getName() {
 			return desc;
 		}
+	}
+
+    @Bean
+    public RestOperations restOperations() {
+        RestTemplate rest = new RestTemplate();
+        //this is crucial!
+        rest.getMessageConverters().add(0, mappingJackson2HttpMessageConverter());
+        rest.getMessageConverters().add(1, new ClassFormHttpMessageConverter());
+        return rest;
+    }
+
+    @Bean
+    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+
+		converter.setObjectMapper(mapper);
+		converter.setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_JSON,APPLICATION_JSON_UTF8));
+        return converter;
+    }
+
+    private HttpMessageConverter<Object> createXmlHttpMessageConverter() {
+        MarshallingHttpMessageConverter xmlConverter =
+          new MarshallingHttpMessageConverter();
+        
+ 
+        return xmlConverter;
+    }
+
+	public ClassFormHttpMessageConverter() {
+		this.supportedMediaTypes.add(MediaType.APPLICATION_FORM_URLENCODED);
+		this.supportedMediaTypes.add(MediaType.MULTIPART_FORM_DATA);
+
+		this.partConverters.add(new ByteArrayHttpMessageConverter());
+		StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter();
+		stringHttpMessageConverter.setWriteAcceptCharset(false);
+		this.partConverters.add(stringHttpMessageConverter);
+		this.partConverters.add(new ResourceHttpMessageConverter());
 	}
 
 }
