@@ -4,12 +4,11 @@ import javax.inject.Inject;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import org.helianto.config.SecurityWebConfig;
 import org.helianto.core.config.HeliantoServiceConfig;
 import org.helianto.core.internal.KeyNameAdapter;
 import org.helianto.core.sender.NotificationSender;
 import org.helianto.core.test.TestDataSourceConfig;
-import org.helianto.network.service.KeyNameAdapterArray;
+import org.helianto.seed.SecurityWebConfig;
 import org.helianto.sendgrid.config.SendGridConfig;
 import org.helianto.user.repository.UserKeyNameAdapterArray;
 import org.hibernate.ejb.HibernatePersistence;

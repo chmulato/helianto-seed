@@ -1,7 +1,7 @@
 package com.iservport.config;
 
-import org.helianto.config.AbstractDispatcherServletConfig;
-import org.helianto.config.AbstractServletContextConfig;
+import org.helianto.seed.AbstractDispatcherServletConfig;
+import org.helianto.seed.AbstractServletContextConfig;
 
 /**
  * Dispatcher servlet.

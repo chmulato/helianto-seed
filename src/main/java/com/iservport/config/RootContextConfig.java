@@ -1,40 +1,31 @@
 package com.iservport.config;
 
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import org.helianto.config.AbstractRootContextConfig;
 import org.helianto.core.config.HeliantoServiceConfig;
 import org.helianto.core.internal.KeyNameAdapter;
-import org.helianto.network.service.KeyNameAdapterArray;
+import org.helianto.seed.AbstractRootContextConfig;
 import org.helianto.user.repository.UserKeyNameAdapterArray;
 import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.ByteArrayHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.ResourceHttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Configurações Java em geral.
@@ -57,17 +48,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 				"com.iservport.*.repository", "org.helianto.*.repository"
 		})
 public class RootContextConfig extends AbstractRootContextConfig {
-	
+
 	protected String[] getPacakgesToScan() {
 		return new String[] {"org.helianto.*.domain", "com.iservport.*.domain"};
 	}
-	
+
 	@Inject
 	private DataSource dataSource;
-	
+
 	@Inject
 	private JpaVendorAdapter vendorAdapter;
 	
+	@Inject
+	private Environment environment;
+
 	/**
 	 * Substitui a configuração original do <code>EntityManagerFactory</code>
 	 * para incluir novos pacotes onde pesquisar por entidades persistentes.
@@ -80,9 +74,9 @@ public class RootContextConfig extends AbstractRootContextConfig {
 		bean.setJpaVendorAdapter(vendorAdapter);
 		bean.setPersistenceProvider(new HibernatePersistence());
 		bean.afterPropertiesSet();
-        return bean.getObject();
+		return bean.getObject();
 	}
-	
+
 	/**
 	 * Para conexão com fontes de dados via JNDI.
 	 * 
@@ -97,7 +91,7 @@ public class RootContextConfig extends AbstractRootContextConfig {
 		jndiFactory.afterPropertiesSet();
 		return jndiFactory.getObject();
 	}
-	
+
 	/**
 	 * Cria lista de categorias da rede de negócios.
 	 */
@@ -110,7 +104,7 @@ public class RootContextConfig extends AbstractRootContextConfig {
 			}
 		};
 	}
-	
+
 	/**
 	 * Cria lista de categorias de usuários.
 	 */
@@ -123,20 +117,29 @@ public class RootContextConfig extends AbstractRootContextConfig {
 			}
 		};
 	}
-	
+
+	@Bean
+	public RestTemplate restTemplate() {
+		RestTemplate restTemplate = new RestTemplate();
+		final List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>();
+	    interceptors.add(new BasicAuthInterceptor(environment.getProperty("tfs.username"), environment.getProperty("tfs.password")));
+	    restTemplate.setInterceptors(interceptors);
+		return restTemplate;
+	}
+
 	/**
 	 * Internal entity types.
 	 * 
 	 * @author mauriciofernandesdecastro
 	 */
 	static enum InternalEntityType implements KeyNameAdapter {
-		
+
 		CUSTOMER('C', "Clientes")
 		, AGENT('A', "Agentes");
-		
+
 		private char value;
 		private String desc;
-		
+
 		/**
 		 * Constructor.
 		 * 
@@ -146,16 +149,16 @@ public class RootContextConfig extends AbstractRootContextConfig {
 			this.value = value;
 			this.desc = desc;
 		}
-		
+
 		public Serializable getKey() {
 			return this.value;
 		}
-		
+
 		@Override
 		public String getCode() {
 			return value+"";
 		}
-		
+
 		@Override
 		public String getName() {
 			return desc;
@@ -168,13 +171,13 @@ public class RootContextConfig extends AbstractRootContextConfig {
 	 * @author mauriciofernandesdecastro
 	 */
 	static enum InternalUserType implements KeyNameAdapter {
-		
+
 		USER('A', "Usuários")
 		, ADMIN('G', "Administradores");
-		
+
 		private char value;
 		private String desc;
-		
+
 		/**
 		 * Constructor.
 		 * 
@@ -184,60 +187,20 @@ public class RootContextConfig extends AbstractRootContextConfig {
 			this.value = value;
 			this.desc = desc;
 		}
-		
+
 		public Serializable getKey() {
 			return this.value;
 		}
-		
+
 		@Override
 		public String getCode() {
 			return value+"";
 		}
-		
+
 		@Override
 		public String getName() {
 			return desc;
 		}
-	}
-
-    @Bean
-    public RestOperations restOperations() {
-        RestTemplate rest = new RestTemplate();
-        //this is crucial!
-        rest.getMessageConverters().add(0, mappingJackson2HttpMessageConverter());
-        rest.getMessageConverters().add(1, new ClassFormHttpMessageConverter());
-        return rest;
-    }
-
-    @Bean
-    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-
-		converter.setObjectMapper(mapper);
-		converter.setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_JSON,APPLICATION_JSON_UTF8));
-        return converter;
-    }
-
-    private HttpMessageConverter<Object> createXmlHttpMessageConverter() {
-        MarshallingHttpMessageConverter xmlConverter =
-          new MarshallingHttpMessageConverter();
-        
- 
-        return xmlConverter;
-    }
-
-	public ClassFormHttpMessageConverter() {
-		this.supportedMediaTypes.add(MediaType.APPLICATION_FORM_URLENCODED);
-		this.supportedMediaTypes.add(MediaType.MULTIPART_FORM_DATA);
-
-		this.partConverters.add(new ByteArrayHttpMessageConverter());
-		StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter();
-		stringHttpMessageConverter.setWriteAcceptCharset(false);
-		this.partConverters.add(stringHttpMessageConverter);
-		this.partConverters.add(new ResourceHttpMessageConverter());
 	}
 
 }

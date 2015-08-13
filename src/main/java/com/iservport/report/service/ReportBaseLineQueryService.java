@@ -2,7 +2,7 @@ package com.iservport.report.service;
 
 import javax.inject.Inject;
 
-import org.helianto.config.PageDecorator;
+import org.helianto.seed.PageDecorator;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
