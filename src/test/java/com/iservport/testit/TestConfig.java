@@ -75,18 +75,18 @@ public class TestConfig {
 	@Autowired
 	private Environment env;
 	
-	/**
-	 * Cria lista de categorias da rede de negócios.
-	 */
-	@Bean
-	public KeyNameAdapterArray keyNameAdapterArray() {
-		return new KeyNameAdapterArray() {
-			@Override
-			public KeyNameAdapter[] values() {
-				return new KeyNameAdapter[0];
-			}
-		};
-	}
+//	/**
+//	 * Cria lista de categorias da rede de negócios.
+//	 */
+//	@Bean
+//	public KeyNameAdapterArray keyNameAdapterArray() {
+//		return new KeyNameAdapterArray() {
+//			@Override
+//			public KeyNameAdapter[] values() {
+//				return new KeyNameAdapter[0];
+//			}
+//		};
+//	}
 	
 	/**
 	 * Cria lista de categorias de usuários.

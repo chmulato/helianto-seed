@@ -92,18 +92,18 @@ public class RootContextConfig extends AbstractRootContextConfig {
 		return jndiFactory.getObject();
 	}
 
-	/**
-	 * Cria lista de categorias da rede de negócios.
-	 */
-	@Bean
-	public KeyNameAdapterArray keyNameAdapterArray() {
-		return new KeyNameAdapterArray() {
-			@Override
-			public KeyNameAdapter[] values() {
-				return InternalEntityType.values();
-			}
-		};
-	}
+//	/**
+//	 * Cria lista de categorias da rede de negócios.
+//	 */
+//	@Bean
+//	public KeyNameAdapterArray keyNameAdapterArray() {
+//		return new KeyNameAdapterArray() {
+//			@Override
+//			public KeyNameAdapter[] values() {
+//				return InternalEntityType.values();
+//			}
+//		};
+//	}
 
 	/**
 	 * Cria lista de categorias de usuários.
@@ -204,3 +204,4 @@ public class RootContextConfig extends AbstractRootContextConfig {
 	}
 
 }
+

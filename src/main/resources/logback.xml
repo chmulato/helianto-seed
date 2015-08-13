@@ -33,7 +33,7 @@
   
   <logger name="com.iservport.home.controller" level="DEBUG"/>
   <logger name="com.iservport.content.controller" level="DEBUG"/>
-  
+  <logger name="com.iservport.tfs.controller.AbstractServiceClass" level="ON"/>
   <root level="INFO">          
     <appender-ref ref="STDOUT" />
   </root>  
