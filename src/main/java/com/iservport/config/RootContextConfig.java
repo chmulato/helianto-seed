@@ -37,7 +37,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Import({HeliantoServiceConfig.class})
 @ComponentScan(
 		basePackages = {
-				"com.iservport.*.repository"
+				"org.helianto.*.sender"
+				, "com.iservport.*.repository"
 				, "com.iservport.*.service"
 				, "com.iservport.*.controller"
 				, "org.helianto.*.controller"
