@@ -5,12 +5,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.helianto.core.config.HeliantoServiceConfig;
-import org.helianto.core.internal.KeyNameAdapter;
 import org.helianto.core.sender.NotificationSender;
 import org.helianto.core.test.TestDataSourceConfig;
+import org.helianto.network.service.RootQueryService;
 import org.helianto.seed.SecurityWebConfig;
 import org.helianto.sendgrid.config.SendGridConfig;
-import org.helianto.user.repository.UserKeyNameAdapterArray;
+import org.helianto.user.service.UserQueryService;
 import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +24,9 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.iservport.config.InternalEntityType;
+import com.iservport.config.InternalUserType;
 
 /**
  * Configuração de teste.
@@ -75,32 +78,17 @@ public class TestConfig {
 	@Autowired
 	private Environment env;
 	
-//	/**
-//	 * Cria lista de categorias da rede de negócios.
-//	 */
-//	@Bean
-//	public KeyNameAdapterArray keyNameAdapterArray() {
-//		return new KeyNameAdapterArray() {
-//			@Override
-//			public KeyNameAdapter[] values() {
-//				return new KeyNameAdapter[0];
-//			}
-//		};
-//	}
-	
-	/**
-	 * Cria lista de categorias de usuários.
-	 */
-	@Bean
-	public UserKeyNameAdapterArray userKeyNameAdapterArray() {
-		return new UserKeyNameAdapterArray() {
-			@Override
-			public KeyNameAdapter[] values() {
-				return new KeyNameAdapter[0];
-			}
-		};
+	@Bean 
+	public RootQueryService rootQueryService() {
+		return new RootQueryService(InternalEntityType.values());
 	}
-	
+			
+	@Bean 
+	public UserQueryService userQueryService() {
+		System.out.println("HERE");
+		return new UserQueryService(InternalUserType.values());
+	}
+			
 	/**
 	 * Password encoder.
 	 */

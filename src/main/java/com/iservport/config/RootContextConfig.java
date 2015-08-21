@@ -1,19 +1,14 @@
 package com.iservport.config;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.naming.NamingException;
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
 
 import org.helianto.core.config.HeliantoServiceConfig;
-import org.helianto.core.internal.KeyNameAdapter;
+import org.helianto.network.service.RootQueryService;
 import org.helianto.seed.AbstractRootContextConfig;
-import org.helianto.user.repository.UserKeyNameAdapterArray;
-import org.hibernate.ejb.HibernatePersistence;
+import org.helianto.user.service.UserQueryService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -21,9 +16,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.jndi.JndiObjectFactoryBean;
-import org.springframework.orm.jpa.JpaVendorAdapter;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -50,75 +42,26 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 		})
 public class RootContextConfig extends AbstractRootContextConfig {
 
+	/**
+	 * Override to set packages to scan.
+	 */
 	protected String[] getPacakgesToScan() {
 		return new String[] {"org.helianto.*.domain", "com.iservport.*.domain"};
 	}
-
-	@Inject
-	private DataSource dataSource;
-
-	@Inject
-	private JpaVendorAdapter vendorAdapter;
 	
 	@Inject
 	private Environment environment;
-
-	/**
-	 * Substitui a configuração original do <code>EntityManagerFactory</code>
-	 * para incluir novos pacotes onde pesquisar por entidades persistentes.
-	 */
-	@Bean 
-	public EntityManagerFactory entityManagerFactory() {
-		LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
-		bean.setDataSource(dataSource);
-		bean.setPackagesToScan(getPacakgesToScan());
-		bean.setJpaVendorAdapter(vendorAdapter);
-		bean.setPersistenceProvider(new HibernatePersistence());
-		bean.afterPropertiesSet();
-		return bean.getObject();
+	
+	@Override
+	public RootQueryService rootQueryService() {
+		return new RootQueryService(InternalEntityType.values());
 	}
-
-	/**
-	 * Para conexão com fontes de dados via JNDI.
-	 * 
-	 * @throws IllegalArgumentException
-	 * @throws NamingException
-	 */
-	@Bean
-	public Object jndiObjectFactoryBean() throws IllegalArgumentException, NamingException {
-		JndiObjectFactoryBean jndiFactory = new JndiObjectFactoryBean();
-		jndiFactory.setJndiName("jdbc/iservportDB");
-		jndiFactory.setResourceRef(true);
-		jndiFactory.afterPropertiesSet();
-		return jndiFactory.getObject();
+			
+	@Override
+	public UserQueryService userQueryService() {
+		return new UserQueryService(InternalUserType.values());
 	}
-
-//	/**
-//	 * Cria lista de categorias da rede de negócios.
-//	 */
-//	@Bean
-//	public KeyNameAdapterArray keyNameAdapterArray() {
-//		return new KeyNameAdapterArray() {
-//			@Override
-//			public KeyNameAdapter[] values() {
-//				return InternalEntityType.values();
-//			}
-//		};
-//	}
-
-	/**
-	 * Cria lista de categorias de usuários.
-	 */
-	@Bean
-	public UserKeyNameAdapterArray userKeyNameAdapterArray() {
-		return new UserKeyNameAdapterArray() {
-			@Override
-			public KeyNameAdapter[] values() {
-				return InternalUserType.values();
-			}
-		};
-	}
-
+			
 	@Bean
 	public RestTemplate restTemplate() {
 		RestTemplate restTemplate = new RestTemplate();
@@ -126,82 +69,6 @@ public class RootContextConfig extends AbstractRootContextConfig {
 	    interceptors.add(new BasicAuthInterceptor(environment.getProperty("tfs.username"), environment.getProperty("tfs.password")));
 	    restTemplate.setInterceptors(interceptors);
 		return restTemplate;
-	}
-
-	/**
-	 * Internal entity types.
-	 * 
-	 * @author mauriciofernandesdecastro
-	 */
-	static enum InternalEntityType implements KeyNameAdapter {
-
-		CUSTOMER('C', "Clientes")
-		, AGENT('A', "Agentes");
-
-		private char value;
-		private String desc;
-
-		/**
-		 * Constructor.
-		 * 
-		 * @param value
-		 */
-		private InternalEntityType(char value, String desc) {
-			this.value = value;
-			this.desc = desc;
-		}
-
-		public Serializable getKey() {
-			return this.value;
-		}
-
-		@Override
-		public String getCode() {
-			return value+"";
-		}
-
-		@Override
-		public String getName() {
-			return desc;
-		}
-	}
-
-	/**
-	 * Internal user types.
-	 * 
-	 * @author mauriciofernandesdecastro
-	 */
-	static enum InternalUserType implements KeyNameAdapter {
-
-		USER('A', "Usuários")
-		, ADMIN('G', "Administradores");
-
-		private char value;
-		private String desc;
-
-		/**
-		 * Constructor.
-		 * 
-		 * @param value
-		 */
-		private InternalUserType(char value, String desc) {
-			this.value = value;
-			this.desc = desc;
-		}
-
-		public Serializable getKey() {
-			return this.value;
-		}
-
-		@Override
-		public String getCode() {
-			return value+"";
-		}
-
-		@Override
-		public String getName() {
-			return desc;
-		}
 	}
 
 }
