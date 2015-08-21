@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 
 import org.helianto.core.config.HeliantoServiceConfig;
 import org.helianto.core.sender.NotificationSender;
+import org.helianto.core.sender.UserConfirmationSender;
 import org.helianto.core.test.TestDataSourceConfig;
 import org.helianto.network.service.RootQueryService;
 import org.helianto.seed.SecurityWebConfig;
@@ -103,6 +104,14 @@ public class TestConfig {
 	@Bean
 	public NotificationSender notificationSender() {
 		return new NotificationSender();
+	}
+	
+	/**
+	 * User confirmation sender.
+	 */
+	@Bean
+	public UserConfirmationSender userConfirmationSender() {
+		return new UserConfirmationSender(env);
 	}
 	
 //	/**
