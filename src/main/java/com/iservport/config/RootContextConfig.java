@@ -26,7 +26,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  */
 @Configuration
 @EnableWebMvc
-@Import({HeliantoServiceConfig.class})
+@Import({HeliantoServiceConfig.class, PrimeSWConfig.class})
 @ComponentScan(
 		basePackages = {
 				"org.helianto.*.sender"
