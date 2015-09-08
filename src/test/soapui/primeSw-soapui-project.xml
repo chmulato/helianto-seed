@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="91fd9ba6-d448-41ae-8a0d-9877e0afa462" activeEnvironment="Default" name="primeSw" resourceRoot="" soapui-version="5.2.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="972b42e2-4659-41af-97a9-3611b202f0ff" wsaVersion="NONE" name="folhaSoapBinding" type="wsdl" bindingName="{http://folha.primews.com.br/}folhaSoapBinding" soapVersion="1_1" anonymous="optional" definition="file:/Users/mauriciofernandesdecastro/workspace/iservport-testit/src/main/resources/META-INF/primesw-folha.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/Users/mauriciofernandesdecastro/workspace/iservport-testit/src/main/resources/META-INF/primesw-folha.wsdl"><con:part><con:url>file:/Users/mauriciofernandesdecastro/workspace/iservport-testit/src/main/resources/META-INF/primesw-folha.wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="folha" targetNamespace="http://folha.primews.com.br/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://folha.primews.com.br/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http">
+  <wsdl:types>
+    <xs:schema elementFormDefault="unqualified" targetNamespace="http://folha.primews.com.br/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="folha" type="tns:pointMirror"/>
+      <xs:element name="folhaPonto" type="tns:folhaPonto"/>
+      <xs:element name="folhaPontoResponse" type="tns:folhaPontoResponse"/>
+      <xs:complexType name="folhaPonto">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="filter" type="tns:folhaFilterIn"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="folhaFilterIn">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="pis" type="xs:string"/>
+          <xs:element minOccurs="0" name="cpf" type="xs:string"/>
+          <xs:element minOccurs="0" name="cnpj" type="xs:string"/>
+          <xs:element name="dataHoraInicio" type="xs:dateTime"/>
+          <xs:element name="dataHoraTermino" type="xs:dateTime"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="folhaPontoResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:pointMirror"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="pointMirror">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="cnpj" type="xs:string"/>
+          <xs:element minOccurs="0" name="pis" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="itens" nillable="true" type="tns:pointItem"/>
+          <xs:element minOccurs="0" name="total" type="tns:pointItem"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="pointItem">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="data" type="xs:dateTime"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="intervalos" nillable="true" type="tns:interval"/>
+          <xs:element name="chp" type="xs:int"/>
+          <xs:element name="ht" type="xs:int"/>
+          <xs:element name="htn" type="xs:int"/>
+          <xs:element name="hnt" type="xs:int"/>
+          <xs:element name="hi" type="xs:int"/>
+          <xs:element name="faltas" type="xs:int"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="extras" nillable="true" type="tns:extra"/>
+          <xs:element minOccurs="0" name="dsr" type="tns:dsr"/>
+          <xs:element name="banco" type="xs:int"/>
+          <xs:element name="bancoAuto" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="justParcial" type="tns:justParcial"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="interval">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="dataHora" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="rep" type="xs:string"/>
+          <xs:element minOccurs="0" name="tipo" type="xs:string"/>
+          <xs:element minOccurs="0" name="justificativa" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="extra">
+        <xs:sequence>
+          <xs:element name="banco" type="xs:boolean"/>
+          <xs:element name="minutes" type="xs:int"/>
+          <xs:element name="noturno" type="xs:boolean"/>
+          <xs:element name="percentual" type="xs:double"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="dsr">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="modo" type="xs:string"/>
+          <xs:element name="valor" type="xs:int"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="justParcial">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="descricao" type="xs:string"/>
+          <xs:element name="minutes" type="xs:int"/>
+          <xs:element minOccurs="0" name="tipo" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="folhaPontoResponse">
+    <wsdl:part element="tns:folhaPontoResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="folhaPonto">
+    <wsdl:part element="tns:folhaPonto" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="FolhaService">
+    <wsdl:operation name="folhaPonto">
+      <wsdl:input message="tns:folhaPonto" name="folhaPonto"></wsdl:input>
+      <wsdl:output message="tns:folhaPontoResponse" name="folhaPontoResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="folhaSoapBinding" type="tns:FolhaService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="folhaPonto">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="folhaPonto">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="folhaPontoResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="folha">
+    <wsdl:port binding="tns:folhaSoapBinding" name="FolhaServicePort">
+      <soap:address location="http://localhost:8084/primecontrol_gateway/folha"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8084/primecontrol_gateway/folha</con:endpoint></con:endpoints><con:operation id="9eb6d3fe-9508-40fc-8898-f783426659c4" isOneWay="false" action="" name="folhaPonto" bindingOperationName="folhaPonto" type="Request-Response" outputName="folhaPontoResponse" inputName="folhaPonto" receivesAttachments="false" sendsAttachments="false"><con:settings/></con:operation></con:interface><con:mockService id="bbff57f6-ccfa-4482-85ff-3e763a6f4f81" port="8080" path="/" host="MacBook-Pro-de-Mauricio.local" name="primeSwServer"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting></con:settings><con:properties/></con:mockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
