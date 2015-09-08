@@ -59,7 +59,6 @@ public class PrimeSwClient extends WebServiceGatewaySupport {
 	@Inject
 	private UserKeyRepository userKeyRepository;
 	
-	@Transactional
 	public Integer readWorkingHours(int userId, Date day) throws DatatypeConfigurationException {
 		
 		User user = userRepository.findAdapter(userId);
