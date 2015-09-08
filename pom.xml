@@ -136,7 +136,19 @@
 
    		<dependency>
   		  	<groupId>org.springframework</groupId>
+  		  	<artifactId>spring-core</artifactId>
+   		  	<version>${spring.version}</version>
+	    </dependency>  
+   		
+   		<dependency>
+  		  	<groupId>org.springframework</groupId>
   		  	<artifactId>spring-context</artifactId>
+   		  	<version>${spring.version}</version>
+	    </dependency>  
+   		
+   		<dependency>
+  		  	<groupId>org.springframework</groupId>
+  		  	<artifactId>spring-beans</artifactId>
    		  	<version>${spring.version}</version>
 	    </dependency>  
    		
@@ -206,13 +218,6 @@
 			    <groupId>org.jvnet.jaxb2.maven2</groupId>
 			    <artifactId>maven-jaxb2-plugin</artifactId>
 			    <version>0.12.3</version>
-			    <executions>
-			        <execution>
-			            <goals>
-			                <goal>generate</goal>
-			            </goals>
-			        </execution>
-			    </executions>
 			    <configuration>
 			        <schemaLanguage>WSDL</schemaLanguage>
 			        <generatePackage>com.iservport.primesw.wsdl</generatePackage>

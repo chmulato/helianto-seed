@@ -9,6 +9,7 @@ import org.helianto.core.sender.NotificationSender;
 import org.helianto.core.sender.UserConfirmationSender;
 import org.helianto.core.test.TestDataSourceConfig;
 import org.helianto.network.service.RootQueryService;
+import org.helianto.seed.AbstractContextConfig;
 import org.helianto.seed.SecurityWebConfig;
 import org.helianto.sendgrid.config.SendGridConfig;
 import org.helianto.user.service.UserQueryService;
@@ -53,8 +54,8 @@ import com.iservport.config.InternalUserType;
 				"com.iservport.*.repository", "org.helianto.*.repository"
 		})
 @PropertySource("classpath:/test.properties")
-public class TestConfig {
-
+public class TestConfig extends AbstractContextConfig {
+	
 	@Inject
 	private DataSource dataSource;
 	

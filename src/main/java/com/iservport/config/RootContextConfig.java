@@ -19,6 +19,11 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser.Feature;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * Configurações Java em geral.
  * 
@@ -49,9 +54,6 @@ public class RootContextConfig extends AbstractRootContextConfig {
 		return new String[] {"org.helianto.*.domain", "com.iservport.*.domain"};
 	}
 	
-	@Inject
-	private Environment environment;
-	
 	@Override
 	public RootQueryService rootQueryService() {
 		return new RootQueryService(InternalEntityType.values());
@@ -62,14 +64,5 @@ public class RootContextConfig extends AbstractRootContextConfig {
 		return new UserQueryService(InternalUserType.values());
 	}
 			
-	@Bean
-	public RestTemplate restTemplate() {
-		RestTemplate restTemplate = new RestTemplate();
-		final List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>();
-	    interceptors.add(new BasicAuthInterceptor(environment.getProperty("tfs.username"), environment.getProperty("tfs.password")));
-	    restTemplate.setInterceptors(interceptors);
-		return restTemplate;
-	}
-
 }
 
