@@ -72,7 +72,8 @@ public class PrimeSwClientTests {
 	@Test
 	public void test() throws DatatypeConfigurationException {
 		assertNotNull(primeSwClient);
-		
+		primeSwClient.setDefaultUri("http://localhost:8088/mockfolhaSoapBinding");
+
 		Operator context = contextRepository.saveAndFlush(new Operator("TEST"));
 		Entity entity = entityRepository.saveAndFlush(new Entity(context, "DEFAULT"));
 		PublicEntity publicEntity = publicEntityRepository.saveAndFlush(new PublicEntity(entity));

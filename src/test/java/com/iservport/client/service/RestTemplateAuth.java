@@ -36,14 +36,14 @@ public class RestTemplateAuth {
 	@Inject 
 	private RestTemplate rest;
 	
+	//allow json comments Feature.ALLOW_COMMENTS
+	ObjectMapper mapper = new ObjectMapper(new JsonFactory().configure(Feature.ALLOW_COMMENTS, true)).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+	
 	@Value("${helianto.basic.auth.user:helianto}") 
 	private String basicAuthUser;
 	
 	@Value("${helianto.basic.auth.secret:helianto}") 
 	private String basicAuthSecret;
-	
-	//allow json comments Feature.ALLOW_COMMENTS
-	ObjectMapper mapper = new ObjectMapper(new JsonFactory().configure(Feature.ALLOW_COMMENTS, true)).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	
 	@Test
 	public void test() {

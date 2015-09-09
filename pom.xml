@@ -215,18 +215,22 @@
 			</plugin>
 
 			<plugin>
-			    <groupId>org.jvnet.jaxb2.maven2</groupId>
-			    <artifactId>maven-jaxb2-plugin</artifactId>
-			    <version>0.12.3</version>
-			    <configuration>
-			        <schemaLanguage>WSDL</schemaLanguage>
-			        <generatePackage>com.iservport.primesw.wsdl</generatePackage>
-			        <schemas>
-			            <schema>
-			                <url>file:/Users/mauriciofernandesdecastro/workspace/iservport-testit/src/main/resources/META-INF/primesw-folha.wsdl</url>
-			            </schema>
-			        </schemas>
-			    </configuration>
+				<groupId>org.jvnet.jaxb2.maven2</groupId>
+				<artifactId>maven-jaxb2-plugin</artifactId>
+				<version>0.12.3</version>
+				<configuration>
+					
+					<extension>true</extension>
+					<forceRegenerate>true</forceRegenerate>
+			
+					<schemaLanguage>WSDL</schemaLanguage>
+					<generatePackage>com.iservport.primesw.wsdl</generatePackage>
+					<schemas>
+						<schema>
+							<url>${project.baseUri}src/main/resources/META-INF/primesw-folha.wsdl</url>
+						</schema>
+					</schemas>
+				</configuration>
 			</plugin>
 
 			<!-- 

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.inject.Inject;
+import javax.xml.bind.JAXBElement;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -21,7 +22,6 @@ import org.helianto.user.domain.User;
 import org.helianto.user.domain.UserKey;
 import org.helianto.user.repository.UserRepository;
 import org.joda.time.DateTime;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 
 import com.iservport.primesw.repository.UserKeyRepository;
@@ -98,13 +98,13 @@ public class PrimeSwClient extends WebServiceGatewaySupport {
 		
 		FolhaPonto folhaPonto = new FolhaPonto();
 		folhaPonto.setFilter(filterIn);
-		FolhaPontoResponse response = (FolhaPontoResponse) getWebServiceTemplate().marshalSendAndReceive(folhaPonto);
-		
+		JAXBElement<FolhaPontoResponse>  response = ((JAXBElement<FolhaPontoResponse> ) getWebServiceTemplate().marshalSendAndReceive(folhaPonto));
+
 		Integer totalHT = 0;
-		
-		for ( PointItem item: response.getReturn().getItens()) {
+		for ( PointItem item: response.getValue().getReturn().getItens()) {
 			totalHT=+item.getHt();
 		}
+		System.err.println(totalHT);
 		return totalHT;
 	}
 
