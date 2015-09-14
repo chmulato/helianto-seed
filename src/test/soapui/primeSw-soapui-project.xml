@@ -109,4 +109,107 @@
       <soap:address location="http://localhost:8084/primecontrol_gateway/folha"/>
     </wsdl:port>
   </wsdl:service>
-</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8084/primecontrol_gateway/folha</con:endpoint></con:endpoints><con:operation id="9eb6d3fe-9508-40fc-8898-f783426659c4" isOneWay="false" action="" name="folhaPonto" bindingOperationName="folhaPonto" type="Request-Response" outputName="folhaPontoResponse" inputName="folhaPonto" receivesAttachments="false" sendsAttachments="false"><con:settings/></con:operation></con:interface><con:mockService id="bbff57f6-ccfa-4482-85ff-3e763a6f4f81" port="8080" path="/" host="MacBook-Pro-de-Mauricio.local" name="primeSwServer"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting></con:settings><con:properties/></con:mockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://MacBook-Pro-de-Mauricio.local:8088/mockfolhaSoapBinding</con:endpoint><con:endpoint>http://localhost:8084/primecontrol_gateway/folha</con:endpoint></con:endpoints><con:operation id="9eb6d3fe-9508-40fc-8898-f783426659c4" isOneWay="false" action="" name="folhaPonto" bindingOperationName="folhaPonto" type="Request-Response" outputName="folhaPontoResponse" inputName="folhaPonto" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="e8b21cac-b338-408c-a285-bb216bde3452" name="Request1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://MacBook-Pro-de-Mauricio.local:8088/mockfolhaSoapBinding</con:endpoint><con:request/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://folha.primews.com.br/FolhaService/folhaPonto"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:mockService id="78296818-69c8-409c-97a5-0adc72f02b4b" port="8088" path="/mockfolhaSoapBinding" host="MacBook-Pro-de-Mauricio.local" name="folhaSoapBindingMockService"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting></con:settings><con:properties/><con:mockOperation name="folhaPonto" id="87765143-ee38-40ff-8902-023234636c42" interface="folhaSoapBinding" operation="folhaPonto"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SEQUENCE</con:dispatchStyle><con:response name="Response 1" id="a93328d5-0b1c-4699-9d79-1cc408527640" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:fol="http://folha.primews.com.br/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <fol:folhaPontoResponse>
+         <!--Optional:-->
+         <return>
+            <!--Optional:-->
+            <cnpj>?</cnpj>
+            <!--Optional:-->
+            <pis>?</pis>
+            <!--Zero or more repetitions:-->
+            <itens>
+               <!--Optional:-->
+               <data>?</data>
+               <!--Zero or more repetitions:-->
+               <intervalos>
+                  <!--Optional:-->
+                  <dataHora>?</dataHora>
+                  <!--Optional:-->
+                  <rep>?</rep>
+                  <!--Optional:-->
+                  <tipo>?</tipo>
+                  <!--Optional:-->
+                  <justificativa>?</justificativa>
+               </intervalos>
+               <chp>?</chp>
+               <ht>18</ht>
+               <htn>?</htn>
+               <hnt>?</hnt>
+               <hi>?</hi>
+               <faltas>?</faltas>
+               <!--Zero or more repetitions:-->
+               <extras>
+                  <banco>?</banco>
+                  <minutes>?</minutes>
+                  <noturno>?</noturno>
+                  <percentual>?</percentual>
+               </extras>
+               <!--Optional:-->
+               <dsr>
+                  <!--Optional:-->
+                  <modo>?</modo>
+                  <valor>?</valor>
+               </dsr>
+               <banco>?</banco>
+               <bancoAuto>?</bancoAuto>
+               <!--Optional:-->
+               <justParcial>
+                  <!--Optional:-->
+                  <descricao>?</descricao>
+                  <minutes>?</minutes>
+                  <!--Optional:-->
+                  <tipo>?</tipo>
+               </justParcial>
+            </itens>
+            <!--Optional:-->
+            <total>
+               <!--Optional:-->
+               <data>?</data>
+               <!--Zero or more repetitions:-->
+               <intervalos>
+                  <!--Optional:-->
+                  <dataHora>?</dataHora>
+                  <!--Optional:-->
+                  <rep>?</rep>
+                  <!--Optional:-->
+                  <tipo>?</tipo>
+                  <!--Optional:-->
+                  <justificativa>?</justificativa>
+               </intervalos>
+               <chp>?</chp>
+               <ht>?</ht>
+               <htn>?</htn>
+               <hnt>?</hnt>
+               <hi>?</hi>
+               <faltas>?</faltas>
+               <!--Zero or more repetitions:-->
+               <extras>
+                  <banco>?</banco>
+                  <minutes>?</minutes>
+                  <noturno>?</noturno>
+                  <percentual>?</percentual>
+               </extras>
+               <!--Optional:-->
+               <dsr>
+                  <!--Optional:-->
+                  <modo>?</modo>
+                  <valor>?</valor>
+               </dsr>
+               <banco>?</banco>
+               <bancoAuto>?</bancoAuto>
+               <!--Optional:-->
+               <justParcial>
+                  <!--Optional:-->
+                  <descricao>?</descricao>
+                  <minutes>?</minutes>
+                  <!--Optional:-->
+                  <tipo>?</tipo>
+               </justParcial>
+            </total>
+         </return>
+      </fol:folhaPontoResponse>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://folha.primews.com.br/FolhaService/folhaPontoResponse"/></con:response><con:dispatchConfig/></con:mockOperation></con:mockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
