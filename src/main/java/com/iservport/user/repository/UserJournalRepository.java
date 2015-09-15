@@ -13,9 +13,7 @@ import com.iservport.user.domain.UserJournal;
  * 
  * @author mauriciofernandesdecastro
  */
-public interface UserJournalRepository 
-	extends JpaRepository<UserJournal, Serializable>
-{
+public interface UserJournalRepository extends JpaRepository<UserJournal, Serializable> {
 	
 	/**
 	 * Find by natural key.

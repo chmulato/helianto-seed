@@ -17,6 +17,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
+import org.helianto.task.domain.ReportFolder;
 import org.helianto.user.domain.User;
 
 @javax.persistence.Entity
@@ -40,11 +41,15 @@ public class UserJournal implements Serializable {
 	private Date issueDate;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(length=12)
+	@Column(length=14)
 	private UserJournalType userJournalType;
 	
 	@Column(length=24)
 	private String journalCode;
+	
+	@ManyToOne
+	@JoinColumn(name="reportFolderId")
+	private ReportFolder reportFolder;
 	
 	public UserJournal() {
 		super();
@@ -97,6 +102,13 @@ public class UserJournal implements Serializable {
 	}
 	public void setJournalCode(String journalCode) {
 		this.journalCode = journalCode;
+	}
+
+	public ReportFolder getReportFolder() {
+		return reportFolder;
+	}
+	public void setReportFolder(ReportFolder reportFolder) {
+		this.reportFolder = reportFolder;
 	}
 
 	@Override

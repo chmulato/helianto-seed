@@ -20,7 +20,7 @@
   <logger name="org.springframework.security" level="OFF"/>
   <logger name="org.springframework.validation" level="OFF"/>
   <logger name="org.springframework.web.servlet.config" level="OFF"/>
-  <logger name="org.springframework.web" level="OFF"/>
+  <logger name="org.springframework.web" level="ON"/>
   
   <logger name="org.hibernate" level="OFF"/>
   <logger name="org.hibernate.SQL" level="ON"/>
@@ -29,11 +29,12 @@
   <logger name="org.hibernate.impl" level="OFF"/>
   <logger name="org.aopalliance" level="OFF"/>
   
-  <logger name="com.iservport.home" level="OFF"/>
+  <logger name="com.iservport" level="ON"/>
   
   <logger name="com.iservport.home.controller" level="DEBUG"/>
   <logger name="com.iservport.content.controller" level="DEBUG"/>
   <logger name="com.iservport.tfs.controller.AbstractServiceClass" level="ON"/>
+  
   <root level="INFO">          
     <appender-ref ref="STDOUT" />
   </root>  
