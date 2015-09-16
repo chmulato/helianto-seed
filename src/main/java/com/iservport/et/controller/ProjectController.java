@@ -35,7 +35,7 @@ public class ProjectController {
 	 *
 	 * GET /{id}
 	 */
-	@RequestMapping(value = { "/projectCode}" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/projectCode" }, method = RequestMethod.GET)
 	@ResponseBody
 	public ETProject projectPipe(UserAuthentication userAuthentication, @PathVariable String projectCode) {
 		return projectQueryService.project(projectCode);

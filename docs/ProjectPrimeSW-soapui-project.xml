@@ -229,4 +229,5 @@
          </return>
       </fol:folhaPontoResponse>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://folha.primews.com.br/FolhaService/folhaPontoResponse"/></con:response><con:dispatchConfig/></con:mockOperation></con:mockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
+</soapenv:Envelope>]]>
+</con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://folha.primews.com.br/FolhaService/folhaPontoResponse"/></con:response><con:dispatchConfig/></con:mockOperation></con:mockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
