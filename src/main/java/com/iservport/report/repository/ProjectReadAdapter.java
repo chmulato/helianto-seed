@@ -79,7 +79,10 @@ public class ProjectReadAdapter
 		String[] toolsStr = toolss.split(",");
 		Integer[] tools = new Integer[toolsStr.length];
 		for (int i = 0; i < toolsStr.length; i++) {
-			tools[i] = Integer.valueOf(toolsStr[i]);
+			String tool = toolsStr[i];
+			if (!tool.isEmpty()) {
+				tools[i] = Integer.valueOf(toolsStr[i]);
+			}
 		}
 		return	tools;
 		

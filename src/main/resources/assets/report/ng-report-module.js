@@ -5,8 +5,8 @@
 	 */
 	.factory('resources', ['$resource', function($resource) {
 		var service = {};
-		service.qualifierResource = $resource("/app/report/qualifier");
-		service.resource = $resource("/app/report/:method"
+		service.qualifierResource = $resource("/api/report/qualifier");
+		service.resource = $resource("/api/report/:method"
 			, {folderId : "@folderId"}
 			, { save: { method: 'PUT'}, create: {method: 'POST' }, remove:{method:'DELETE'}});
 		return service;
@@ -14,10 +14,8 @@
 	/**
 	 * Controlador de relatórios.
 	 */
-	.controller('ReportController', ['$scope', '$window', '$http', 'resources', 'qualifierService', '$log'
-	                                  , function($scope, $window, $http, resources, qualifierService, $log) {
-//	.controller('ReportController', ['$scope', '$http','resources', 'genericServices', 'securityServices', 'commomLang', 'controllerLang','$interval'
-//	                                    , function($scope, $http, resources, genericServices, securityServices, commomLang, reportLocale, $interval) {
+	.controller('ReportController', ['$scope', '$window', '$http', 'resources', 'qualifierService', 'lang', '$log'
+	                                  , function($scope, $window, $http, resources, qualifierService, lang, $log) {
 		
 //		//to i18n
 //		$scope.localizationKeys = reportLocale._getLocalizationKeys();
@@ -138,7 +136,16 @@
 				$("#modalBody").modal('hide');
 			});
 		};
-
+		/**
+		 * Controle de exibição de textos do projeto
+		 */
+		$scope.projectSection = 0;
+		$scope.setProjectSection = function(value) {
+			$scope.projectSection = value;
+		};
+		$scope.isProjectSection = function(value) {
+			return (value == $scope.projectSection);
+		};
 		/**
 		 * Exports
 		 */

@@ -1,75 +1,324 @@
-<div class="modal-header">
-	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	<span class="h4 modal-title" id="modalLabel" > {{'FOLDER' | i18n}} : {{reportFolder.folderName}}</span>
-	
-</div><!-- modal-header-->
+<div data-modal-header-wrapper>Projeto</div>
   		
 <div class="modal-body">
 <form  data-ng-submit="updateReportFolder()" 
 	class="form-horizontal" >
 
 	<div class="row">
+	<div class="col-md-8" >
 
-		<div class="col-md-8" >
+		<!--  Código do projeto -->
+		<div data-control-id="reportCode" data-form-group-wrapper data-label="Código do Projeto">
+		<input id="reportCode" type="text" 
+			name="reportCode" data-ng-model="reportFolder.reportCode" 
+			class="form-control" maxlength="128" readonly="readonly" />
+		</div>
+		<hr/>
 
-			<div id="form-group-folderCode"
-				class="form-group">
-				<label for="folderCode" class="col-sm-3 control-label">folderCode*</label>
-				<div class="col-sm-9">
-					<input id="folderCode" type="text" name="folderCode" required
-						data-ng-model="reportFolder.folderCode"
-						class="form-control" />
+		<!--  Código do projeto -->
+		<div data-control-id="folderCode" data-form-group-wrapper data-label="Código Teste">
+		<input id="folderCode" type="text"  
+			name="folderCode" data-ng-model="reportFolder.folderCode"
+			placeholder=""
+		    class="form-control" maxlength="64" required/>
+		</div>
 		
-			
-				</div>
+		<!--  Nome do projeto -->
+		<div id="form-group-folderName" class="form-group">
+			<label for="folderName" class="col-sm-3 control-label">Nome do Projeto</label>
+			<div class="col-sm-9">
+				<input id="folderName" type="text" required name="folderName"
+					maxlength="64"
+					data-ng-model="reportFolder.folderName"
+					placeholder=""
+				    class="form-control" />
 			</div>
+		</div>	
+			
+		<!--  Prefixo -->
+		<div id="form-group-patternPrefix"
+			class="form-group">
+			<label for="numberPrefix" class="col-sm-3 control-label">Prefixo</label>
+			<div class="col-sm-4">				
+				<input id="numberPrefix" type="text" name="numberPrefix" required
+					data-ng-model="reportFolder.numberPrefix"
+					class="form-control" />			
+			</div>
+			<label for="numberSuffix" class="col-sm-2 control-label">Máximo de tarefas</label>
+			<div class="col-sm-3">		
+				<select id="numberSuffix" name="numberSuffix" class="form-control" data-ng-model="reportFolder.numberSuffix">
+					<option value="2"> 99</option>
+					<option value="3"> 999</option>
+					<option value="4" > 9999</option>
+				</select>
+			</div>
+		</div>
 
-			<div id="form-group-folderName" class="form-group">
-				<label for="folderName" class="col-sm-3 control-label">folderName</label>
+		<!--  Situação -->
+		<div class="form-group">
+			<label  class="col-sm-3 control-label">Situação</label>
+			<div class="col-md-9" >
+				<select class="form-control" data-ng-model="reportFolder.resolution" >
+					<option value="T">Em análise</option>
+					<option value="P">Em andamento</option>
+					<option value="D">Encerrada</option>
+				</select>
+			</div>
+		</div>
+		
+		<!--  Data de inclusão -->
+		<div class="form-group" >	
+			<label for="startDate" class="col-md-3 control-label">Incluído em</label>
+			
 				<div class="col-sm-9">
-					<input id="folderName" type="text" required name="folderName"
-						maxlength="64"
-						data-ng-model="reportFolder.folderName"
-						placeholder=""
-					    class="form-control" />
+				<input type="hidden" name="startDate"
+					value="{{reportFolder.startDate.getTime()}}" />
+				<div data-ng-click="open($event,0)" id="startDatePicker"
+					class="input-group"
+					data-ng-init="reportFolder.startDate = ((reportFolder.startDate>0 ? reportFolder.startDate : dateNow.getTime()) | date:'shortDate')">
+					<input type="text" class="form-control" data-ng-model="reportFolder.startDate"
+						data-is-open="datePicker[0]" data-datepicker-options="dateOptions"
+						data-datepicker-popup="shortDate" data-ng-required="true"
+						data-close-text="Close" /> <span class="input-group-btn">
+						<button type="button" class="btn btn-default">
+							<i class="glyphicon glyphicon-th"></i>
+						</button>
+					</span>
 				</div>
 			</div>	
-			
-			<div id="form-group-prefix"
-				class="form-group">
-				<label for="prefix" class="col-sm-3 control-label">Prefixo</label>
-				<div class="col-sm-4">				
-					<input id="patternPrefix" type="text" name="patternPrefix" required
-						data-ng-model="reportFolder.patternPrefix"
-						class="form-control" />			
-				</div>
-				<label for="numberOfDigits" class="col-sm-2 control-label">Máximo de tarefas</label>
-				<div class="col-sm-3">		
-					<select id="numberOfDigits" name="numberOfDigits" class="form-control" data-ng-model="reportFolder.numberOfDigits">
-						<option value="2"> 99</option>
-						<option value="3"> 999</option>
-						<option value="4" > 9999</option>
-					</select>
-				</div>
-			</div>
-
 		</div>
-		<!-- col-md-8 -->
-		<div class="col-md-4">
-			<div data-ng-show="message.exist" class="alert alert-danger" role="alert"> 
-						  Código Existente.
-						<a href data-ng-click="selectReportFolder(message.id,0)" class="btn btn-sm btn-primary">
-							Abrir pasta
-						</a>
-			</div>
-			<div data-ng-show="message.error" class="alert alert-danger" role="alert"> 
-						  Erro ao salvar pasta
-			</div>
-		</div><!--col-md-4  -->	 
 		
+		<!--  Data prevista -->
+		<div class="form-group" >	
+			<label for="nextCheckDate" class="col-md-3 control-label">Previsto para</label>	
+			<div class="col-sm-9">
+				<div data-ng-click="open($event,1)" id="nextCheckDatePicker"
+						class="input-group"
+						data-ng-init="reportFolder.nextCheckDate = ((reportFolder.nextCheckDate>0 || reportFolder.nextCheckDate!=null ? reportFolder.nextCheckDate : dateNow.getTime()) | date:'shortDate')">
+						<input type="text" class="form-control" data-ng-model="reportFolder.nextCheckDate"
+							data-is-open="datePicker[1]" data-datepicker-options="dateOptions"
+							data-datepicker-popup="shortDate" data-ng-required="true"
+							data-close-text="Close" /> <span class="input-group-btn">
+							<button type="button" class="btn btn-default">
+								<i class="glyphicon glyphicon-th"></i>
+							</button>
+						</span>
+				</div>
+			</div>	
+		</div>
 
-	</div>
-	<!-- row -->
+		<!-- navegação para campos texto -->
+		<ul class="nav nav-tabs">
+		  <li role="presentation" data-ng-class="{'active':isProjectSection(0)}"><a data-ng-click="setProjectSection(0)">Objetivos</a></li>
+		  <li role="presentation" data-ng-class="{'active':isProjectSection(1)}"><a data-ng-click="setProjectSection(1)">Benefícios</a></li>
+		  <li role="presentation" data-ng-class="{'active':isProjectSection(2)}"><a data-ng-click="setProjectSection(2)">Premissas</a></li>
+		  <li role="presentation" data-ng-class="{'active':isProjectSection(3)}"><a data-ng-click="setProjectSection(3)">Entregas</a></li>
+		  <li role="presentation" data-ng-class="{'active':isProjectSection(4)}"><a data-ng-click="setProjectSection(4)">Restrições</a></li>
+		</ul>
+
+		<div id="form-group-benefits" class="form-group"  data-ng-show="isProjectSection(0)">
+				<div class="col-sm-12">
+					<textarea id="taskDesc" data-redactor name="taskDesc" class="form-control" data-ng-model="reportFolder.taskDesc"
+						rows="3"></textarea>
+				</div>
+		</div>
+		<div id="form-group-benefits" class="form-group"  data-ng-show="isProjectSection(1)">
+				<div class="col-sm-12">
+					<textarea id="benefits" data-redactor name="benefits" class="form-control" data-ng-model="reportFolder.benefits"
+						rows="3"></textarea>
+				</div>
+		</div>
+		<div id="form-group-assumptions" class="form-group" data-ng-show="isProjectSection(2)">
+				<div class="col-sm-12">
+					<textarea id="assumptions" data-redactor name="assumptions" class="form-control" data-ng-model="reportFolder.assumptions"
+						rows="3"></textarea>
+				</div>
+		</div>
+		<div id="form-group-deliverables" class="form-group" data-ng-show="isProjectSection(3)">
+				<div class="col-sm-12">
+					<textarea id="deliverables" data-redactor name="deliverables" class="form-control" data-ng-model="reportFolder.deliverables"
+						rows="3"></textarea>
+				</div>
+		</div>
+		<div id="form-group-constraints" class="form-group" data-ng-show="isProjectSection(4)">
+				<div class="col-sm-12">
+					<textarea id="constraints" data-redactor name="constraints" class="form-control" data-ng-model="reportFolder.constraints"
+						rows="3"></textarea>
+				</div>
+		</div>
+	</div>	
+	<!-- col-md-8 -->
+	<!-- col-md-4 -->
+
+		<div class="col-md-4">
+			<div id="form-group-priority" class="form-group">
+				<label for="priority" class="col-sm-8 control-label">Categoria</label>
+			</div>	
+			<hr>
+			<div class="form-group" >	
+				<label for="issueDate" class="col-md-5 control-label">Concluído em</label>
+ 				<div class="col-sm-7">
+					<input type="hidden" name="actualEndDate"
+						value="{{reportFolder.actualEndDate.getTime()}}" />
+					<div data-ng-click="open($event,0)" id="actualEndDate"
+						class="input-group"
+						data-ng-init="reportFolder.actualEndDate = ((reportFolder.actualEndDate>0 ? reportFolder.actualEndDate : dateNow.getTime()) | date:'shortDate')">
+						<input type="text" class="form-control" data-ng-model="reportFolder.actualEndDate"
+							data-is-open="datePicker[0]" data-datepicker-options="dateOptions"
+							data-datepicker-popup="shortDate" data-ng-required="true"
+							data-close-text="Close" /> <span class="input-group-btn">
+							<button type="button" class="btn btn-default">
+								<i class="glyphicon glyphicon-th"></i>
+							</button>
+						</span>
+					</div>
+				</div>	
+			</div>	 
+			
+			<div class="form-group" >
+				<label for="issueDate" class="col-md-5 control-label">Iniciado em</label>
+				<div class="col-md-7">
+					<input type="hidden" name="issueDate"
+						value="{{review.nextCheckDate.getTime()}}" />
+					<div data-ng-click="open($event,1)" id="nextCheckDatePicker"
+						class="input-group"
+						data-ng-init="review.nextCheckDate = ((review.nextCheckDate>0 || review.nextCheckDate!=null ? review.nextCheckDate : dateNow.getTime()) | date:'shortDate')">
+						<input type="text" class="form-control" data-ng-model="review.nextCheckDate"
+							data-is-open="datePicker[1]" data-datepicker-options="dateOptions"
+							data-datepicker-popup="shortDate" data-ng-required="true"
+							data-close-text="Close" /> <span class="input-group-btn">
+							<button type="button" class="btn btn-default">
+								<i class="glyphicon glyphicon-th"></i>
+							</button>
+						</span>
+					</div>
+				</div>	
+			</div>	
+			<hr>
+			 <!-- 
+                 ! Equipe
+                 -->
+         		<!--    	<div id="form-group-priority" class="form-group">
+						<label for="priority" class="col-sm-8 control-label">Equipe</label>
+					</div>	
+					<hr>
+
+					<div id="form-group-member" class="form-group row">
+
+					<div data-ng-controller="MemberController as memberCtrl">
+					<div class="row" data-ng-hide="isAddMember()">
+						<div class="col-sm-3" >
+						      <img class="media-object img-circle" data-ng-click="setAddMember(true)" style="width:45px" src="/images/user/gender64-N.png">
+						</div>
+					</div>
+					<div id="form-group-member" class="form-group row" data-ng-show="isAddMember()">
+
+						<div class="col-sm-7">
+							<div class="input-group">
+								<input id="member" type="text" required="required" 
+									name="member" data-ng-model="valueOnTypeAhead"
+									data-typeahead="member.userName for member in getStaffMembers($viewValue)"
+									data-typeahead-loading="loadingMembers"
+									data-typeahead-on-select='onSelect($item, $model, $label)'
+									placeholder="Digite o Nome ou email"
+									class="form-control"> <i
+									data-ng-show="loadingMembers" class="glyphicon glyphicon-refresh"></i>
+							</div>
+						</div>
+						<div class="col-sm-5">
+							<div style="font-size: 12px; line-height: 1.5em;" data-ng-hide="identityMember.userId>0 || valueOnTypeAhead.length==0">
+								<i class="fa fa-angle-left"></i> Incluir Membro
+							</div>
+						</div>
+						<div  class="col-sm-4" data-ng-show="identityMember.userId>0 && valueOnTypeAhead.length>0">
+							<button class="btn btn-primary" data-ng-click="confirmStaffMember(identityMember.userId)"> Incluir {{identityMember.userName}} </button>
+						</div>
+
+					</div>
+				 --> 	
+	              	<!-- tabela com a equipe -->
+	              <!--  	<div class="row" >
+	              		<div data-ng-repeat="staffMember in staffMembers">
+	              		<div class="col-md-8" >
+		              	<div class="media" >
+						  <div class="media-left">
+						      <img class="media-object img-circle" style="width:45px" data-ng-src="{{staffMember.userImageUrl}}" data-err-src="/images/user/gender64-N.png">
+						  </div>
+						  <div class="media-body">
+						    <h4 class="media-heading">{{staffMember.displayName}}</h4>
+						    {{staffMember.firstName}} {{staffMember.lastName}}
+						  </div>
+						</div>
+						</div>
+						<div class="col-md-4">
+						  <button type="button" class="btn btn-danger" data-toggle="modal" data-ng-click="memberToDelete(staffMember.id)" data-target="#myModal">
+							<i class="fa fa-remove"></i>						 
+						  </button>
+						</div>
+						<div class="col-md-12"><br></div>
+						</div>
+		            </div> 	          
+
+		            </div>
+		          </div><!-- memberCtrl -->      
+  <!-- 
+					<div class="modal fade" id="myModal" tabindex="-1" 
+					role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					  <div class="modal-dialog">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					        <h4 class="modal-title alert alert-danger" id="myModalLabel">
+					        	 Área de Risco
+					        </h4>
+					      </div>
+					      <div class="modal-body">
+					      <div data-ng-show="message.error" class="alert alert-danger" role="alert"> 
+						 	 {{message.errorMessage}}
+						   </div>
+					      <div class="alert alert-warning" role="alert">
+					      	Esta ação não poderá ser desfeita. Deseja realmente excluir 
+					      	<img class="img-circle" style="width:45px" 
+					      		data-ng-src="{{member.userImageUrl}}" 
+					      		data-err-src="/images/user/gender64-N.png"> ({{member.displayName}}) do projeto?
+					      </div>
+					      	 <button type="button" class="btn btn-default" data-ng-click="hideModal()">{{'CLOSE'}}</button>
+					        <button type="button" class="btn btn-danger" data-ng-click="deleteMember(member.id)" >Confirmar Exclusão</button>
+					    
+					     </div>
+					    
+					    </div>
+					  </div>
+					</div>
+				<hr>
+		 -->
+		 <div data-tools-wrapper data-parsed-model="reportFolder.tools"></div>
+		 <div data-tech-wrapper data-parsed-model="reportFolder.tools"></div>
+		 
+			<div id="form-group-tecnologiaempregada" class="form-group">
+					<label for="tecnologiaempregada" class="col-sm-8 control-label">Técnologia Empregada</label>
+			</div>	
+			<hr>	
+				<div class="form-group">
+					<div class="col-sm-12">
+						<label class="checkbox"> 
+							<input type="checkbox" name="android" data-ng-model="reportFolder.android" id="android" value="0" checked="checked"> Android
+						</label> 
+					</div>
+					<div class="col-sm-12">
+						<label class="checkbox"> 
+							<input type="checkbox"	name="pdv" data-ng-model="reportFolder.pdv" id="pdv" value="1"> PDV
+						</label> 
+					</div>
+					
+				</div>
+				<div class="form-group"><label class="col-md-3 text-left" for="folderOther">Outros</label>
+					<div class="col-md-7">
+						<input type="text" id="outros" name="folderName" maxlength="64" data-ng-model="reportFolder.folderOther" placeholder="" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched">
+					</div></div>
+				</div>	
+				<hr>
+	</div>	
 
 	<hr />
 
@@ -79,11 +328,12 @@
 			<!-- ! Submit button !-->
 			<div class="pull-right"> 
 				<button type="submit" name="submit" value="0" class="btn btn-primary">Salvar
-				Pasta</button>
+				Projeto</button>
 				<a data-dismiss="modal"  class="btn btn-default">Fechar</a>
 			</div>
 		</div>
 	</div>
+
 	<!-- row -->
 </form>
 </div>
