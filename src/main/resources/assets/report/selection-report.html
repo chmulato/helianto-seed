@@ -1,5 +1,100 @@
-<script src="/webjars/d3js/3.1.4/d3.min.js"></script>
-<script src="/webjars/rickshaw/1.5.0/rickshaw.min.js"></script>
+<div class="col-md-12"><h3>Tarefas</h3></div><!-- title -->
 
-<div data-iservport-filter  class="col-md-3" data-ng-hide="!isReportSection(-1)"></div><!-- filter -->
-<div data-iservport-main data-ng-class="{'col-md-12': !isReportSection(-1), 'col-md-9':isReportSection(-1)}" ></div><!-- main -->
+<div class="col-md-12">
+<div class="row">
+
+<!-- Filter -->
+<div class="col-md-3 col-sm-12" data-ng-show="isSectionTabSet(-1)">
+<div data-qualifier-panel="qualifiers" data-set-qualifier="setQualifier(value)" data-is-qualifier-active="isQualifierActive(value)" data-ng-init="setSectionTab(-1)" ></div>
+</div><!-- Filter -->
+
+<!-- Main -->
+<div class="col-sm-12" data-ng-class="{'col-md-9':isSectionTabSet(-1)}">
+
+    <div class="panel panel-default">
+	<!--
+	 ! Título
+	 !-->
+	<div class="panel-body">
+	<div class="row">
+		<div class="col-md-12 col-xs-12">
+			<div class="h4 pull-right">
+				<a data-ng-show="isSectionTabSet(-1)" data-ng-click="newReportFolder();clearReportFolder()" data-ng-hide="isExported(qualifier.entityId)" class="btn btn-danger">
+					Novo projeto</a>
+				<a data-ng-show="isSectionTabSet(0)" data-ng-click="newReport(reportFolder.id)" data-ng-hide="isExported(reportFolder.exporterId)" class="btn btn-danger">
+					Nova tarefa</a>
+				<a data-ng-show="isSectionTabSet(1)" data-ng-click="newUsage()" class="btn btn-danger">
+					Novo monitoramento</a>
+			</div>
+			<div class="h3">{{reportFolder.folderName}}</div>
+			<div class="h4" data-ng-repeat="qualifierTitle in qualifiers" data-ng-show="qualifierTitle.qualifierName==qualifierValue">
+				<small>{{qualifierTitle.qualifierName | i18n}}</small>
+			</div>
+		</div>
+	</div>
+	</div>
+	<!-- 
+	 ! Pills
+	 !-->
+	<div class="panel-body">
+		<ul class="nav nav-pills nav-justified">
+		  <li data-ng-class="{active:isSectionTabSet(-1)}">
+		    <a class="list-group-item" data-ng-click="setSectionTab(-1)"><i class="fa fa-folder-open"></i> Projetos</a>
+		  </li>
+		  <li data-ng-class="{active:isSectionTabSet(0)}">
+		    <a class="list-group-item" data-ng-click="setSectionTab(0)">Tarefas</a>
+		  </li>
+		  <li data-ng-class="{active:isSectionTabSet(1)}">
+		    <a class="list-group-item" data-ng-click="setSectionTab(1)">Monitoramento</a>
+		  </li>
+		  <li data-ng-class="{active:isSectionTabSet(2)}">
+		    <a class="list-group-item" data-ng-click="setSectionTab(2)">Comentários</a>
+		  </li>
+		</ul>
+	</div>
+	<!-- 
+	 ! Conteúdo
+	 !-->
+	<div class="panel-body">
+        <div class="row">
+        <!-- 
+         ! SEÇÃO -1
+         ! Aba Projetos
+         !
+         ! -->
+        <div class="col-md-12" data-ng-show="isSectionTabSet(-1)">
+             <div data-ng-include="'/assets/report/selection/report-folder.html'"></div>
+        </div>
+        <!-- 
+         ! SEÇÃO 0
+         ! Aba Tarefas
+         !
+         ! -->
+        <div class="col-md-12" data-ng-show="isSectionTabSet(0)">
+             <div class="row" data-ng-include="'/assets/report/selection/report-0.html'"></div>
+        </div>
+        <!-- 
+         ! SEÇÃO 1
+         ! Aba Monitoramento
+         !
+         ! -->
+        <div class="col-md-12" data-ng-show="isSectionTabSet(1)">
+             <div class="row" data-ng-include="'/assets/report/selection/report-1.html'"></div>
+        </div>
+        <!-- 
+         ! SEÇÃO 2
+         ! Aba Comentários
+         !
+         ! -->
+        <div class="col-md-12" data-ng-show="isSectionTabSet(2)">
+             <div class="row" data-ng-include="'/assets/report/selection/report-2.html'"></div>
+        </div>
+		</div>
+
+	</div>
+	</div>
+</div><!-- Main -->
+</div>
+</div>
+
+

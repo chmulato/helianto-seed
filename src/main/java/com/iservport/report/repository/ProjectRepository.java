@@ -28,7 +28,7 @@ public interface ProjectRepository
 			+ "from Project folder "
 			+ "where folder.id = ?1 ")
 	ProjectReadAdapter findById(int id);
-;
+
 			
 }
 	

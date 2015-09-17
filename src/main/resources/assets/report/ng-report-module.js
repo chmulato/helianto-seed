@@ -1,98 +1,45 @@
 (function() {
-	app = angular.module('report', ['ui.bootstrap', 'app.services','angular-redactor' ,'ngResource']);
-//		return {
-//			restrict: 'E',
-//			templateUrl:'/assets/report/selection-main.html',
+	app = angular.module('report', ['ui.bootstrap', 'app.services', 'ngResource', 'ngSanitize', 'angular-loading-bar', 'angular-redactor', 'ui.bootstrap.accordion'])
+	/**
+	 * Recursos de relatórios
+	 */
+	.factory('resources', ['$resource', function($resource) {
+		var service = {};
+		service.qualifierResource = $resource("/app/report/qualifier");
+		service.resource = $resource("/app/report/:method"
+			, {folderId : "@folderId"}
+			, { save: { method: 'PUT'}, create: {method: 'POST' }, remove:{method:'DELETE'}});
+		return service;
+	}])
+	/**
+	 * Controlador de relatórios.
+	 */
+	.controller('ReportController', ['$scope', '$window', '$http', 'resources', 'qualifierService', '$log'
+	                                  , function($scope, $window, $http, resources, qualifierService, $log) {
+//	.controller('ReportController', ['$scope', '$http','resources', 'genericServices', 'securityServices', 'commomLang', 'controllerLang','$interval'
+//	                                    , function($scope, $http, resources, genericServices, securityServices, commomLang, reportLocale, $interval) {
+		
+//		//to i18n
+//		$scope.localizationKeys = reportLocale._getLocalizationKeys();
+//		securityServices.getCategoryMap();
+//		$scope.showMenuItem =  function(code){
+//			return securityServices.showMenuItem(code);
 //		}
-//
-//	})
-	app.controller('ReportController', ['$scope', '$window', '$http', '$resource' , 'genericServices', 'securityServices'
-	                              	                                  , function($scope, $window, $http, $resource, genericServices, securityServices) {
-	
-		var baseUrl = '/api/report/';
-		$scope.graphResource = $resource(baseUrl + "/graph");
-		$scope.listGraph = function(value) {
-			$scope.burnUpExecution = $scope.graphResource.query({baseLineId: value});
-		};
-		$scope.listGraph(1);
-		
-//		$scope.burnUpExecution = [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 17 }, { x: 3, y: 42 } ];
-		$scope.renderer = 'line';
-		
-		securityServices.getCategoryMap();
-		$scope.showMenuItem =  function(code){
-			return securityServices.showMenuItem(code);
-		}
-		$scope.isAuthorized = function(role, ext){
-			return securityServices.isAuthorized(role, ext);
-		}
-		$scope.logout = function(){
-			return securityServices.logout();
-		}
-		$http.get('/app/home/entity').success(function(data, status, headers, config) {
-			return 	$scope.authorizedEntity = data;
-		})
-		
-		/*
-		 * Recursos
-		 */
-		$scope.qualifierResource = $resource("/api/category/qualifier");
-		$scope.categoryResource = $resource("/api/category/", { categoryId:"@categoryId" });
-		$scope.qualifierResource = $resource(baseUrl + "qualifier");
-		$scope.reportFolderResource = $resource(baseUrl + "folder", { qualifierValue:"@qualifierValue",folderId:"@folderId"}, {
-			save: { method: 'PUT' },
-			create: { method: 'POST' }
-		});
-		$scope.reportFolderExportResource = $resource(baseUrl + "folder/export", { reportFolderId:"@reportFolderId", entitiesIds:"@entitiesIds" }, {
-			save: { method: 'PUT' },
-			exportFolder: { method: 'POST' }
-		});
-		$scope.searchResource= $resource(baseUrl+'search', null, {
-			search:{ method: 'POST', isArray: false }});
-		$scope.reportResource = $resource(baseUrl , { folderId:"@folderId", reportId:"@reportId"}, {
-			save: { method: 'PUT' },
-			create: { method: 'POST' },
-		});
-		$scope.reportPhaseResource = $resource(baseUrl+"phase" , { folderId:"@folderId"}, {
-			save: { method: 'PUT' },
-			create: { method: 'POST' },
-		});
-		$scope.staffMemberResource = $resource(baseUrl + "staffMember" ,{search:"@search", searchFolderId:"@searchFolderId", staffMemberId:"@staffMemberId", folderId:"@folderId", users:"@users", userId:"@userId", targetId:"@targetId"}, {
-			save: { method: 'PUT'},
-			newStaffMember:{method: 'POST'}
-		});
-		$scope.reviewResource = $resource(baseUrl + "review" ,{reportId:"@reportId"}, {
-			save: { method: 'PUT'},
-			newReview:{method: 'POST'},
-			getReview:{method: 'GET', isArray:false},
-			query:{method: 'GET', isArray:false}
-		});
-		$scope.participantResource = $resource(baseUrl + "participant" ,{reportId:"@reportId"}, {
-			save: { method: 'PUT'},
-			newParticipant:{method: 'POST'},
-			getParticipant:{method: 'GET', isArray:false},
-			query:{method: 'GET', isArray:false}
-		});
-		$scope.followUpResource = $resource(baseUrl + "followUp" ,{reportId:"@reportId"}, {
-			save: { method: 'PUT'},
-			newFollowUp:{method: 'POST'},
-			getFollowUp:{method: 'GET', isArray:false},
-			query:{method: 'GET', isArray:false}
-		});
-		$scope.reportReviewResource = $resource(baseUrl+"review" , { reportId:"@reportId"}, {
-			save: { method: 'PUT' },
-			create: { method: 'POST' },
-		});	
-		
-		/*
-		 * FIM Recursos
-		 */
-		
-		
+//		securityServices.getAuthorizedRoles();
+//		$scope.isAuthorized = function(role, ext){
+//			return securityServices.isAuthorized(role, ext);
+//		}
+//		$scope.logout = function(){
+//			return securityServices.logout();
+//		}
+//		$http.get('/app/home/entity').success(function(data, status, headers, config) {
+//			return 	$scope.authorizedEntity = data;
+//		})
 		
 		/*
 		 * initializers
 		 */
+		var baseUrl = '/app/report/';
 		$scope.externalId = (externalId==null || externalId=='undefined')?0:externalId;
 		$scope.menuName = "control";		
 		$scope.baseName="report";
@@ -105,8 +52,6 @@
 		$scope.searchBool = false; 
 		$scope.message ={"categoryExists":true};
 		$scope.date = new Date();
-		//retorna a url pra mostrar no modal
-		$scope.formUrl = '/assets/report/form-report.html';
 
 		$scope.dateNow = new Date(); 
 		$scope.reportFolder ={"numberOfDigits":3};
@@ -122,66 +67,6 @@
 		$scope.aggregate = 0;
 		$scope.qualifierType = 1;
 		$scope.typeOfReviewBar = 'success';
-		
-
-		
-		/**
-		 * Abre um modal.
-		 * 
-		 * @param formName Nome do Fragmento (form-YYYY)
-		 * 
-		 */
-		$scope.openForm = function(formName){
-			$scope.message =[];
-			//inicialização em form-report
-			$scope.createPart = false;
-			$('#save-report input[type="text"]').removeAttr('readonly').val('');
-			
-			$scope.formUrl = '/assets/report/'+formName+'.html';
-			$("#modalBody").modal('show');
-		}
-		
-		
-		/*
-		 * end Initializers
-		 * 
-		 */
-		
-		$scope.sectionTab = 0;
-		$scope.setSectionTab = function(value) {
-			$scope.sectionTab = value;
-		};
-		$scope.isSectionTabSet = function(value) {
-			return $scope.sectionTab === value;
-		};
-
-		/*
-		 * Ajax get's
-		 */
-		
-		/**
-		 * Qualifier = tipo de report
-		 */
-		$scope.qualifierValue = 0;
-		$scope.listQualifiers = function() {
-			$scope.qualifiers = $scope.qualifierResource.query();
-			$scope.qualifiers.$promise.then(function(data) {
-				console
-				if ($scope.qualifierValue === 0 && data.length>0 && $scope.externalId==0) {
-					$scope.setQualifier($scope.qualifiers[0]);
-				}
-			})
-		};
-		$scope.setQualifier = function(qualifierItem) {
-			$scope.sectionTab = -1;
-			$scope.qualifier = qualifierItem;
-			$scope.qualifierValue = qualifierItem.qualifierValue;
-			$scope.qualifierName = qualifierItem.qualifierName;
-			$scope.reportFolders = [];
-			$scope.reportList = [];
-			$scope.listReportFolders(qualifierItem.qualifierValue);
-		}
-		$scope.listQualifiers();
 
 		$scope.reportSection = -1;
 		$scope.setReportSection = function(value){
@@ -193,48 +78,29 @@
 		};
 		
 		/**
-		 * Pastas.
+		 * Qualifier
+		 */
+		$scope.setQualifier = function(value, data) {
+			if (Array.isArray(data)) {
+				$scope.qualifiers = data;
+			}
+			$scope.qualifierValue = value;
+			$scope.reportFolderValue = 0;
+			$scope.listReportFolders(value);
+		}
+		qualifierService.run(resources.qualifierResource, $scope.setQualifier, 0);
+		
+		
+		/**
+		 * Report folders.
 		 */
 		$scope.folderValue = 0;
-		$scope.reportFolder= {};
-		
-		
-	
-
-		
-		$scope.entitiesIds = [];
-		/**
-		 * Método usado para inserir ou retirar valores de um array.
-		 * 
-		 * Uso com checkBox: <input data-ng-click="toggleSelection(idToAdd)"  type="checkbox" id="item-" name="{{idToAdd}}" > 
-		 * 
-		 */
-		$scope.toggleSelection = function toggleSelection(id) {
-			var idx = $scope.entitiesIds.indexOf(id);
-
-			if (idx > -1) {
-				$scope.entitiesIds.splice(idx ,1);
-		
-			}
-			else {
-				$scope.entitiesIds.push(id);
-			}
-			console.log($scope.entitiesIds);
-		};
-		
-		//end export
-		
-		$scope.setSection= function(val){
-			$scope.section = val;
-			$scope.qualifierValue = val;
-		}
-		
 		$scope.listReportFolders = function(reportCategory) {
-			$scope.setSection(reportCategory);
-			$scope.reportFolderList = $scope.reportFolderResource.get({qualifierValue:reportCategory});
-			$scope.reportFolderList.$promise.then(function(data) {
+			$scope.report = {"id":-1};
+			resources.resource.get({method:'folder', qualifierValue:reportCategory}).$promise.then(
+			function(data) {
+				$scope.reportFolderList = data;
 				if (data.content.length>0) {
-					$scope.setSectionTab(-1);
 					$scope.reportFolders = data.content;
 					if($scope.externalId==0){	
 						$scope.folderValue = data.content[0].id;
@@ -242,47 +108,78 @@
 							$scope.listReports($scope.folderValue);
 						}
 					}
-				}else{
-					$scope.reportFolder = null;
-					$scope.reportFolders = [];
-					$scope.reports = [];
-					$scope.report = {"id":-1};
 				}
 			})
 		};
-
-		$scope.newReportFolder = function() {
-			$scope.reportFolder = $scope.reportFolderResource.create({qualifierValue:$scope.qualifierValue});
-			$scope.openForm('form-report-folder');
-		};
 		$scope.getReportFolder = function(id) {
-			$scope.reportFolder = $scope.reportFolderResource.get({folderId: id});
-			$scope.reportFolder.$promise.then(function(data) {
-				 $scope.folderValue = data.id;
-				 $scope.listReportPhases($scope.folderValue);
-				 $scope.listStaffMembers($scope.folderValue);
+			resources.resource.get({method:'folder', folderId: id}).$promise.then(
+			function(data) {
+				$scope.reportFolder = data;
+			});
+		};
+		$scope.setReportFolder = function(reportFolder) {
+			$scope.folderValue = reportFolder.id;
+			$scope.listReports($scope.folderValue);
+			$scope.listReportPhases($scope.folderValue);
+			$scope.listStaffMembers($scope.folderValue);
+		};
+		$scope.newReportFolder = function() {
+			resources.resource.create({method:'folder', qualifierValue:$scope.qualifierValue}, null).$promise.then(
+			function(data) {
+				$scope.reportFolder = data;
+				$scope.openForm('report-folder');
 			});
 		};
 		$scope.updateReportFolder = function() {
-			console.log($scope.reportFolder);
-			$scope.reportFolder.tools = $scope.entitiesIds;
-			$scope.reportFolder = $scope.reportFolderResource.save($scope.reportFolder);
-			$scope.reportFolder.$promise.then(
-					function(data, getReponseHeaders) {
-						$scope.listReportFolders($scope.qualifierValue);
-						$scope.listReports(data.id);
-						$("#modalBody").modal('hide');
-					},
-					function(data, getReponseHeaders) {
-						console.log(data);
-						if(data.status === 302) {
-							$scope.message= data.data;
-							$scope.message.exist = true;
-						}
-					}
-			);
+			resources.resource.save({method:'folder'}, $scope.reportFolder).$promise.then(
+			function(data, getReponseHeaders) {
+				$scope.reportFolder = data;
+				$scope.setReportFolder(data);
+				$("#modalBody").modal('hide');
+			});
 		};
 
+		/**
+		 * Exports
+		 */
+		$scope.entitiesIds = [];
+		$scope.exportFolder = function(){
+			resources.resource.get({method:'export', reportFolderId:$scope.reportFolder.id}).$promise.then(
+			function(data, getReponseHeaders) {
+				$scope.entityList = data;
+			});
+			resources.resource.get({method:'export', reportFolderId:$scope.reportFolder.id, selected:true}).$promise.then(
+			function(data, getReponseHeaders) {
+				$scope.entityListExported = data;
+			});
+			$scope.openForm('form-folder-export');
+		}
+		$scope.isExported = function(targetId){
+			return false; //$scope.authorizedEntity.id != targetId;
+		}
+		$scope.saveExport = function(){
+			$scope.entitiesIds = [];
+			resources.resource.save({method:'export', reportFolderId:$scope.reportFolder.id, entitiesIds:$scope.entitiesIds}, null).$promise.then(
+			function(data, getReponseHeaders) {
+				$("#modalBody").modal('hide');
+				$scope.entityListExported = data;
+			});
+		}
+		/**
+		 * Método usado para inserir ou retirar valores de um array.
+		 * 
+		 * Uso com checkBox: <input data-ng-click="toggleSelection(idToAdd)"  type="checkbox" id="item-" name="{{idToAdd}}" > 
+		 */
+		$scope.toggleSelection = function toggleSelection(id) {
+			var idx = $scope.entitiesIds.indexOf(id);
+			if (idx > -1) {
+				$scope.entitiesIds.splice(idx, 1);
+			}
+			else {
+				$scope.entitiesIds.push(id);
+			}
+		};
+		
 		/**
 		 * Ações
 		 */
@@ -314,12 +211,11 @@
 			console.log(searchForm);
 			console.log(page);
 			// resource search
-			$scope.reportSearchList = $scope.searchResource.search(searchForm);
-			$("#searchString").val("");
-			$scope.reportSearchList.$promise.then(function(data) {
+			resources.resource.search({method:'search'}, searchForm).$promise.then(function(data) {
+				$scope.reportSearchList = data;
+				$("#searchString").val("");
 				//$scope.searchBool = true;
 				$scope.page = page;
-				$scope.nextAndPrevious = genericServices.getNextAndPreviousLinkByList(data);
 				console.log(data);
 				if(data.totalElements == 1){
 					$scope.report = data.content[0];
@@ -353,61 +249,44 @@
 			return $scope.phaseLiterals.indexOf(literal)>-1?true:false;
 		};
 		
-		//list
+		/**
+		 * Reports
+		 */
+		$scope.reportFolder= {};
+		if($scope.externalId>0){
+			$scope.getReport($scope.externalId,null, true);
+		}
+		$scope.setExternalId = function(val){
+			$scope.externalId = val ;
+		}
 		$scope.listReports = function(folderValue, page, isFilter) {
 			$scope.folderValue = folderValue;
-			//posiciona na aba pasta e zera os reports
+			//zera os reports
 			if($scope.externalId==0){
-//				$scope.reportSection = 0 ;	
 				$scope.report = {"id":-1};
 			}
-			
 			if(!isFilter){
 				$scope.getReportFolder(folderValue);
 			}
-			$scope.reportList = $scope.reportResource.get({folderId:folderValue, pageNumber: page, phases:$scope.phaseLiterals});
-			$scope.reportList.$promise.then(function(data) {
-				$scope.nextAndPrevious = genericServices.getNextAndPreviousLinkByList(data);
+			resources.resource.get({folderId:folderValue, pageNumber: page, phases:$scope.phaseLiterals}).$promise.then(function(data) {
+				$scope.reportList = data;
 				if (data.content.length>1) {
-					$scope.setSectionTab(0);
 					$scope.reports = data.content;
-				}else if(data.totalPages == 1 && data.totalElements == 1 && data.numberOfElements == 1){
-					$scope.report = data.content[0];
 				}
 			})
 		};
-
-		//getOne
 		$scope.getReport = function(idVal, sectionVal, retrieveCascade, openForm) {
-			$scope.reportNotExists = false;
-			$scope.showReportList = false;
-			$scope.showReportFolderList = false;
-			
-			$scope.report = $scope.reportResource.get({id: idVal});
-			if(sectionVal==null || sectionVal=='undefined'){
-				sectionVal=0;
-			}
-			$scope.reportSection = sectionVal ;
 			if(retrieveCascade==null || retrieveCascade=='undefined'){
 				retrieveCascade=false;
 			}
-			$scope.report.$promise.then(function(data) {
+			resources.resource.get({id: idVal}).$promise.then(
+			function(data) {
+				$scope.report = data;
 				if(data.id>0 ){
-					$scope.setSectionTab(sectionVal);
-					//get reporter
-					$scope.reportResource.get({reportId: data.id}).$promise.then(function(reporter) {
-						$scope.report.identityId = reporter.reporterId;
-					});
-					console.log("report category resolved as "+data.categoryId);
-					$scope.reportCategory = $scope.categoryResource.get({categoryId: data.categoryId});
-					$scope.reportCategory.$promise.then(function(data) {
-						if(data.id>0 ){
-							//TODO verify
-							//$scope.customProperties = JSON.parse(data.customProperties);
-						}
-					});
+					$scope.getReporter(data.identityId);
+					$scope.getCategory(data.categoryId);
 					if(openForm){
-						$scope.openForm('form-report');	
+						$scope.openForm('report');	
 					}
 					if(retrieveCascade){
 						$scope.listReports(data.reportPlanFolderId);
@@ -419,174 +298,160 @@
 				}
 			});
 		};
-
-		if($scope.externalId>0){
-			$scope.getReport($scope.externalId,null, true);
-		}
-
-		$scope.setExternalId = function(val){
-			$scope.externalId = val ;
-		}
-
-		//create
-		$scope.newReport = function(folderValue) {
-			$scope.report = $scope.reportResource.create({folderId:folderValue});
-			$scope.openForm('form-report');
-		};
-		//Update
-		$scope.updateReport = function() {
-			//$scope.setChangeState(0);
-				console.log($scope.report);
-				$scope.report = $scope.reportResource.save($scope.report);
-				$scope.report.$promise.then(
-						function(data, getReponseHeaders) {
-							console.log($scope.report);
-							$scope.listReports($scope.folderValue);
-							$scope.getReport(data.id, 1);
-							$("#modalBody").modal('hide');	
-						},
-						function(data, getReponseHeaders) {
-							console.log(data);
-							if(data.status === 302) {
-								$scope.message= data.data;
-								$scope.message.exist= true;
-							}
-						}
-				);
-		}
-		
-		//phase
-		
-		
-		//list
-		$scope.listReportPhases = function(folderValue) {
-			$scope.folderValue = folderValue;
-			$scope.reportPhaseList = $scope.reportPhaseResource.query({folderId:folderValue});
-			$scope.reportPhaseList.$promise.then(function(data) {
-					$scope.reportPhases = data;
-					$scope.phaseLiterals = [];
-					$scope.reportPhases.forEach(function(entry) {
-						if ($scope.phaseLiterals.indexOf(entry.literal) == -1) {
-							$scope.phaseLiterals.push(entry.literal);
-					    }
-					});
-			})
-		};
-
-		//getOne
-		$scope.getReportPhase = function(idVal, sectionVal, retrieveCascade) {
-			
-			$scope.reportPhase = $scope.reportPhaseResource.get({id: idVal});
-			if(sectionVal==null || sectionVal=='undefined'){
-				sectionVal=0;
-			}
-			$scope.reportPhase.$promise.then(function(data) {
+		$scope.getReporter = function(reportId) {
+			resources.resource.get({reportId: reportId}).$promise.then(function(data) {
+				$scope.report.identityId = data.reporterId;
 			});
 		};
-
-		//create
+		$scope.getCategory = function(reportId) {
+//			$scope.categoryResource.get({categoryId: data.categoryId}).$promise.then(
+//			function(data) {
+//				$scope.reportCategory = data;
+//				if(data.id>0 ){
+//					//TODO verify
+//					//$scope.customProperties = JSON.parse(data.customProperties);
+//				}
+//			});
+		};
+		$scope.newReport = function(folderValue) {
+			$scope.report = resources.resource.create({folderId:folderValue});
+			$scope.openForm('report');
+		};
+		$scope.updateReport = function() {
+			$scope.report = resources.resource.save($scope.report).$promise.then(
+			function(data, getReponseHeaders) {
+				$scope.listReports($scope.folderValue);
+				$scope.getReport(data.id, 1);
+				$("#modalBody").modal('hide');	
+			});
+		}
+		
+		/**
+		 * Report phase
+		 */
+		$scope.listReportPhases = function(folderValue) {
+			$scope.folderValue = folderValue;
+			resources.resource.query({method:'phase', folderId:folderValue}).$promise.then(
+			function(data) {
+				$scope.reportPhaseList = data;
+				$scope.reportPhases = data;
+				$scope.phaseLiterals = [];
+				$scope.reportPhases.forEach(function(entry) {
+					if ($scope.phaseLiterals.indexOf(entry.literal) == -1) {
+						$scope.phaseLiterals.push(entry.literal);
+				    }
+				});
+			})
+		};
+		$scope.getReportPhase = function(idVal, sectionVal, retrieveCascade) {
+			resources.resource.get({method:'phase', id: idVal}).$promise().then(
+			function(data) {
+				$scope.reportPhase = data;
+				$scope.setReportPhase(data);
+			});
+		};
+		$scope.setReportPhase = function(reportPhase) {
+		};
 		$scope.newReportPhase = function(folderValue) {
-			$scope.reportPhase = $scope.reportPhaseResource.create({folderId:folderValue});
-			$scope.openForm('form-report-phase');
+			resources.resource.create({method:'phase', folderId:folderValue}, null).$promise().then(
+			function(data) {
+				$scope.reportPhase = data;
+				$scope.setReportPhase(data);
+				$scope.openForm('report-phase');
+			});
 		};
-		//Update
 		$scope.updateReportPhase = function() {
-				$scope.reportPhase = $scope.reportPhaseResource.save($scope.reportPhase);
-				$scope.reportPhase.$promise.then(
-						function(data, getReponseHeaders) {
-							$scope.listReportPhases(data.reportFolderId);
-							$("#modalBody").modal('hide');	
-						},
-						function(data, getReponseHeaders) {
-							console.log(data);
-							if(data.status === 302) {
-								$scope.message= data.data;
-								$scope.message.exist= true;
-							}
-						}
-				);
+			resources.resource.save({method:'phase'}, $scope.reportPhase).$promise.then(
+			function(data, getReponseHeaders) {
+				$scope.reportPhase =  data;
+				$scope.setReportPhase(data);
+				$("#modalBody").modal('hide');	
+			});
 		};
-
 		$scope.openReportPhase = function(id){
 			$scope.getReportPhase(id);
-			$scope.openForm('form-report-phase');
+			$scope.openForm('report-phase');
 		}
 	
-		// Membros da equipe
+		/**
+		 * Staff members.
+		 */
 		$scope.staffMember={};
 		
 		$scope.folderId =0;
 		$scope.listStaffMembers = function(folderId) {
-			$scope.staffMembers = $scope.staffMemberResource.get({folderId: folderId});
 			$scope.folderId = folderId;
-			$scope.staffMembers.$promise.then(function(data) {
+			resources.resource.get({method:'staffMember', folderId: folderId}).$promise.then(
+			function(data) {
+				$scope.staffMemberList = data;
 				$scope.staffMembers = data.content;
-			})
-		};
-
-		$scope.newStaffMember = function() {
-			$scope.staffMember = $scope.staffMemberResource.newStaffMember({folderId: $scope.folderValue});
-			$scope.staffMember.$promise.then(function(data) {
 			});
-			return $scope.staffMember;
-			//$scope.openForm('form-staff-member');
 		};
-		$scope.getStaffMember = function(id) {
+		$scope.getStaffMember = function(staffMemberId) {
 			$scope.message= [];
-			$scope.staffMember = $scope.staffMemberResource.get({staffMemberId: id});
+			resources.resource.get({method:'staffMember', staffMemberId: staffMemberId}).$promise.then(
+			function(data) {
+				$scope.staffMember = data;
+				$scope.setStaffMember(data);
+			});
+		};
+		$scope.setStaffMember = function(staffMember) {
+		};
+		$scope.newStaffMember = function() {
+			$scope.staffMember = resources.resource.create({method:'staffMember', folderId: $scope.folderValue}, null).$promise.then(
+			function(data) {
+				$scope.staffMember = data;
+				$scope.setStaffMember(data);
+				$scope.openForm('staff-member');
+			});
 		};
 		$scope.memberToDelete = function(id) {	
 			$scope.message=[];
-			$scope.member = $scope.staffMemberResource.get({staffMemberId: id});
+			resources.resource.get({method:'staffMember', staffMemberId: id}).$promise.then(
+			function(data) {
+				$scope.member = data;
+			});
 		};
-		
-		$scope.hideModal = function(){
-			$("#myModal").modal('hide');
-			$scope.message=[];
-		};
-		
-		$scope.deleteMember = function(id) {
-			$scope.staffMemberResource.remove({targetId: id}).$promise.then(
-					function(data) {
-						$scope.hideModal();
-						console.log(data);
-						$scope.listStaffMembers($scope.folderValue);
-					},
-					function(data, getReponseHeaders) {
-						console.log(data);
-						if(data.status === 404) {
-							$scope.message= data.data;
-							$scope.message.error= true;
-						}
-					}
-			);
-		};
-		
 		$scope.updateStaffMember = function() {
-
-			$scope.staffMember = $scope.staffMemberResource.save($scope.staffMember);
-			$scope.staffMember.$promise.then(
-					function(data, getReponseHeaders) {
-						$scope.listStaffMembers($scope.folderValue);
-					//	$("#modalBody").modal('hide');
-					}, 
-					function(data, getReponseHeaders) {
-						console.log(data);
-						if(data.status === 302) {
-							$scope.message= data.data;
-							$scope.message.exist=true;
-						}
-					}
-			);
+			resources.resource.save({method:'staffMember'}, $scope.staffMember).$promise.then(
+			function(data, getReponseHeaders) {
+				$scope.staffMember = data;
+				$("#modalBody").modal('hide');
+			});
 		};
+		$scope.deleteMember = function(id) {
+			resources.resource.remove({method:'staffMember', targetId: id}).$promise.then(
+			function(data) {
+				$("#modalBody").modal('hide');
+				$scope.listStaffMembers($scope.folderValue);
+			});
+		};
+		/**
+		 * Chamada de pesquisa de usuário para typeAhead
+		 */		
+		$scope.getStaffMembers = function(val){
+			return $scope.userList = resources.resource.query({method:'staffMember', users: true, search:val, searchFolderId: $scope.folderValue})
+			.$promise.then(function(response) {
+				var items = response.map(function(e) {
+					if(e.userName==null || e.userName.length <=0){
+						e.userName=e.userKey;
+					}
+					return e;
+				});
+				return items;
+			});
+		}
 		
+		/**
+		 * Users.
+		 */
 		$scope.users = function(){
-			$scope.userList = $scope.staffMemberResource.query({users: true});
+			$scope.userList = resources.resource.query({method:'staffMember', users: true});
 		}
 		$scope.users();
 		
 		$scope.getUser = function(id){
-			return $scope.staffMemberResource.get({users: true, userId: id});
+			return resources.resource.get({method:'staffMember', users: true, userId: id});
 		}
 		$scope.identityMember = {"userId" : -1};
 		
@@ -607,34 +472,51 @@
 			
 		}
 		
+		
+		
+		
 		/**
-		 * Chamada de pesquisa de usuário para typeAhead
-		 * 
-		 */		
-		$scope.getStaffMembers = function(val){
-			return $scope.userList = $scope.staffMemberResource.query({users: true, search:val, searchFolderId: $scope.folderValue})
-			.$promise.then(function(response) {
-				var items = response.map(function(e) {
-					if(e.userName==null || e.userName.length <=0){
-						e.userName=e.userKey;
-					}
-					return e;
-				});
-				return items;
-			});
-		}
-		
-		
-		
-		
-		
-		// Monitoramentos
+		 * Review
+		 */
 		$scope.review={'progress':0};
-		
+		$scope.reportId =0;
+		$scope.listReviews = function(reportId) {
+			$scope.reportId = reportId;
+			resources.resource.query({method:'review', reportId: reportId}).$promise.then(
+			function(data) {
+				$scope.reviews = data;
+				if (data.length===1) {
+				}
+			});
+		};
+		$scope.getReview = function(id) {
+			resources.resource.get({method:'review', reportReviewId: id}).$promise.then(
+			function(data) {
+				$scope.review = data;
+				$scope.openForm('form-report-review');
+			});
+		};
+		$scope.newReview = function() {
+			resources.resource.create({method:'review', reportId: $scope.reportId}, null).$promise.then(
+			function(data) {
+				$scope.review = data;
+				$scope.openForm('form-report-review');
+			});
+		};
+		$scope.updateReview = function() {
+			$scope.review = resources.resource.save({method:'review'}, $scope.review).$promise.then(
+			function(data, getReponseHeaders) {
+				$scope.listReviews(data.reportId);
+				$scope.reportResource.get({id: data.reportId}).$promise.then(function(data){
+					$scope.listReports(data.reportFolderId);
+					$scope.setSectionTab(1);
+				});
+				$("#modalBody").modal('hide');
+			});
+		};
 		$scope.$watch('review.workflowLevel', function () { 
 			$scope.typeOfReviewBar = $scope.getTypeOfReviewBar($scope.review.workflowLevel);
 		}, true);
-		
 		$scope.getTypeOfReviewBar = function (value){
 			if (value < 25) {
 				return  'danger';
@@ -646,131 +528,90 @@
 				return  'success';
 			}	
 		}
-		
-		$scope.reportId =0;
-		$scope.listReviews = function(reportId) {
-			$scope.reviews = $scope.reviewResource.query({reportId: reportId});
-			$scope.reportId = reportId;
-			$scope.reviews.$promise.then(function(data) {
-				if (data.length===1) {
-				}
-			})
-		};
 
-		$scope.newReview = function() {
-			$scope.review = $scope.reviewResource.newReview({reportId: $scope.reportId});
-			$scope.openForm('form-report-review');
-		};
-		$scope.getReview = function(id) {
-			$scope.message= [];
-			$scope.review = $scope.reviewResource.getReview({reportReviewId: id});
-			$scope.openForm('form-report-review');
-		};
-		$scope.updateReview = function() {
-
-			$scope.review = $scope.reviewResource.save($scope.review);
-			$scope.review.$promise.then(
-					function(data, getReponseHeaders) {
-						$scope.listReviews(data.reportId);
-						$scope.reportResource.get({id: data.reportId}).$promise.then(function(data){
-							$scope.listReports(data.reportFolderId);
-							$scope.setSectionTab(1);
-						});
-						$("#modalBody").modal('hide');
-					}, 
-					function(data, getReponseHeaders) {
-						console.log(data);
-						if(data.status === 302) {
-							$scope.message= data.data;
-							$scope.message.exist=true;
-						}
-					}
-			);
-		};
-
-		//Participante
-		
-
+		/**
+		 * Participants.
+		 */
 		$scope.participant={};
-		
 		$scope.reportId =0;
 		$scope.listParticipants = function(reportId) {
-			$scope.participants = $scope.participantResource.query({reportId: reportId});
 			$scope.reportId = reportId;
-			$scope.participants.$promise.then(function(data) {
+			resources.resource.query({method:'participant', reportId: reportId}).$promise.then(
+			function(data) {
+				$scope.participants = data;
 				if (data.length===1) {
 				}
-			})
-		};
-
-		$scope.newParticipant = function() {
-			$scope.participant = $scope.participantResource.newParticipant({reportId: $scope.reportId});
+			});
 		};
 		$scope.getParticipant = function(id) {
 			$scope.message= [];
-			$scope.participant = $scope.participantResource.getParticipant({participantId: id});
+			resources.resource.getParticipant({method:'participant', participantId: id}).$promise.then(
+			function(data) {
+				$scope.participant = data;
+				$scope.setParticipant(data);
+			});
+		};
+		$scope.setParticipant = function(participant) {
+		};
+		$scope.newParticipant = function() {
+			resources.resource.newParticipant({method:'participant', reportId: $scope.reportId}, null).$promise.then(
+			function(data) {
+				$scope.participant = data;
+				$scope.setParticipant(data);
+			});
 		};
 		$scope.updateParticipant = function() {
-
-			$scope.participant = $scope.participantResource.save($scope.participant);
-			$scope.participant.$promise.then(
-					function(data, getReponseHeaders) {
-					//	$("#modalBody").modal('hide');
-					}, 
-					function(data, getReponseHeaders) {
-						console.log(data);
-						if(data.status === 302) {
-							$scope.message= data.data;
-							$scope.message.exist=true;
-						}
-					}
-			);
+			resources.resource.save({method:'participant'}, $scope.participant).$promise.then(
+			function(data, getReponseHeaders) {
+				$scope.participant = data;
+				$scope.setParticipant(data);
+				$("#modalBody").modal('hide');
+			});
 		};
 
 		
-		//Comentários
-		
-
+		/**
+		 * FollowUps.
+		 */
 		$scope.followUp={};
-		
 		$scope.reportId =0;
 		$scope.listFollowUps = function(reportId) {
-			$scope.followUps = $scope.followUpResource.query({reportId: reportId});
 			$scope.reportId = reportId;
-			$scope.followUps.$promise.then(function(data) {
+			resources.resource.query({method:'followUp', reportId: reportId}).$promise.then(
+			function(data) {
+				$scope.followUps = data;
 				if (data.length===1) {
 				}
-			})
+			});
 		};
-
-		$scope.newFollowUp = function() {
-			$scope.followUp = $scope.followUpResource.newFollowUp({reportId: $scope.reportId});
-		};
-		$scope.getFollowUp = function(id) {
+		$scope.getFollowUp = function(followUpId) {
 			$scope.message= [];
-			$scope.followUp = $scope.followUpResource.getFollowUp({followUpId: id});
+			resources.resource.get({method:'followUp', followUpId: followUpId}).$promise.then(
+			function(data) {
+				$scope.followUp = data;
+				$scope.setFollowUp(data);
+			});
+		};
+		$scope.setFollowUp = function(followUp) {
+		};
+		$scope.newFollowUp = function() {
+			resources.resource.create({method:'followUp', reportId: $scope.reportId}, null).$promise.then(
+			function(data) {
+				$scope.followUp = data;
+				$scope.setFollowUp(data);
+			});
 		};
 		$scope.updateFollowUp = function() {
-
-			$scope.followUp = $scope.followUpResource.save($scope.followUp);
-			$scope.followUp.$promise.then(
-					function(data, getReponseHeaders) {
-						//$("#modalBody").modal('hide');
-					}, 
-					function(data, getReponseHeaders) {
-						console.log(data);
-						if(data.status === 302) {
-							$scope.message= data.data;
-							$scope.message.exist=true;
-						}
-					}
-			);
+			resources.resource.save({method:'followUp'}, $scope.followUp).$promise.then(
+			function(data, getReponseHeaders) {
+				$scope.followUp = data;
+				$("#modalBody").modal('hide');
+			});
 		};
 
 		$scope.getFavouriteIcon = function() {
 			return $scope.favouriteIcon;
 		}
-
 		$scope.setFavouriteId = function(favouriteId) {
 			$scope.favouriteId = favouriteId;
 		}
@@ -806,201 +647,23 @@
 			
 		}
 		
+		/**
+		 * Abre um modal.
+		 * 
+		 * @param formName Nome do Fragmento (form-YYYY)
+		 * 
+		 */
+		$scope.openForm = function(formName){
+			$scope.message =[];
+			//inicialização em form-report
+			$scope.createPart = false;
+			$('#save-report input[type="text"]').removeAttr('readonly').val('');
+			
+			$scope.formUrl = '/assets/report/form/'+formName+'.html';
+			$("#modalBody").modal('show');
+			}
 			
 	}])
-	.controller('MemberController', ['$scope', function($scope) {
-		var addMember=false;
-		$scope.isAddMember=function() {
-			return addMember;
-		};
-		$scope.setAddMember = function(value) {
-			addMember = value;
-		};
-	}])
-	.controller('ViewController', ['$scope', function($scope) {
-	}])
 	;
-
-	/**
-	 * View Controller
-	 */
-	app.controller('ViewController', ['$scope', '$http', 'securityServices', function($scope, $http, securityServices) {
-		
-		/**
-		 * Abas
-		 */
-		$scope.sectionTab = 1;
-		$scope.setSectionTab = function(value) {
-			this.sectionTab = value;
-	    };
-	    $scope.isSectionTabSet = function(value) {
-	      return this.sectionTab === value;
-	    };
-
-		/**
-		 * Autorização
-		 */
-		$scope.authList =[];
-		defineAuthorities();
-		function defineAuthorities(){
-			securityServices.getAuthorizedRoles(null).success(function(data, status, headers, config) {
-				$scope.authList = data.content;
-			});
-		}
-		$scope.isAuthorized =function(role, ext){
-			return securityServices.isAuthorized($scope.authList, role, ext);
-		}
-		
-	}]);
-	
-	/**
-	 * Prime control
-	 */
-	app.directive('toolsWrapper', function() {
-		  return {
-		    restrict: "A",
-		    scope: { parsedModel: '@' },
-		    link: function(scope, element, attrs) {
-		    	scope.checkList = {
-			    	 '0':'Enterprise Tester'
-					,'1':'Redmine'
-					,'2':'Test Manager'
-					,'3':'PerfectMobile'
-					,'4':'Ferramentas Office'
-		    	}
-		    },
-		    template: '<div data-panel-wrapper data-label="Ferramentas">'+
-		    		  '<div class="checkbox" data-ng-repeat="(key, value) in checkList" >' + 
-		              '<label>' +
-		              '<input data-ng-model="parsedModel" name="tools" type="checkbox" value="{{key}}">' +
-		              '{{value}}' +
-		              '</label>' +
-		              '</div>' +
-		              '</div>'
-		  }
-	})
-	.directive('techWrapper', function() {
-		  return {
-		    restrict: "A",
-		    scope: { parsedModel: '@' },
-		    link: function(scope, element, attrs) {
-		    	scope.checkList = {
-			    	 'A':'Android'
-					,'B':'PDV'
-		    	}
-		    },
-		    template: '<div data-panel-wrapper data-label="Tecnologia empregada">'+
-		    		  '<div class="checkbox" data-ng-repeat="(key, value) in checkList" >' + 
-		              '<label>' +
-		              '<input data-ng-model="parsedModel" name="tools" type="checkbox" value="{{key}}">' + 
-		              '{{value}}' +
-		              '</label>' +
-		              '</div>' +
-		              '</div>'
-		  }
-	});
-	
-	/**
-	 * Layout
-	 */
-	
-	/**
-	 * Form group wrapper
-	 * 
-	 * Example:
-	 * <div data-control-id="x" data-form-group-wrapper data-label="y">...</div>
-	 */
-	app.directive('formGroupWrapper', function() {
-		  return {
-		    restrict: "A", 
-		    transclude: true,
-		    scope: { controlId:'@', label:'@' },
-		    template: '<div class="form-group">'+
-		              '<label for="{{controlId}}" class="col-sm-3 control-label">{{label}}</label>' +
-		              '<div class="col-sm-9">' +
-		              '<ng-transclude></ng-transclude>' +
-		              '</div>' +
-		              '</div>'
-		  }
-	})
-	/**
-	 * Panel wrapper
-	 * 
-	 * Example:
-	 * <div data-panel-wrapper data-label="x">...</div>
-	 */
-	.directive('panelWrapper', function() {
-		  return {
-		    restrict: "A", 
-		    transclude: true,
-		    scope: { label:'@' },
-		    template: '<div class="panel panel-default">'+
-		              '<div class="panel-heading" >{{label}}</div>' +
-		              '<div class="panel-body" >' +
-		              '<ng-transclude></ng-transclude>' +
-		              '</div>' +
-		              '</div>'
-		  }
-	})
-	/**
-	 * Modal header wrapper
-	 * 
-	 * Example:
-	 * <div data-modal-header-wrapper>...</div>
-	 */
-	.directive('modalHeaderWrapper', function() {
-		  return {
-		    restrict: "A", 
-		    transclude: true,
-		    template: '<div class="modal-header">'+
-		              '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
-		              '<span class="h4 modal-title" id="modalLabel" >' +
-		              '<ng-transclude></ng-transclude>' +
-		              '</span>' +
-		              '</div>'
-		  }
-	})
-	/**
-	 * Gráfico
-	 */
-	.directive('rickshawChart', function () {
-		return {
-			scope: {
-				data: '=',
-				renderer: '='
-			},
-			template: '<div></div>',
-			restrict: 'EA',
-			link: function postLink(scope, element, attrs) {
-				scope.$watchCollection('[data, renderer]', function(newVal, oldVal){
-					if(!newVal[0]){
-						return;
-					}
-//					scope.data = scope.data.sort(function(a, b) {
-//						if (a.x > b.x) { return 1; }
-//						if (a.x < b.x) { return -1; }
-//						return 0;
-//					});
-					element[0].innerHTML ='';
-
-					var graph = new Rickshaw.Graph({
-						element: element[0],
-						width: attrs.width,
-						height: attrs.height,
-						interpolation: 'linear',
-						series: [{data: scope.data, color: attrs.color}],
-						renderer: scope.renderer
-					});
-					
-					var hoverDetail = new Rickshaw.Graph.HoverDetail( {
-						graph: graph
-					} );
-					
-					graph.render();
-				});
-			}
-		}
-	});
-
 
 })();

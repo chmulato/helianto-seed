@@ -1,0 +1,53 @@
+		 <!-- 
+          !
+          ! SEÇÃO 1
+          ! Aba Monitoramento
+          !
+          ! -->
+          		
+            <div class="col-md-6 col-xs-12" data-ng-show="isReportSection(1)"> 
+                 	          		          		
+				<table class="table table-hover">
+				<thead>
+        			<tr>
+        	         <th>R</th>
+         			 <th>Detalhe</th>
+         			  <th>Progresso</th>
+        		     <th>ID</th>
+     			   </tr>
+      			</thead>
+				
+				  <tbody>
+				    <tr data-ng-class="{active: reportItem.id==report.id}" 
+				    	data-ng-click="getReview(review.id)"
+			 			data-ng-repeat="review in reviews.content" >
+				      <td><a><i class="{{review.resolutionIcon}}"></i> </a>
+				      </td>
+				      <td class="mail-ontact">
+				      	<small>{{review.displayName.length>0?review.displayName:review.firstName+' '+review.lastName}}</small>	
+				         <div data-ng-bind-html="review.reviewText"></div> 
+				         
+				      </td> 
+				      <td>
+				      	<progressbar animate="false" value="review.workflowLevel"
+				      		type="{{getTypeOfReviewBar(review.workflowLevel)}}"><b>{{review.workflowLevel}}%</b></progressbar>
+				      </td>
+				      <td style="min-width:64px; width: 64px;">
+				        <span>{{review.issueDate | date:'dd'}} </span> 
+				        <i class="fa fa-sign-in"></i>
+				        <br />
+				       <span>{{review.issueDate | date:'MMM'}}</span>  
+				      </td>
+				    </tr>
+				  </tbody>
+				</table>
+           
+            
+            <div class="col-md-6 col-xs-12" data-ng-show="isReportSection(1)"> 
+                   
+                  </td>
+						<td > <button class="btn btn-default" data-ng-click="newReview()"> Novo Monitoramento</button> </td>
+				  <td>
+                  
+             </div>	
+             

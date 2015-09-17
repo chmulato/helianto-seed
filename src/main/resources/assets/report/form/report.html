@@ -1,0 +1,246 @@
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+<!-- 	<span class="h4 modal-title" id="modalLabel" > {{'EXPORT' | i18n}} : {{reportFolder.folderName}}</span>
+ -->	<span class="h4 modal-title" id="modalLabel" >  {{reportFolder.folderName}}</span>
+	
+</div><!-- modal-header-->
+  		
+<div class="modal-body">
+<form method="POST" data-ng-submit="updateReport()" id="saveReport"
+	class="form-horizontal" role="form">
+
+	<div class="row" >
+
+		<div class="col-md-8">
+		
+			<div id="form-group-reportCode"
+				class="form-group">
+				<label for="reportCode" class="col-sm-3 control-label">Código</label>
+				<div class="col-sm-9">
+					<input id="reportCode" type="text" readonly="readonly" name="reportCode"
+						maxlength="128"
+						placeholder="128"
+						data-ng-model="report.reportCode" class="form-control" />
+				</div>
+			</div>
+
+			<label for="issueDate" class="col-sm-3 control-label"></label>
+			<label for="nextCheckDate" class="col-sm-4 control-label"><p class="pull-left">Próxima verificação</p></label>
+			<label for="scheduledEndDate" class="col-sm-4 control-label"><p class="pull-left">Término da tarefa</p></label>
+			
+			<div id="form-group-dates" class="form-group">
+		
+				<div class="col-sm-3">
+					<input type="hidden" name="issueDate"
+						value="{{dateNow.getTime()}}" />
+
+						<input type="hidden" name="id" value="{{(report.id || 0)}}" />
+						
+						<input type="hidden" name="folderId"
+						value="{{aggregate}}" />
+						
+						<input type="hidden" name="categoryId"
+						value="{{categoryId}}" />
+						
+						
+				</div>
+				
+				<div class="col-sm-4">
+					<input type="hidden" name="nextCheckDate"
+						value="{{nextCheckDate.getTime()}}" />
+					<div data-ng-click="open($event,1)" id="nextCheckDatePicker"
+						class="input-group"
+						data-ng-init="nextCheckDate= ((report.nextCheckDate>0 ? report.nextCheckDate : dateNow.getTime()) | date:'shortDate')">
+						<input type="text" class="form-control" data-ng-model="nextCheckDate"
+							data-is-open="datePicker[1]" data-datepicker-options="dateOptions"
+							data-datepicker-popup="shortDate" data-ng-required="true"
+							data-close-text="Close" /> <span class="input-group-btn">
+							<button type="button" class="btn btn-default">
+								<i class="glyphicon glyphicon-th"></i>
+							</button>
+						</span>
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<input type="hidden" name="scheduledEndDate"
+						value="{{scheduledEndDate.getTime()}}" />
+					<div data-ng-click="open($event,2)" id="scheduledEndDatePicker"
+						class="input-group"
+						data-ng-init="scheduledEndDate= (report.scheduledEndDate>0 ?report.scheduledEndDate:dateNow.getTime() | date:'shortDate')">
+						<input type="text" class="form-control" data-ng-model="scheduledEndDate"
+							data-is-open="datePicker[2]" data-datepicker-options="dateOptions"
+							data-datepicker-popup="shortDate" data-ng-required="true"
+							data-close-text="Close" /> <span class="input-group-btn">
+							<button type="button" class="btn btn-default">
+								<i class="glyphicon glyphicon-th"></i>
+							</button>
+						</span>
+					</div>
+				</div>
+				
+			</div>
+
+			<div id="form-group-nextCheckDate" class="form-group">
+
+
+			</div>		
+			<div id="form-group-scheduledEndDate" class="form-group">
+				
+			</div>
+
+			<div id="form-group-summary" class="form-group">
+				<label for="summary" class="col-sm-3 control-label">Resumo</label>
+				<div class="col-sm-9">
+					<input id="summary" name="summary" class="form-control" data-ng-model="report.summary"/>
+				</div>
+			</div>
+
+			<div id="form-group-taskDesc" class="form-group">
+				<label for="taskDesc" class="col-sm-3 control-label">Descrição</label>
+				<div class="col-sm-9">
+					<textarea id="taskDesc" data-redactor name="taskDesc" class="form-control" data-ng-model="report.taskDesc"
+						rows="3"></textarea>
+				</div>
+			</div>
+
+			<div id="form-group-content" class="form-group">
+				<label for="content" class="col-sm-3 control-label">Conteúdo</label>
+				<div class="col-sm-9">
+					<textarea  name="contentAsString" data-redactor data-ng-model="report.contentAsString"
+					 id="contentAsString" class="form-control" rows="3"></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<label  class="col-sm-3 control-label">Relator</label>
+				<div class="input-group col-md-9" >
+					<select id="reporterId" 
+						class="form-control" name="reporterId" 
+						data-ng-model="report.identityId" class="form-control" >
+								<option value="{{staffMember.identityId}}" data-ng-repeat="staffMember in staffMembers" >
+									{{staffMember.displayName!=null && staffMember.displayName.length > 0?staffMember.displayName:staffMember.firstName + staffMember.lastName}}
+								</option>
+					</select>
+				</div>
+			</div>	
+			
+			<div class="form-group" data-ng-show="reportPhases.length>0">
+				<label  class="col-sm-3 control-label">Fase</label>
+				<div class="input-group col-md-9" >
+					<select class="form-control" data-ng-model="report.phase" >
+						<option value="{{reportPhase.literal}}" data-ng-repeat="reportPhase in reportPhases" >
+							{{reportPhase.phaseName}}
+						</option>
+					</select>
+				</div>
+			</div>	
+			
+		</div>
+		<!-- col-md-8 -->
+		<div class="col-md-4">
+
+			<div id="uploadMsg" class="alert alert-warning"
+				role="alert">				
+				<strong>Aba Avançado</strong>
+				
+			</div>
+			<hr />
+			<div id="form-group-relativeSize" class="form-group">
+				<label for="relativeSize" class="col-sm-3 control-label">Tamanho relativo</label>
+				<div class="col-sm-9">
+					<div class="col-sm-12">
+						<input id="relativeSize" name="relativeSize" class="form-control" value="0" data-ng-model="report.relativeSize"/>
+					</div>	
+				</div>
+			</div>
+
+			<div id="form-group-priority" class="form-group">
+				<label for="priority" class="col-sm-3 control-label">Prioridade</label>
+				<div class="col-sm-9">
+					<div class="col-sm-12">
+						<label class="radio-inline"> 
+							<input type="radio" name="priority" data-ng-model="report.priority" id="priority" value="0" checked="checked"> Muito importante.
+						</label> 
+					</div>
+					<div class="col-sm-12">
+						<label class="radio-inline"> 
+							<input type="radio"	name="priority" data-ng-model="report.priority" id="priority" value="1"> Importante.
+						</label> 
+					</div>
+					<div class="col-sm-12">
+						<label class="radio-inline"> 
+							<input type="radio" name="priority" data-ng-model="report.priority" id="priority" value="2"> Menos importante.
+						</label> 
+					</div>
+					<div class="col-sm-12">
+						<label class="radio-inline">
+							<input type="radio" name="priority" data-ng-model="report.priority" id="priority" value="3"> Opcional.
+						</label>
+					</div>
+				</div>
+			</div>
+
+			<div id="form-group-frequency" class="form-group">
+				<label for="frequency" class="col-sm-3 control-label">Notificação</label>
+				<div class="col-sm-9">
+					<!--  este? linhas separadas 12 ou 6 mesmo linha? -->
+					<div class="col-sm-12">
+						<label class="radio-inline">
+						  <input type="radio" name="frequency" id="frequency" data-ng-model="report.frequency" value="0" checked="checked"> Diária
+						</label>
+					</div>
+					<div class="col-sm-12">
+						<label class="radio-inline">
+						  <input type="radio" name="frequency" id="frequency" data-ng-model="report.frequency" value="1"> Não requerida
+						</label>
+					</div>
+					
+				</div>
+			</div>
+			
+			<div data-ng-show="message.exist" class="alert alert-danger col-sm-12"  role="alert"> 
+				<div class="col-sm-7"> Código Existente. </div>
+				<div class="col-sm-5">
+					<a href data-ng-click="getReport(message.id)" data-dismiss="modal" class="btn btn-sm btn-primary">
+						Abrir Tarefa
+					</a>
+				</div>
+			</div>
+			<div data-ng-show="message.filled" class="alert alert-danger col-sm-12"  role="alert"> 
+				<div class="col-sm-12"> Número máximo de Tarefas nesta pasta atingido </div>
+				
+			</div>
+			
+			<div data-ng-show="message.error" class="alert alert-danger col-sm-12"  role="alert"> 
+				<div class="col-sm-12"> Erro grave! saia e entre novamente no Sistema. </div>
+				
+			</div>
+			
+			<div data-ng-show="message.exist" class="alert alert-danger"  role="alert"> 
+						  Código Existente.
+						<a href data-ng-click="getReport(message.id)" data-dismiss="modal" class="btn btn-sm btn-primary">
+							Abrir Tarefa
+						</a>
+			</div>
+			
+		</div>
+		<!-- col-md-4 -->
+
+	</div>
+	<!-- row -->
+
+	<hr />
+
+	<!-- ! Submit row !-->
+	<div class="row">
+		<div class="col-md-12">
+			<!-- ! Submit button !-->
+			<div class="pull-right"> 
+				<button type="submit" name="submit" value="0" class="btn btn-primary">Salvar
+				tarefa</button>
+				<a data-dismiss="modal"  class="btn btn-default">Fechar</a>
+			</div>
+		</div>
+	</div>
+	<!-- row -->
+</form>
+</div>

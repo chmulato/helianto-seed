@@ -1,7 +1,7 @@
 package com.iservport.config;
 
 import org.helianto.seed.AbstractServletContextConfig;
-import org.helianto.seed.SecurityWebConfig;
+import org.helianto.seed.MultiHttpSecurityConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @Configuration
 @EnableTransactionManagement
-@Import({ RootContextConfig.class, SecurityWebConfig.class })
+@Import({ RootContextConfig.class, MultiHttpSecurityConfig.class })
 public class ServletContextConfig extends AbstractServletContextConfig {
 	
 }
