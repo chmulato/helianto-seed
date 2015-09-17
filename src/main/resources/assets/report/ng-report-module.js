@@ -1,5 +1,5 @@
 (function() {
-	app = angular.module('report', ['ui.bootstrap', 'app.services', 'ngResource', 'ngSanitize', 'angular-loading-bar', 'angular-redactor', 'ui.bootstrap.accordion'])
+	app = angular.module('report', ['ui.bootstrap', 'app.layout', 'app.services', 'ngResource', 'ngSanitize', 'angular-loading-bar', 'angular-redactor', 'ui.bootstrap.accordion'])
 	/**
 	 * Recursos de relatórios
 	 */
