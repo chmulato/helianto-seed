@@ -5,7 +5,7 @@
 	 */
 	.factory('resources', ['$resource', function($resource) {
 		var service = {};
-		service.qualifierResource = $resource("/api/report/qualifier");
+		service.qualifierResource = $resource("/api/report/project/qualifier");
 		service.resource = $resource("/api/report/:method"
 			, {folderId : "@folderId"}
 			, { save: { method: 'PUT'}, create: {method: 'POST' }, remove:{method:'DELETE'}});
@@ -95,7 +95,7 @@
 		$scope.folderValue = 0;
 		$scope.listReportFolders = function(reportCategory) {
 			$scope.report = {"id":-1};
-			resources.resource.get({method:'folder', qualifierValue:reportCategory}).$promise.then(
+			resources.resource.get({method:'project', qualifierValue:reportCategory}).$promise.then(
 			function(data) {
 				$scope.reportFolderList = data;
 				if (data.content.length>0) {
@@ -110,7 +110,7 @@
 			})
 		};
 		$scope.getReportFolder = function(id) {
-			resources.resource.get({method:'folder', folderId: id}).$promise.then(
+			resources.resource.get({method:'project', folderId: id}).$promise.then(
 			function(data) {
 				$scope.reportFolder = data;
 			});
@@ -122,14 +122,14 @@
 			$scope.listStaffMembers($scope.folderValue);
 		};
 		$scope.newReportFolder = function() {
-			resources.resource.create({method:'folder', qualifierValue:$scope.qualifierValue}, null).$promise.then(
+			resources.resource.create({method:'project', qualifierValue:$scope.qualifierValue}, null).$promise.then(
 			function(data) {
 				$scope.reportFolder = data;
 				$scope.openForm('report-folder');
 			});
 		};
 		$scope.updateReportFolder = function() {
-			resources.resource.save({method:'folder'}, $scope.reportFolder).$promise.then(
+			resources.resource.save({method:'project'}, $scope.reportFolder).$promise.then(
 			function(data, getReponseHeaders) {
 				$scope.reportFolder = data;
 				$scope.setReportFolder(data);

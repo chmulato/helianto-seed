@@ -42,20 +42,22 @@ public interface ProjectRepository
 			+ "  project_.startDate, "
 			+ "  project_.endDate, "
 			+ "  project_.volumeTags, "
-			+ "  project_.categoryOverrideAllowed"
+			+ "  project_.categoryOverrideAllowed, "
+			+ "  project_.benefits, "
+			+ "  project_.assumptions, "
+			+ "  project_.deliverables, "
+			+ "  project_.constraints, "
+			+ "  project_.tools"
 			+ ") "
-			+ "from Project project_ ";
-
+			+ "from Project project_ ";	
+	
 	/**
 	 * Find project.
 	 * 
 	 * @param entityId
 	 * @param id
 	 */
-	@Query(QUERY
-			+ "where project_.entity.id = ?1 "
-			+ "and project_.id = ?2 ")
-	Project findProject(int entityId, int id);
+	Project findProjectByEntity_IdAndId(int entityId, int id);
 
 	/**
 	 * Page by category id.

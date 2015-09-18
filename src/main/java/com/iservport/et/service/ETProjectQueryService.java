@@ -12,12 +12,12 @@ import org.springframework.web.util.UriComponents;
 import com.iservport.et.domain.ETProject;
 
 /**
- * Serviço de atualização de projetos.
+ * Serviço de atualização de projetos Enterprise Tester.
  * 
  * @author mauriciofernandesdecastro
  */
 @Service
-public class ProjectQueryService 
+public class ETProjectQueryService 
 	extends AbstractETApiService
 {
 	

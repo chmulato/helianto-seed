@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.iservport.et.domain.ETProject;
-import com.iservport.et.service.ProjectCommandService;
-import com.iservport.et.service.ProjectQueryService;
+import com.iservport.et.service.ETProjectCommandService;
+import com.iservport.et.service.ETProjectQueryService;
 
 /**
  * Projects controller.
@@ -25,10 +25,10 @@ import com.iservport.et.service.ProjectQueryService;
 public class ProjectController {
 	
 	@Inject
-	private ProjectQueryService projectQueryService;
+	private ETProjectQueryService projectQueryService;
 
 	@Inject
-	private ProjectCommandService projectCommandService;
+	private ETProjectCommandService projectCommandService;
 
 	/**
 	 * Get a project.

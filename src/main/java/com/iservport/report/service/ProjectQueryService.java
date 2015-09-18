@@ -105,7 +105,7 @@ public class ProjectQueryService {
 	 * @param projectId
 	 */
 	public Project project(int entityId, Integer projectId) {
-		Project project 	= projectRepository.findProject(entityId, projectId);
+		Project project 	= projectRepository.findProjectByEntity_IdAndId(entityId, projectId);
 		if (project!=null) {
 			return project;
 		}

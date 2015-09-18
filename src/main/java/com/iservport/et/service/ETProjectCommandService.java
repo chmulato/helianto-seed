@@ -3,12 +3,12 @@ package com.iservport.et.service;
 import org.springframework.stereotype.Service;
 
 /**
- * Serviço de consulta a projetos.
+ * Serviço de consulta a projetos Enterprise Tester.
  * 
  * @author mauriciofernandesdecastro
  */
 @Service
-public class ProjectCommandService 
+public class ETProjectCommandService 
 	extends AbstractETApiService
 {
 

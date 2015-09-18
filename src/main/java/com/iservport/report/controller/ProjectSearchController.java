@@ -6,7 +6,6 @@ import javax.inject.Inject;
 
 import org.helianto.core.internal.QualifierAdapter;
 import org.helianto.security.internal.UserAuthentication;
-import org.helianto.task.repository.FolderReadAdapter;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.iservport.report.domain.Project;
-import com.iservport.report.repository.ProjectReadAdapter;
 import com.iservport.report.service.ProjectCommandService;
 import com.iservport.report.service.ProjectQueryService;
 
@@ -75,19 +73,19 @@ public class ProjectSearchController {
 	/**
 	 * Projeto.
 	 *
-	 * GET 	/api/report/project?folderId
+	 * GET 	/api/report/project?projectId
 	 */
-	@RequestMapping(method=RequestMethod.GET, params={"folderId"})
-	public Project folderOpen(UserAuthentication userAuthentication, @RequestParam Integer folderId) {
-		return  projectQueryService.project(userAuthentication.getEntityId(), folderId);
+	@RequestMapping(method=RequestMethod.GET, params={"projectId"})
+	public Project folderOpen(UserAuthentication userAuthentication, @RequestParam Integer projectId) {
+		return  projectQueryService.project(userAuthentication.getEntityId(), projectId);
 	}	
 
 	/**
-	 * Ataulizar projeto.
+	 * Atualizar projeto.
 	 *
 	 * PUT 	/api/report/project
 	 */
-	@RequestMapping(value={"/folder"}, method=RequestMethod.PUT, consumes="application/json")
+	@RequestMapping(method=RequestMethod.PUT, consumes="application/json")
 	public Project projectNew(UserAuthentication userAuthentication, @RequestBody Project command) {
 		return  projectCommandService.project(userAuthentication.getUserId(), command);
 	}

@@ -23,11 +23,11 @@ public class ProjectQueryServiceTests {
 		service.project("53fd922b-eece-430e-8dc5-a35a00acf0cd");
 	}
 	
-	private ProjectQueryService service;
+	private ETProjectQueryService service;
 	
 	@Before
 	public void setUp() {
-		service = new ProjectQueryService();
+		service = new ETProjectQueryService();
 	}
 
 }
