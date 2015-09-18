@@ -112,20 +112,6 @@ public class ReportCommandService {
 	}
 
 	/**
-	 * Pasta.
-	 * 
-	 * @param folderId
-	 */
-	public ProjectReadAdapter folderOpen(Integer folderId) {
-
-		ProjectReadAdapter project 	= projectRepository.findById(folderId);
-		if (project!=null) {
-			return project;
-		}
-		throw new UnsupportedOperationException("Project required.");
-	}
-
-	/**
 	 * Atualizar pasta.
 	 * 
 	 * @param command
@@ -169,7 +155,7 @@ public class ReportCommandService {
 				project.setCategory(category);
 				List<Integer> existing 
 				= reportFolderRepository.
-				findIdsByCategoryIdAndFolderCodeLike(command.getCategoryId(), command.getFolderCode().toLowerCase());
+				findIdsByCategory_IdAndFolderCodeLike(command.getCategoryId(), command.getFolderCode().toLowerCase());
 				if (existing!=null && existing.size()>0) {
 					throw new RuntimeException("Instrument folder not unique.");
 				}

@@ -2,6 +2,8 @@ package com.iservport.report.repository;
 
 import java.io.Serializable;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -17,18 +19,55 @@ public interface ProjectRepository
 	extends JpaRepository<Project, Serializable>
 {
 	
+	public static final String QUERY = "select new "
+			+ "com.iservport.report.domain.Project"
+			+ "( project_.id"
+			+ ", project_.entity.id, "
+			+ "  project_.folderCode, "
+			+ "  project_.content, "
+			+ "  project_.encoding, "
+			+ "  project_.owner.id, "
+			+ "  project_.reportNumberPattern, "
+			+ "  project_.patternSuffix, "
+			+ "  project_.parsedContent, "
+			+ "  project_.category.id, "
+			+ "  project_.privacyLevel, "
+			+ "  project_.zIndex, "
+			+ "  project_.partner.id, "
+			+ "  project_.userGroup.id, "
+			+ "  project_.folderCaption, "
+			+ "  project_.parentPath, "
+			+ "  project_.nature, "
+			+ "  project_.traceabilityItems, "
+			+ "  project_.startDate, "
+			+ "  project_.endDate, "
+			+ "  project_.volumeTags, "
+			+ "  project_.categoryOverrideAllowed"
+			+ ") "
+			+ "from Project project_ ";
 
+	/**
+	 * Find project.
+	 * 
+	 * @param entityId
+	 * @param id
+	 */
+	@Query(QUERY
+			+ "where project_.entity.id = ?1 "
+			+ "and project_.id = ?2 ")
+	Project findProject(int entityId, int id);
 
-	@Query("select new "
-			+ "com.iservport.report.repository.ProjectReadAdapter"
-			+ "(folder.id, folder.category.id, folder.folderCode, folder.folderName, "
-			+ "folder.folderDecorationUrl, folder.patternPrefix, folder.patternSuffix,"
-			+ "folder.entity.id,"
-			+ "folder.benefits, folder.assumptions, folder.deliverables, folder.constraints, folder.tools) "
-			+ "from Project folder "
-			+ "where folder.id = ?1 ")
-	ProjectReadAdapter findById(int id);
-
+	/**
+	 * Page by category id.
+	 * 
+	 * @param entityId
+	 * @param qualifierValue
+	 * @param page
+	 */
+	@Query(QUERY
+			+ "where project_.entity.id = ?1 "
+			+ "and project_.category.id = ?2 ")
+	Page<Project> findByEntity_IdAndCategory_Id(int entityId, Integer qualifierValue, Pageable page);
 			
 }
 	
