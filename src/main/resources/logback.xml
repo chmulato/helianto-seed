@@ -22,11 +22,12 @@
   <logger name="org.springframework.web.servlet.config" level="OFF"/>
   <logger name="org.springframework.web" level="ON"/>
   
-  <logger name="org.hibernate" level="OFF"/>
+  <logger name="org.hibernate" level="ON"/>
   <logger name="org.hibernate.SQL" level="ON"/>
-  <logger name="org.hibernate.jdbc" level="OFF"/>
-  <logger name="org.hibernate.jdbc.AbstractBatcher" level="OFF"/>
-  <logger name="org.hibernate.impl" level="OFF"/>
+  <logger name="org.hibernate.type" level="TRACE"/>
+  <logger name="org.hibernate.jdbc" level="ON"/>
+  <logger name="org.hibernate.jdbc.AbstractBatcher" level="ON"/>
+  <logger name="org.hibernate.impl" level="ON"/>
   <logger name="org.aopalliance" level="OFF"/>
   
   <logger name="com.iservport" level="ON"/>

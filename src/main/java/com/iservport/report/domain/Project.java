@@ -111,7 +111,7 @@ public class Project
 	 * @param tools
 	 */
 	public Project(int id
-			, int entityId
+			, Integer entityId
 			, String folderCode
 			, byte[] content
 			, String encoding
@@ -119,11 +119,11 @@ public class Project
 			, String reportNumberPattern
 			, String patternSuffix
 			, String parsedContent
-			, int categoryId
+			, Integer categoryId
 			, char privacyLevel
 			, String zIndex
-			, int partnerId
-			, int userGroupId
+			, Integer partnerId
+			, Integer userGroupId
 			, String folderCaption
 			, String parentPath
 			, String nature
@@ -131,7 +131,7 @@ public class Project
 			, Date startDate
 			, Date endDate
 			, String volumeTags
-			, boolean categoryOverrideAllowed
+			, Boolean categoryOverrideAllowed
 			, String benefits
 			, String assumptions
 			, String deliverables
