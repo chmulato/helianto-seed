@@ -10,7 +10,7 @@ import org.helianto.core.sender.UserConfirmationSender;
 import org.helianto.core.test.TestDataSourceConfig;
 import org.helianto.network.service.RootQueryService;
 import org.helianto.seed.AbstractContextConfig;
-import org.helianto.seed.OAuth2ServerConfig;
+import org.helianto.seed.OAuth2ClientConfig;
 import org.helianto.seed.SecurityWebConfig;
 import org.helianto.sendgrid.config.SendGridConfig;
 import org.helianto.user.service.UserQueryService;
@@ -41,7 +41,7 @@ import com.iservport.config.InternalUserType;
 @Import({TestDataSourceConfig.class
 		, HeliantoServiceConfig.class
 		, SecurityWebConfig.class
-		, OAuth2ServerConfig.class
+		, OAuth2ClientConfig.class
 		, SendGridConfig.class})
 @ComponentScan(
 		basePackages = {

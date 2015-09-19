@@ -40,7 +40,7 @@ import com.iservport.testit.TestConfig;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes={TestDataSourceConfig.class, TestConfig.class, PrimeSWConfig.class})
 @Transactional
-public class PrimeSwClientTests {
+public class PrimeSwClientRunOnce {
 	
 	@Inject
 	private PrimeSwClient primeSwClient;
