@@ -66,47 +66,44 @@
 			</div>
 		</div>
 		
-		<!--  Data de inclusão -->
-		<div class="form-group" >	
-			<label for="startDate" class="col-md-3 control-label">Incluído em</label>
-			
-				<div class="col-sm-9">
-				<input type="hidden" name="startDate"
-					value="{{reportFolder.startDate.getTime()}}" />
-				<div data-ng-click="open($event,0)" id="startDatePicker"
-					class="input-group"
-					data-ng-init="reportFolder.startDate = ((reportFolder.startDate>0 ? reportFolder.startDate : dateNow.getTime()) | date:'shortDate')">
-					<input type="text" class="form-control" data-ng-model="reportFolder.startDate"
-						data-is-open="datePicker[0]" data-datepicker-options="dateOptions"
-						data-datepicker-popup="shortDate" data-ng-required="true"
-						data-close-text="Close" /> <span class="input-group-btn">
-						<button type="button" class="btn btn-default">
-							<i class="glyphicon glyphicon-th"></i>
-						</button>
-					</span>
-				</div>
-			</div>	
+		<!-- Incluído em  -->
+		<div class="form-group" >
+		<label for="startDatePicker" class="col-md-3 control-label">Incluído em</label>
+		<div class="col-sm-9">
+		<div data-ng-click="open($event,1)" id="startDatePicker"
+			class="input-group">
+			<input type="text" class="form-control" data-ng-model="reportFolder.startDate"
+				data-is-open="datePicker[1]" data-datepicker-options="dateOptions"
+				data-datepicker-popup="shortDate" data-ng-required="true"
+				data-close-text="Close" /> 
+			<span class="input-group-btn">
+				<button type="button" class="btn btn-default">
+					<i class="glyphicon glyphicon-calendar"></i>
+				</button>
+			</span>
+		</div>
+		</div>
 		</div>
 		
-		<!--  Data prevista -->
-		<div class="form-group" >	
-			<label for="nextCheckDate" class="col-md-3 control-label">Previsto para</label>	
-			<div class="col-sm-9">
-				<div data-ng-click="open($event,1)" id="nextCheckDatePicker"
-						class="input-group"
-						data-ng-init="reportFolder.nextCheckDate = ((reportFolder.nextCheckDate>0 || reportFolder.nextCheckDate!=null ? reportFolder.nextCheckDate : dateNow.getTime()) | date:'shortDate')">
-						<input type="text" class="form-control" data-ng-model="reportFolder.nextCheckDate"
-							data-is-open="datePicker[1]" data-datepicker-options="dateOptions"
-							data-datepicker-popup="shortDate" data-ng-required="true"
-							data-close-text="Close" /> <span class="input-group-btn">
-							<button type="button" class="btn btn-default">
-								<i class="glyphicon glyphicon-th"></i>
-							</button>
-						</span>
-				</div>
-			</div>	
+		<!-- Previsto para  -->
+		<div class="form-group" >
+		<label for="nextCheckDatePicker" class="col-md-3 control-label">Previsto para</label>
+		<div class="col-sm-9">
+		<div data-ng-click="open($event,2)" id="nextCheckDatePicker"
+			class="input-group">
+			<input type="text" class="form-control" data-ng-model="reportFolder.nextCheckDate"
+				data-is-open="datePicker[2]" data-datepicker-options="dateOptions"
+				data-datepicker-popup="shortDate" data-ng-required="true"
+				data-close-text="Close" /> 
+			<span class="input-group-btn">
+				<button type="button" class="btn btn-default">
+					<i class="glyphicon glyphicon-calendar"></i>
+				</button>
+			</span>
 		</div>
-
+		</div>
+		</div>
+		
 		<!-- navegação para campos texto -->
 		<ul class="nav nav-tabs">
 		  <li role="presentation" data-ng-class="{'active':isProjectSection(0)}"><a data-ng-click="setProjectSection(0)">Objetivos</a></li>
@@ -156,44 +153,12 @@
 			</div>	
 			<hr>
 			<div class="form-group" >	
-				<label for="issueDate" class="col-md-5 control-label">Concluído em</label>
+				<label for="actualEndDate" class="col-md-5 control-label">Concluído em</label>
  				<div class="col-sm-7">
 					<input type="hidden" name="actualEndDate"
 						value="{{reportFolder.actualEndDate.getTime()}}" />
-					<div data-ng-click="open($event,0)" id="actualEndDate"
-						class="input-group"
-						data-ng-init="reportFolder.actualEndDate = ((reportFolder.actualEndDate>0 ? reportFolder.actualEndDate : dateNow.getTime()) | date:'shortDate')">
-						<input type="text" class="form-control" data-ng-model="reportFolder.actualEndDate"
-							data-is-open="datePicker[0]" data-datepicker-options="dateOptions"
-							data-datepicker-popup="shortDate" data-ng-required="true"
-							data-close-text="Close" /> <span class="input-group-btn">
-							<button type="button" class="btn btn-default">
-								<i class="glyphicon glyphicon-th"></i>
-							</button>
-						</span>
-					</div>
-				</div>	
 			</div>
 			
-			<div class="form-group" >
-				<label for="issueDate" class="col-md-5 control-label">Iniciado em</label>
-				<div class="col-md-7">
-					<input type="hidden" name="issueDate"
-						value="{{review.nextCheckDate.getTime()}}" />
-					<div data-ng-click="open($event,1)" id="nextCheckDatePicker"
-						class="input-group"
-						data-ng-init="review.nextCheckDate = ((review.nextCheckDate>0 || review.nextCheckDate!=null ? review.nextCheckDate : dateNow.getTime()) | date:'shortDate')">
-						<input type="text" class="form-control" data-ng-model="review.nextCheckDate"
-							data-is-open="datePicker[1]" data-datepicker-options="dateOptions"
-							data-datepicker-popup="shortDate" data-ng-required="true"
-							data-close-text="Close" /> <span class="input-group-btn">
-							<button type="button" class="btn btn-default">
-								<i class="glyphicon glyphicon-th"></i>
-							</button>
-						</span>
-					</div>
-				</div>	
-			</div>	
 			<hr>
 			 <!-- 
                  ! Equipe
