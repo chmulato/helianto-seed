@@ -1,6 +1,7 @@
 package com.iservport.report.repository;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -71,6 +72,18 @@ public interface ProjectRepository
 			+ "where project_.entity.id = ?1 "
 			+ "and project_.category.id = ?2 ")
 	Page<Project> findByEntity_IdAndCategory_Id(int entityId, Integer qualifierValue, Pageable page);
+			
+	/**
+	 * List by identity id.
+	 * 
+	 * @param entityId
+	 * @param qualifierValue
+	 * @param page
+	 */
+	// TODO resolver por identidade.
+	@Query(QUERY
+			+ "where project_.entity.id = ?1 ")
+	List<Project> findByIdentity_Id(int entityId);
 			
 }
 	

@@ -128,6 +128,16 @@ public class ProjectQueryService {
 		return projectRepository.findByEntity_IdAndCategory_Id(entityId, qualifierValue, page);
 	}
 	
+	/**
+	 * Lista de projetos.
+	 * 
+	 * @param entityId
+	 */
+	// TODO listar por usuário
+	public List<Project> projectList(int entityId) {
+		return projectRepository.findByIdentity_Id(entityId);
+	}
+	
     /**
      * Total da estimativa das fases.
      */

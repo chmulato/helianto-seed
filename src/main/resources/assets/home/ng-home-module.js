@@ -1,8 +1,17 @@
 (function() {
-	app = angular.module('home', ['ui.bootstrap', 'app.services']);
-	
-	app.controller('HomeController', ['$scope', '$window', '$http', '$resource' , 'genericServices', 'securityServices'
-	                                  , function($scope, $window, $http, $resource, genericServices, securityServices) {
+	app = angular.module('home', ['ui.bootstrap', 'app.layout', 'app.services', 'ngResource', 'ngSanitize', 'angular-loading-bar', 'angular-redactor', 'ui.bootstrap.accordion'])
+	/**
+	 * Recursos de home
+	 */
+	.factory('resources', ['$resource', function($resource) {
+		var service = {};
+		service.resource = $resource("/api/home/:method"
+			, null
+			, { save: { method: 'PUT'}, create: {method: 'POST' }, remove:{method:'DELETE'}});
+		return service;
+	}])
+	.controller('HomeController', ['$scope', '$window', '$http', 'resources' , 'genericServices', 'securityServices'
+	                                  , function($scope, $window, $http, resources, genericServices, securityServices) {
 	
 		$scope.baseName = "home";
 		$scope.projetos = [
@@ -12,6 +21,21 @@
 				{nome: "Projeto 4", cor: "white", data: new Date(), checkin: "false", checkout: "true" },
 				{nome: "Projeto 5", cor: "white", data: new Date(), checkin: "false", checkout: "true" }
 		];
+		
+		$scope.listReportFolders = function(reportCategory) {
+			$scope.report = {"id":-1};
+			resources.resource.get({method:'project', qualifierValue:reportCategory}).$promise.then(
+			function(data) {
+				$scope.reportFolders = data;
+				if (data.content.length>0 && $scope.externalId==0) {
+					if($scope.folderValue==0) {
+						$scope.reportFolder = data.content[0];
+					}
+					$scope.setReportFolder($scope.reportFolder);
+				}
+			})
+		};
+		
 		$scope.adicionarProjeto = function (projeto) {
 			if (projeto != null) {
 				$scope.projetos.push(angular.copy(projeto));
@@ -38,36 +62,5 @@
 
 	}]); // HomeController
 	
-	/**
-	 * View Controller
-	 */
-	app.controller('ViewController', ['$scope', '$http', 'securityServices', function($scope, $http, securityServices) {
-		
-		/**
-		 * Abas
-		 */
-		$scope.sectionTab = 1;
-		$scope.setSectionTab = function(value) {
-			this.sectionTab = value;
-	    };
-	    $scope.isSectionTabSet = function(value) {
-	      return this.sectionTab === value;
-	    };
-
-		/**
-		 * Autorização
-		 */
-		$scope.authList =[];
-		defineAuthorities();
-		function defineAuthorities(){
-			securityServices.getAuthorizedRoles(null).success(function(data, status, headers, config) {
-				$scope.authList = data.content;
-			});
-		}
-		$scope.isAuthorized =function(role, ext){
-			return securityServices.isAuthorized($scope.authList, role, ext);
-		}
-		 
-	}]);
 
 } )();
