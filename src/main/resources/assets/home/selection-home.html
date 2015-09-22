@@ -41,32 +41,27 @@
 		<tr ng-class="{'font-weight: bold': contato.selecionado}" ng-repeat="projeto in projetos | filter:criterioDeBusca |  orderBy:criterioDeOrdenacao:direcaoDaOrdenacao">
 			<td>
 				<div style="width: 20px; height: 20px;" ng-style="{'background-color': projeto.cor}">
-					<input type="checkbox" ng-model="projeto.selecionado">
+					<input type="checkbox" data-ng-model="projeto.selecionado">
 				</div>
 			</td>
-			<td>{{projeto.nome | uppercase}}</td>
-			<td>{{projeto.data | date:'dd/MM/yyyy HH:mm'}}</td>
-			<td>{{projeto.checkin | lowercase}}</td>
-			<td>{{projeto.checkout | lowercase}}</td>
+			<td>{{projeto.folderName | uppercase}}</td>
+			<td>{{projeto.issueDate | date:'dd/MM/yyyy HH:mm'}}</td>
 		</tr>
 	</table>    
     <ul class="list-group">
-		<li class="list-group-item">
+		<li class="list-group-item" data-ng-repeat="projeto in projetos">
 		  <div class="pull-right">
-		    <div class="input-group">
-		      <input type="text" class="form-control" value="xx/xx/xxxx" style="width: 8em;">
+		    <div class="input-group" data-ng-show="isUserCheckedInProject(projeto.id)">
+		      <input type="text" class="form-control" value="{{projeto.issueDate | date:'shortDate'}}" style="width: 8em;">
 			  	<span class="input-group-btn">
 			    	<button class="btn btn-sm btn-info">Check-out</button>
 			    </span>
 			</div>		    
+			<div class="pull-right" data-ng-hide="isUserCheckedInProject(projeto.id)">
+		    	<a class="btn btn-sm btn-danger" data-ng-click="checkIn(projeto.id)">Check-in</a>
+			</div>
 		  </div>
-      		Um projeto
-      	</li>
-		<li class="list-group-item">
-		  <div class="pull-right">
-		    <a class="btn btn-sm btn-danger">Check-in</a>
-		  </div>
-      		Outro projeto
+      		{{projeto.folderName}}
       	</li>
     </ul>
   </div>

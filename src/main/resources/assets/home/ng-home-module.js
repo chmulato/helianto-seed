@@ -22,18 +22,29 @@
 				{nome: "Projeto 5", cor: "white", data: new Date(), checkin: "false", checkout: "true" }
 		];
 		
-		$scope.listReportFolders = function(reportCategory) {
-			$scope.report = {"id":-1};
-			resources.resource.get({method:'project', qualifierValue:reportCategory}).$promise.then(
+		/**
+		 * Lista projetos do usuário logado.
+		 */
+		$scope.testCheckedProject = 0;
+		$scope.listProjects = function() {
+			resources.resource.query({method:'project'}).$promise.then(
 			function(data) {
-				$scope.reportFolders = data;
-				if (data.content.length>0 && $scope.externalId==0) {
-					if($scope.folderValue==0) {
-						$scope.reportFolder = data.content[0];
-					}
-					$scope.setReportFolder($scope.reportFolder);
+				$scope.projetos = data;
+				if ($scope.testCheckedProject==0) {
+					$scope.testCheckedProject = data[0];
 				}
 			})
+		};
+		$scope.listProjects();
+		
+		/**
+		 * Verdadeiro se o projeto é o atual para o usuário.
+		 */
+		$scope.isUserCheckedInProject = function(value) {
+			return value==$scope.testCheckedProject;
+		};
+		$scope.checkIn = function(value) {
+			$scope.testCheckedProject = value;
 		};
 		
 		$scope.adicionarProjeto = function (projeto) {
