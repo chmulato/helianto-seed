@@ -12,11 +12,11 @@
 
   * Existem atividades que subtraem o total de horas trabalhas por projeto; parte delas vem do registro de entrada e saída do ponto; parte vem de outros eventos, tais como reuniões, etc.; o sistema calcula o acumulado de horas por usuário e por projeto em um dado período.
 
-  * O gerente de projeto cria novo projeto no Testit; atribui pessoas ao projeto, descreve requisitos e [determina cenários de teste]; o sistema sincroniza estas informações com 2 partes externas: 1) Enterprise Tester, onde os cenários serão executados, e 2) o TFS do cliente, para fins de informação.
+  * O gerente de projeto cria novo projeto no Testit; atribui pessoas ao projeto, descreve requisitos e [determina cenários de teste].
 
-  * O analista de teste executa os testes no ET; a execução é atualizada no Testit.
+  * O analista de teste executa os testes no ET.
 
-  * O analista de testes inclui bugs no ET; os bugs são atualizados no Testit e no TFS; eventualmente o cliente atualiza o bug no TFS e os dados são reproduzidos no ET.
+  * O analista de testes inclui bugs no ET; os bugs são atualizados no Testit e, eventualmente, no TFS.
 
   * O Testit consolida os dados dos projetos e de usuários para a emissão de relatórios diários para o cliente.
   
