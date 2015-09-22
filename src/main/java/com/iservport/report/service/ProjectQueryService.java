@@ -9,8 +9,9 @@ import org.helianto.core.internal.QualifierAdapter;
 import org.helianto.core.internal.SimpleCounter;
 import org.helianto.core.repository.CategoryReadAdapter;
 import org.helianto.core.repository.CategoryRepository;
-import org.helianto.task.repository.FolderReadAdapter;
-import org.helianto.task.service.ReportFolderCommandService;
+import org.helianto.task.domain.ReportPhase;
+import org.helianto.task.repository.ReportPhaseAdapter;
+import org.helianto.task.repository.ReportPhaseRepository;
 import org.joda.time.DateMidnight;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import com.iservport.report.domain.Project;
 import com.iservport.report.repository.CategoryReportTmpRepository;
-import com.iservport.report.repository.ProjectReadAdapter;
 import com.iservport.report.repository.ProjectRepository;
 import com.iservport.report.repository.ReportStatsRepository;
 
@@ -39,6 +39,9 @@ public class ProjectQueryService {
 
 	@Inject
 	private CategoryRepository categoryRepository;
+	
+	@Inject
+	private ReportPhaseRepository reportPhaseRepository;
 	
 	@Inject 
 	private CategoryReportTmpRepository categoryReportTmpRepository;
@@ -124,5 +127,19 @@ public class ProjectQueryService {
 		Pageable page = new PageRequest(pageNumber, itemsPerPage, Direction.ASC, "folderCode");
 		return projectRepository.findByEntity_IdAndCategory_Id(entityId, qualifierValue, page);
 	}
+	
+    /**
+     * Total da estimativa das fases.
+     */
+    public int calcEstimate(int projectId) {
+    	int estimate = 0;
+    	List<ReportPhaseAdapter> phases = reportPhaseRepository.findByReportFolderId(projectId);
+    	if (phases!=null) {
+        	for (ReportPhaseAdapter phase: phases) {
+        		estimate += phase.getEstimate();
+        	}
+    	}
+    	return estimate;
+    }
 
 }

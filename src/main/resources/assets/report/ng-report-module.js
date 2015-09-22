@@ -97,20 +97,17 @@
 			$scope.report = {"id":-1};
 			resources.resource.get({method:'project', qualifierValue:reportCategory}).$promise.then(
 			function(data) {
-				$scope.reportFolderList = data;
-				if (data.content.length>0) {
-					$scope.reportFolders = data.content;
-					if($scope.externalId==0){	
-						$scope.folderValue = data.content[0].id;
-						if($scope.folderValue>0 ){
-							$scope.listReports($scope.folderValue);
-						}
+				$scope.reportFolders = data;
+				if (data.content.length>0 && $scope.externalId==0) {
+					if($scope.folderValue==0) {
+						$scope.reportFolder = data.content[0];
 					}
+					$scope.setReportFolder($scope.reportFolder);
 				}
 			})
 		};
 		$scope.getReportFolder = function(id) {
-			resources.resource.get({method:'project', folderId: id}).$promise.then(
+			resources.resource.get({method:'project', projectId: id}).$promise.then(
 			function(data) {
 				$scope.reportFolder = data;
 			});
@@ -132,6 +129,7 @@
 			resources.resource.save({method:'project'}, $scope.reportFolder).$promise.then(
 			function(data, getReponseHeaders) {
 				$scope.reportFolder = data;
+				$scope.listReportFolders($scope.qualifierValue);
 				$scope.setReportFolder(data);
 				$("#modalBody").modal('hide');
 			});

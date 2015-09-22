@@ -69,6 +69,7 @@ public class ProjectCommandService {
 			project = projectRepository.findOne(command.getId());
 		}
 		project.setFolderCode(command.getFolderCode());
+		project.setFolderName(command.getFolderName());
 		project.setContent(command.getContent());
 		project.setEncoding(command.getEncoding());
 		project.setReportNumberPattern(command.getReportNumberPattern());

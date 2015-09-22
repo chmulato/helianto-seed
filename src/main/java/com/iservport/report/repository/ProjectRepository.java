@@ -24,6 +24,7 @@ public interface ProjectRepository
 			+ "( project_.id"
 			+ ", project_.entity.id, "
 			+ "  project_.folderCode, "
+			+ "  project_.folderName, "
 			+ "  project_.content, "
 			+ "  project_.encoding, "
 			+ "  project_.owner.id, "

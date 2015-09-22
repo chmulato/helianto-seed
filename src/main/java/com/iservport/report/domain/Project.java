@@ -85,6 +85,7 @@ public class Project
 	 * @param id
 	 * @param entityId
 	 * @param folderCode
+	 * @param folderName
 	 * @param content
 	 * @param encoding
 	 * @param ownerId
@@ -113,6 +114,7 @@ public class Project
 	public Project(int id
 			, Integer entityId
 			, String folderCode
+			, String folderName
 			, byte[] content
 			, String encoding
 			, int ownerId
@@ -140,6 +142,7 @@ public class Project
 		super(id, entityId, folderCode, content, encoding, ownerId, reportNumberPattern, patternSuffix, parsedContent,
 				categoryId, privacyLevel, zIndex, partnerId, userGroupId, folderCaption, parentPath, nature, traceabilityItems,
 				startDate, endDate, volumeTags, categoryOverrideAllowed);
+		setFolderName(folderName);
 		setBenefits(benefits);
 		setAssumptions(assumptions);
 		setDeliverables(deliverables);

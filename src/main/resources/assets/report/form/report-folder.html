@@ -38,15 +38,15 @@
 		<!--  Prefixo -->
 		<div id="form-group-patternPrefix"
 			class="form-group">
-			<label for="numberPrefix" class="col-sm-3 control-label">Prefixo</label>
+			<label for="patternPrefix" class="col-sm-3 control-label">Prefixo</label>
 			<div class="col-sm-4">				
-				<input id="numberPrefix" type="text" name="numberPrefix" required
-					data-ng-model="reportFolder.numberPrefix"
+				<input id="numberPrefix" type="text" name="patternPrefix" required
+					data-ng-model="reportFolder.patternPrefix"
 					class="form-control" />			
 			</div>
-			<label for="numberSuffix" class="col-sm-2 control-label">Máximo de tarefas</label>
+			<label for="numberOfDigits" class="col-sm-2 control-label">Máximo de tarefas</label>
 			<div class="col-sm-3">		
-				<select id="numberSuffix" name="numberSuffix" class="form-control" data-ng-model="reportFolder.numberSuffix">
+				<select id="numberSuffix" name="numberOfDigits" class="form-control" data-ng-model="reportFolder.numberOfDigits" data-convert-to-number>
 					<option value="2"> 99</option>
 					<option value="3"> 999</option>
 					<option value="4" > 9999</option>
@@ -66,9 +66,9 @@
 			</div>
 		</div>
 		
-		<!-- Incluído em  -->
+		<!-- Início  -->
 		<div class="form-group" >
-		<label for="startDatePicker" class="col-md-3 control-label">Incluído em</label>
+		<label for="startDatePicker" class="col-md-3 control-label">Data de início</label>
 		<div class="col-sm-9">
 		<div data-ng-click="open($event,1)" id="startDatePicker"
 			class="input-group">
@@ -87,11 +87,11 @@
 		
 		<!-- Previsto para  -->
 		<div class="form-group" >
-		<label for="nextCheckDatePicker" class="col-md-3 control-label">Previsto para</label>
+		<label for="endDatePicker" class="col-md-3 control-label">Previsto para</label>
 		<div class="col-sm-9">
-		<div data-ng-click="open($event,2)" id="nextCheckDatePicker"
+		<div data-ng-click="open($event,2)" id="endDatePicker"
 			class="input-group">
-			<input type="text" class="form-control" data-ng-model="reportFolder.nextCheckDate"
+			<input type="text" class="form-control" data-ng-model="reportFolder.endDate"
 				data-is-open="datePicker[2]" data-datepicker-options="dateOptions"
 				data-datepicker-popup="shortDate" data-ng-required="true"
 				data-close-text="Close" /> 
@@ -115,7 +115,7 @@
 
 		<div id="form-group-benefits" class="form-group"  data-ng-show="isProjectSection(0)">
 				<div class="col-sm-12">
-					<textarea id="taskDesc" data-redactor name="taskDesc" class="form-control" data-ng-model="reportFolder.taskDesc"
+					<textarea id="contentAsString" data-redactor name="contentAsString" class="form-control" data-ng-model="reportFolder.contentAsString"
 						rows="3"></textarea>
 				</div>
 		</div>
@@ -143,8 +143,7 @@
 						rows="3"></textarea>
 				</div>
 		</div>
-	</div>	
-	<!-- col-md-8 -->
+	</div><!-- col-md-8 -->
 	<!-- col-md-4 -->
 
 		<div class="col-md-4">
@@ -284,7 +283,7 @@
 				</div>	
 				<hr>
 	</div>	
-
+	</div>
 	<hr />
 
 	<!-- ! Submit row !-->

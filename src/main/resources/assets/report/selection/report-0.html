@@ -1,124 +1,145 @@
-<!-- 
- ! Lado Tarefas
- ! -->
-<div class="col-md-4 col-xs-12 ">
-	<div class="col-md-12">
-	      <div class="btn-group">
-		  <button type="button" class="btn btn-default">Fases</button>
-		  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-		    <span class="caret"></span>
-		    <span class="sr-only">Toggle Dropdown</span>
-		  </button>
-		  <ul class="dropdown-menu" role="menu">
-		    <li data-ng-repeat="reportPhase in reportPhases">
-			  {{'PHASE' | i18n}} {{reportItem.phase}} {{reportPhase.phaseName}}  
-				<input data-ng-click="toggleSelectionPhase(reportPhase.literal);listReports(folderValue, null, true)"  
-					type="checkbox"  
-					data-ng-checked="phaseLiteralsContains(reportPhase.literal)" 
-					name="{{reportPhase.literal}}" /> 	
-		    </li>
-		  </ul>
-		</div>	
-	</div>
-	<div class="col-md-12"><br></div>
-	<table class="table table-hover">
-	  <tbody>
-	    <tr data-ng-class="{active: reportItem.id==report.id}" 
-	    	data-ng-click="getReport(reportItem.id);listReviews(reportItem.id)"
-				data-ng-repeat="reportItem in reportList.content" >
-	      <td class="h4" style="min-width:72px; width: 72px;">
-	        <i class="{{reportItem.openingIcon}}"></i> |
-	        <i class="{{reportItem.closingIcon}}"></i>
-	      </td>
-	      <td class="mail-ontact"><a href="mail_detail.html">{{'PHASE' | i18n}} {{reportItem.phase}} {{reportItem.reportCode}}</a>
-	        <h5>{{reportItem.summary}}</h5>
-	      </td>
-	      <td style="min-width:64px; width: 64px;">
-	        <span>{{reportItem.issueDate | date:'dd'}} </span> 
-	        <i class="fa fa-sign-in"></i>
-	        <br />
-	        <span>{{reportItem.issueDate | date:'MMM'}}</span>
-	      </td>
-	      <td data-ng-hide="reportItem.closed" style="min-width:64px; width: 64px;">
-	        <span>{{reportItem.nextCheckDate | date:'dd'}} </span> 
-	        <i class="fa fa-sign-out"></i>
-	        <br />
-	        <span>{{reportItem.nextCheckDate | date:'MMM'}}</span>
-	      </td>
-	    </tr>
-	  </tbody>
-	</table>
-</div>
 <div class="col-md-6 col-xs-12" >
-  <div class="panel panel-default" data-ng-show="report.id>0" >
-  	<small class="pull-right">
-	<label   class="btn btn-sm btn-default active" >
-		{{report.nextCheckDate | date :'shortDate'}}
-	</label>
-	</small>		
-	<div class="h4">{{report.summary}}</div>
-	<div class="h4"><small>{{report.reportCode}}</small></div>
-	<div class="h5" >
-	<!--
-	 ! Botão [Editar]
-	 !-->
+    <!-- 
+     ! Descrição do projeto.
+     -->
+	<div class="pull-right">
+		<i class="fa fa-lock" data-ng-show="isExported(reportFolder.exporterId)"></i>
+		<div data-ng-hide="isExported(reportFolder.exporterId)" >
+			<a data-ng-click="openForm('report-folder')" class="btn btn-sm btn-primary">Editar</a>
+			<a data-ng-click="exportFolder()" class="btn btn-sm btn-primary">Exportar</a>
+		</div>
+	</div>	
+	<div data-ng-bind-html="reportFolder.contentAsString"></div>
+	<hr>
+	<div data-ng-bind-html="'<strong>Benefícios: </strong>'+reportFolder.benefits"></div>
+	<hr>
+	<div data-ng-bind-html="'<strong>Premissas: </strong>'+reportFolder.assumptions"></div>
+	<hr>
+	<div data-ng-bind-html="'<strong>Entregas: </strong>'+reportFolder.deliverables"></div>
+	<hr>
+	<div data-ng-bind-html="'<strong>Restrições: </strong>'+reportFolder.constraints"></div>
+</div>
+<div class="col-md-6 col-xs-12">		
+	<!-- 
+	 ! Fases do projeto
+	 -->
+	<div class="panel panel-default">
+	<div class="panel-body">Fases</div>
+	<table class="table">
+	<tr data-ng-repeat="reportPhase in reportPhases">
+	<td >{{reportPhase.literal}} {{reportPhase.phaseName}}</td>
+	<td>  
+		<span>{{reportPhase.scheduledStartDate | date:'dd'}} </span> 
+			<i class="fa fa-sign-in"></i>
+			<br />
+		<span>{{reportPhase.scheduledStartDate | date:'MMM'}}</span>
+	</td>
+	<td>
+		<span>{{reportPhase.scheduledEndDate | date:'dd'}} </span> 
+			<i class="fa fa-sign-out"></i>
+			<br />
+		<span>{{reportPhase.scheduledEndDate | date:'MMM'}}</span>				
+	</td>
+	<td > <button class="btn btn-default" data-ng-click="openReportPhase(reportPhase.id)"> Editar</button> </td>
+	<td>
+		<input data-ng-click="toggleSelectionPhase(reportPhase.literal);listReports(folderValue, null, true)"  type="checkbox"  data-ng-checked="phaseLiteralsContains(reportPhase.literal)" name="{{reportPhase.literal}}" > 	
+	</td>
+	</tr>
+	</table>
 	<small class="pull-right">
-	<button  data-ng-click="getReport(report.id, null, null, true)" class="btn btn-sm btn-primary active" role="button">
-		Editar
-	</button>
-	</small>
-	</div>
-	</div>
-</div>
-<!-- 
- !
- ! Lado Descrição 
- !
- ! -->
-<div class="col-md-8 col-xs-12" >
-		<!--
-		 ! Botão [Editar]
-		 !-->
-		<div class="row">
-		<div class="col-md-12" >
-		<small class="pull-right">
-		<button  data-ng-click="getReport(report.id, null, null, true)" class="btn btn-sm btn-primary active" role="button">
-			Editar
+		<button class="btn btn-default navbar-btn"
+		 data-ng-click="newReportPhase(reportFolder.id)" 
+		 data-ng-hide="isExported(reportFolder.exporterId)">
+			Nova Fase
 		</button>
-		</small>
+	</small>
+	</div>	
+	<!-- 
+	 ! Equipe
+	 -->
+	<div class="panel panel-default">
+	<div class="panel-body">Equipe</div>
+	<div id="form-group-member" class="form-group row">
+		<div class="col-sm-6">
+			<div class="input-group">
+				<input id="member" type="text" required="required" 
+					name="member" data-ng-model="valueOnTypeAhead"
+					data-typeahead="member.userName for member in getStaffMembers($viewValue)"
+					data-typeahead-loading="loadingMembers"
+					data-typeahead-on-select='onSelect($item, $model, $label)'
+					placeholder="Digite o Nome ou email"
+					class="form-control"> <i
+					data-ng-show="loadingMembers" class="glyphicon glyphicon-refresh"></i>
+			</div>
 		</div>
+		<div class="col-sm-6">
+			<div style="font-size: 24px; line-height: 1.5em;" data-ng-hide="identityMember.userId>0 || valueOnTypeAhead.length==0">
+				<i class="fa fa-angle-left"></i> Incluir Membro
+			</div>
 		</div>
-		<!--
-		 ! Painel
-		 !-->
-        <div class="panel panel-default" >
-        	<!-- cabeçalho descrição-->
-            <div class="panel-heading">
-              <div class="h4">Descrição</div>
-            </div>
-        	<!-- dado pela categoria -->
-            <div class="panel-body" data-ng-show="customProperties.copyCategoryText=='beforeReportDesc'" style="background-color: #eee;" data-ng-bind-html="reportCategory.contentAsString">
-            <i class="fa fa-magic pull-right"></i>
-            </div>
-        	<!-- descrição -->
-            <div class="panel-body" data-ng-bind-html="report.taskDesc | trustAsHtml"></div>
-        	<!-- cabeçalho resultado -->
-            <div class="panel-heading">
-              <div class="h4">Resultado</div>
-            </div>
-        	<!-- dado pela categoria -->
-            <div class="panel-body" data-ng-show="customProperties.customCheckListMapBeforeReportResult!=undefined && customProperties.customCheckListMapBeforeReportResult!=null" style="background-color: #eee;">
-            <i class="fa fa-magic pull-right"></i>
-            	<div class="checkbox" data-ng-repeat="checkListItem in customProperties.customCheckListMapBeforeReportResult">
-            	<label for="customCheckListMapBeforeReportResult_{{$index}}" >
-            	<input type="checkbox" id="customCheckListMapBeforeReportResult_{{$index}}" data-ng-true-value="false"> {{checkListItem}}
-            	</label>
-            	</div>
-            </div>
-        	<!-- resultado -->
-            <div class="panel-body" data-ng-bind-html="report.contentAsString | trustAsHtml"></div> 
-          </div>
-        </div>
-        <div class="h5" data-ng-show="report.id>0 && isReportSection(0)">
-</div>
+		<div  class="col-sm-6" data-ng-show="identityMember.userId>0 && valueOnTypeAhead.length>0">
+			<button class="btn btn-primary" data-ng-click="confirmStaffMember(identityMember.userId)"> Incluir {{identityMember.userName}} </button>
+		</div>
+	</div>
+	<!-- tabela com a equipe -->
+	<div class="row">
+		<div data-ng-repeat="staffMember in staffMembers">
+			<div class="col-md-8">
+				<div class="media">
+					<div class="media-left">
+						<img class="media-object img-circle" style="width: 45px"
+							data-ng-src="{{staffMember.userImageUrl}}"
+							data-err-src="/images/user/gender64-N.png">
+					</div>
+					<div class="media-body">
+						<h4 class="media-heading">{{staffMember.displayName}}</h4>
+						{{staffMember.firstName}} {{staffMember.lastName}}
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<button type="button" class="btn btn-danger" data-toggle="modal"
+					data-ng-click="memberToDelete(staffMember.id)"
+					data-target="#myModal">
+					<i class="fa fa-remove"></i>
+				</button>
+			</div>
+			<div class="col-md-12">
+				<br>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title alert alert-danger" id="myModalLabel">
+						Área de Risco</h4>
+				</div>
+				<div class="modal-body">
+					<div data-ng-show="message.error" class="alert alert-danger"
+						role="alert">{{message.errorMessage | i18n}}</div>
+					<div class="alert alert-warning" role="alert">
+						Esta ação não poderá ser desfeita. Deseja realmente excluir <img
+							class="img-circle" style="width: 45px"
+							data-ng-src="{{member.userImageUrl}}"
+							data-err-src="/images/user/gender64-N.png">
+						({{member.displayName}}) do projeto?
+					</div>
+					<button type="button" class="btn btn-default"
+						data-ng-click="hideModal()">{{'CLOSE' | i18n}}</button>
+					<button type="button" class="btn btn-danger"
+						data-ng-click="deleteMember(member.id)">Confirmar
+						Exclusão</button>
+				</div>
 
+			</div>
+		</div>
+	</div>	
+	</div>
+</div>

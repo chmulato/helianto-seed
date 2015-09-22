@@ -1,11 +1,11 @@
-<div class="col-md-4 col-xs-12 "data-ng-show="isReportSection(-1)">
+<!-- <div class="col-md-12 "data-ng-show="isReportSection(-1)">
 		<table class="table table-hover">
 		  <tbody>
 		    <tr data-ng-class="{active: reportFolder.id==folder.id}" 
 		    	data-ng-click="setExternalId(0);listReports(folder.id,null,false)"
 	 			data-ng-repeat="folder in reportFolders" >
 		      <td class="h4" style="min-width:72px; width: 72px;">
-        <!-- icon -->
+
         <i data-ng-show="isExported(folder.exporterId)" class="fa fa-lock"></i>
       </td>
       <td class="">{{folder.folderCode}}
@@ -19,166 +19,27 @@
     </tr>
   </tbody>
 </table>
-</div>
+</div> -->
 
-<div class="col-md-8 col-xs-12 "data-ng-show="isReportSection(-1)">
-                <!-- 
-                 ! Descrição do projeto.
-                 -->
-                <accordion close-others="true">
-               		<accordion-group  is-open="status.open">
-						<accordion-heading> 
-							Resumo
-							<i class="pull-right glyphicon" data-ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}">
-						 	</i>
-						 </accordion-heading>	
-              			<div data-ng-bind-html="reportFolder.contentAsString"></div>
-              			 <!--
-						 ! Botão [Editar]
-						 !-->
-						<small class="pull-right">
-						<i class="fa fa-lock" data-ng-show="isExported(reportFolder.exporterId)"></i>
-						<div data-ng-hide="isExported(reportFolder.exporterId)" >
-						<a href data-ng-click="openForm('form-report-folder')" class="btn btn-sm btn-primary">
-							Editar
-						</a>
-						<a href data-ng-click="exportFolder()" class="btn btn-sm btn-primary">
-							Exportar
-						</a>
-						</div>
-						</small>	
-             	 	</accordion-group>			
-                <!-- 
-                 ! Fases do projeto
-                 -->
-                <accordion-group  is-open="status.open1">
-					<accordion-heading> 
-						Fases 
-						<i  class="pull-right glyphicon" 
-							data-ng-class="{'glyphicon-chevron-down': status.open1, 'glyphicon-chevron-right': !status.open1}">
-						</i>
-					</accordion-heading>
-							
-		              	<!-- tabela com as fases -->
-						<table class="table">
-						<tr data-ng-repeat="reportPhase in reportPhases">
-						<td >{{reportPhase.literal}} {{reportPhase.phaseName}}</td>
-						<td>  
-							<span>{{reportPhase.scheduledStartDate | date:'dd'}} </span> 
-								<i class="fa fa-sign-in"></i>
-								<br />
-							<span>{{reportPhase.scheduledStartDate | date:'MMM'}}</span>
-						</td>
-						<td>
-							<span>{{reportPhase.scheduledEndDate | date:'dd'}} </span> 
-								<i class="fa fa-sign-out"></i>
-								<br />
-							<span>{{reportPhase.scheduledEndDate | date:'MMM'}}</span>				
-						</td>
-						<td > <button class="btn btn-default" data-ng-click="openReportPhase(reportPhase.id)"> Editar</button> </td>
-						<td>
-							<input data-ng-click="toggleSelectionPhase(reportPhase.literal);listReports(folderValue, null, true)"  type="checkbox"  data-ng-checked="phaseLiteralsContains(reportPhase.literal)" name="{{reportPhase.literal}}" > 	
-						</td>
-						</tr>
-						</table>
-						<small class="pull-right">
-							<button class="btn btn-default navbar-btn"
-							 data-ng-click="newReportPhase(reportFolder.id)" 
-							 data-ng-hide="isExported(reportFolder.exporterId)">
-								Nova Fase
-							</button>
-						</small>
-				</accordion-group>	
-				
-                <!-- 
-                 ! Equipe
-                 -->
-                <accordion-group  is-open="status.open2">
-					<accordion-heading>
-						Equipe
-						<i  class="pull-right glyphicon" 
-							data-ng-class="{'glyphicon-chevron-down': status.open2, 'glyphicon-chevron-right': !status.open2}">
-						</i>
-						
-					</accordion-heading>
-					
-					<hr>
-					<div id="form-group-member" class="form-group row">
-						<div class="col-sm-6">
-							<div class="input-group">
-								<input id="member" type="text" required="required" 
-									name="member" data-ng-model="valueOnTypeAhead"
-									data-typeahead="member.userName for member in getStaffMembers($viewValue)"
-									data-typeahead-loading="loadingMembers"
-									data-typeahead-on-select='onSelect($item, $model, $label)'
-									placeholder="Digite o Nome ou email"
-									class="form-control"> <i
-									data-ng-show="loadingMembers" class="glyphicon glyphicon-refresh"></i>
-							</div>
-						</div>
-						<div class="col-sm-6">
-							<div style="font-size: 24px; line-height: 1.5em;" data-ng-hide="identityMember.userId>0 || valueOnTypeAhead.length==0">
-								<i class="fa fa-angle-left"></i> Incluir Membro
-							</div>
-						</div>
-						<div  class="col-sm-6" data-ng-show="identityMember.userId>0 && valueOnTypeAhead.length>0">
-							<button class="btn btn-primary" data-ng-click="confirmStaffMember(identityMember.userId)"> Incluir {{identityMember.userName}} </button>
-						</div>
-					</div>
-					
-	              	<!-- tabela com a equipe -->
-	              	<div class="row" >
-	              		<div data-ng-repeat="staffMember in staffMembers">
-	              		<div class="col-md-8" >
-		              	<div class="media" >
-						  <div class="media-left">
-						      <img class="media-object img-circle" style="width:45px" data-ng-src="{{staffMember.userImageUrl}}" data-err-src="/images/user/gender64-N.png">
-						  </div>
-						  <div class="media-body">
-						    <h4 class="media-heading">{{staffMember.displayName}}</h4>
-						    {{staffMember.firstName}} {{staffMember.lastName}}
-						  </div>
-						</div>
-						</div>
-						<div class="col-md-4">
-						  <button type="button" class="btn btn-danger" data-toggle="modal" data-ng-click="memberToDelete(staffMember.id)" data-target="#myModal">
-							<i class="fa fa-remove"></i>						 
-						  </button>
-						</div>
-						<div class="col-md-12"><br></div>
-						</div>
-		            </div> 	          
-					<div class="modal fade" id="myModal" tabindex="-1" 
-					role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-					  <div class="modal-dialog">
-					    <div class="modal-content">
-					      <div class="modal-header">
-					        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					        <h4 class="modal-title alert alert-danger" id="myModalLabel">
-					        	 Área de Risco
-					        </h4>
-					      </div>
-					      <div class="modal-body">
-					      <div data-ng-show="message.error" class="alert alert-danger" role="alert"> 
-						 	 {{message.errorMessage | i18n}}
-						   </div>
-					      <div class="alert alert-warning" role="alert">
-					      	Esta ação não poderá ser desfeita. Deseja realmente excluir 
-					      	<img class="img-circle" style="width:45px" 
-					      		data-ng-src="{{member.userImageUrl}}" 
-					      		data-err-src="/images/user/gender64-N.png"> ({{member.displayName}}) do projeto?
-					      </div>
-					      	 <button type="button" class="btn btn-default" data-ng-click="hideModal()">{{'CLOSE' | i18n}}</button>
-					        <button type="button" class="btn btn-danger" data-ng-click="deleteMember(member.id)" >Confirmar Exclusão</button>
-					    
-					     </div>
-					    
-					    </div>
-					  </div>
-					</div>
-					
-				</accordion-group>	
-				</accordion>	
-
+<div class="col-md-12"
+	data-ng-click="setExternalId(0);listReports(folder.id,null,false);setSectionTab(0);"
+	data-ng-repeat="folder in reportFolders.content" >
+	
+	<div class="row">
+		<!-- descrição básica do projeto -->
+		<div class="col-md-8">
+	    <div class="ui-bullet">
+	        <div class="btn-icon btn-icon-round btn-icon-lg bg-primary">
+	            <i class="ti-cut"></i>
+	        </div>
+	        <div class="ui-bullet-content">
+	            <h4>{{folder.folderName}}</h4>
+	            <p data-ng-bind-html="folder.contentAsString | trustAsHtml"></p>
+	        </div>
+	    </div>
+		</div>
+		<!-- estatísticas do projeto -->
+		<div class="col-md-4">
+		</div>
+	</div>
 </div>
-        </div>
