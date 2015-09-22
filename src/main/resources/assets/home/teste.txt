@@ -1,0 +1,19 @@
+	<input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="Que projeto você busca?" />
+	<table ng-show="(projetos.length > 0)" class="table">
+		<tr>
+			<th></th>
+			<th><a href="" ng-click="ordenarPor('nome')">Nome</a></th>
+			<th>Data</th>
+			<th>Checkin</th>
+			<th>Checkout</th>
+		</tr>
+		<tr ng-class="{'font-weight: bold': contato.selecionado}" ng-repeat="projeto in projetos | filter:criterioDeBusca |  orderBy:criterioDeOrdenacao:direcaoDaOrdenacao">
+			<td>
+				<div style="width: 20px; height: 20px;" ng-style="{'background-color': projeto.cor}">
+					<input type="checkbox" data-ng-model="projeto.selecionado">
+				</div>
+			</td>
+			<td>{{projeto.folderName | uppercase}}</td>
+			<td>{{projeto.issueDate | date:'dd/MM/yyyy HH:mm'}}</td>
+		</tr>
+	</table>    
