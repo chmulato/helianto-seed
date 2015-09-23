@@ -14,13 +14,6 @@
 	                                  , function($scope, $window, $http, resources, genericServices, securityServices) {
 	
 		$scope.baseName = "home";
-		$scope.projetos = [
-				{nome: "Projeto 1", cor: "black", data: new Date(), checkin: "true" , checkout: "false"},
-				{nome: "Projeto 2", cor: "white", data: new Date(), checkin: "false", checkout: "true" }, 
-				{nome: "Projeto 3", cor: "white", data: new Date(), checkin: "false", checkout: "true" },
-				{nome: "Projeto 4", cor: "white", data: new Date(), checkin: "false", checkout: "true" },
-				{nome: "Projeto 5", cor: "white", data: new Date(), checkin: "false", checkout: "true" }
-		];
 		
 		/**
 		 * Lista projetos do usuário logado.

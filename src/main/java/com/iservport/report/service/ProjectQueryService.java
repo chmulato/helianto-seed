@@ -1,5 +1,6 @@
 package com.iservport.report.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -8,8 +9,6 @@ import org.helianto.core.def.CategoryGroup;
 import org.helianto.core.internal.QualifierAdapter;
 import org.helianto.core.internal.SimpleCounter;
 import org.helianto.core.repository.CategoryReadAdapter;
-import org.helianto.core.repository.CategoryRepository;
-import org.helianto.task.domain.ReportPhase;
 import org.helianto.task.repository.ReportPhaseAdapter;
 import org.helianto.task.repository.ReportPhaseRepository;
 import org.joda.time.DateMidnight;
@@ -23,6 +22,7 @@ import com.iservport.report.domain.Project;
 import com.iservport.report.repository.CategoryReportTmpRepository;
 import com.iservport.report.repository.ProjectRepository;
 import com.iservport.report.repository.ReportStatsRepository;
+import com.iservport.user.repository.UserJournalRepository;
 
 /**
  * Project query service.
@@ -38,7 +38,7 @@ public class ProjectQueryService {
 	private ProjectRepository projectRepository;
 
 	@Inject
-	private CategoryRepository categoryRepository;
+	private UserJournalRepository userJournalRepository;
 	
 	@Inject
 	private ReportPhaseRepository reportPhaseRepository;
@@ -108,11 +108,7 @@ public class ProjectQueryService {
 	 * @param projectId
 	 */
 	public Project project(int entityId, Integer projectId) {
-		Project project 	= projectRepository.findProjectByEntity_IdAndId(entityId, projectId);
-		if (project!=null) {
-			return project;
-		}
-		throw new UnsupportedOperationException("Project id required.");
+		return projectRepository.findProjectByEntity_IdAndId(entityId, projectId);
 	}
 
 	/**
@@ -133,9 +129,29 @@ public class ProjectQueryService {
 	 * 
 	 * @param entityId
 	 */
-	// TODO listar por usuário
 	public List<Project> projectList(int entityId) {
-		return projectRepository.findByIdentity_Id(entityId);
+		List<Project> result = null;		
+		if (entityId > 0) {
+			boolean blnResult = true;
+			List<SimpleCounter> listSimpleCounter = userJournalRepository.findByProjectCheckIn(entityId); 
+			if ((listSimpleCounter != null) && (listSimpleCounter.size() > 0)) {
+				for (SimpleCounter simpleCounter : listSimpleCounter) {
+					if (simpleCounter.getBaseClass() != null) {
+						int projectId = (int) simpleCounter.getBaseClass();
+						Project project = projectRepository.findProjectByEntity_IdAndId(entityId, projectId);
+						if (project != null) {
+							// found someone
+							if (blnResult) {
+								result = new ArrayList<Project>();
+								blnResult = false;
+							}
+							result.add(project);
+						}
+					}
+				}
+			}
+		}
+		return result;
 	}
 	
     /**

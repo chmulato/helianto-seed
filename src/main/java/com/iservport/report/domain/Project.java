@@ -201,7 +201,6 @@ public class Project
     
      public void setTools(String tools){
     	 this.tools = tools;
-    	 
      }
      
      public Set<UserJournal> getUserJournals() {

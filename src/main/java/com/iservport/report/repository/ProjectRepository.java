@@ -54,11 +54,14 @@ public interface ProjectRepository
 			+ "from Project project_ ";	
 	
 	/**
-	 * Find project.
+	 * Project by entityId and id
 	 * 
-	 * @param entityId
 	 * @param id
+	 * @param entityId
 	 */
+	@Query(QUERY
+			+ "where project_.entity.id = ?1 "
+			+ "and project_.id = ?2 ")
 	Project findProjectByEntity_IdAndId(int entityId, int id);
 
 	/**
