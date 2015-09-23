@@ -1,8 +1,8 @@
 package com.iservport.user.repository;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import org.helianto.core.internal.SimpleCounter;
 import org.helianto.user.domain.User;
@@ -25,19 +25,22 @@ public interface UserJournalRepository extends JpaRepository<UserJournal, Serial
 	
 	/**
 	 * Last user journal project check-in.
+	 * 
+	 * @param userId
 	 */
 	@Query("select new "
 			+ "org.helianto.core.internal.SimpleCounter("
-			+ "  userJournal_.reportFolder.id"
-			+ ", count(userJournal_.reportFolder.id)"
+			+ "  project_.id"
+			+ ", count(project_.id)"
 			+ ", max(userJournal_.issueDate)"
 			+ ") "
-			+ "from UserJournal userJournal_ "
-			+ "where userJournal_.reportFolder.id in ?1 "
-			+ "and userJournal_.user.id = ?2 "
+			+ "from Project project_ "
+			+ "join project_.userJournals userJournal_ "
+			+ "where userJournal_.user.id = ?1 "
+			+ "and project_.resolution = 'DOING' "
 			+ "and userJournal_.userJournalType = 'PRJ_CHECK_IN' "
-			+ "group by userJournal_.reportFolder.id "
+			+ "group by project_.id "
 			+ "order by userJournal_.issueDate DESC ")
-	SimpleCounter findLastByProjectCheckIn(Collection<Integer> projectIds, int userId);
+	List<SimpleCounter> findByProjectCheckIn(int userId);
 
 }

@@ -1,15 +1,18 @@
 package com.iservport.report.domain;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 
-import org.helianto.core.domain.Category;
 import org.helianto.core.domain.Entity;
 import org.helianto.task.def.ReportFolderContentType;
 import org.helianto.task.domain.ReportFolder;
 import org.helianto.user.domain.User;
+
+import com.iservport.user.domain.UserJournal;
 
 /**
  * Projetos.
@@ -38,6 +41,9 @@ public class Project
 	
 	@Lob
 	private String tools;
+	
+	@OneToMany
+	private Set<UserJournal> userJournals;
 	
 	/**
 	 * Default constructor.
@@ -195,5 +201,12 @@ public class Project
     	 this.tools = tools;
     	 
      }
+     
+     public Set<UserJournal> getUserJournals() {
+		return userJournals;
+	 }
+     public void setUserJournals(Set<UserJournal> userJournals) {
+		this.userJournals = userJournals;
+	 }
     
 }
