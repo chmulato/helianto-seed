@@ -65,9 +65,6 @@ public class ReportSearchController {
 	@Inject 
 	private ReportQueryService reportQueryService;
 	
-	@Inject 
-	private UserQueryService userQueryService;
-	
 	@Inject
 	private ReportBaseLineCommandService reportBaseLineCommandService;
 	
@@ -83,13 +80,13 @@ public class ReportSearchController {
 	/**
 	 * Lista reports por pastas.
 	 *
-	 * GET       /api/report?id
+	 * GET       /api/report?folderId
 	 */
 
-	@RequestMapping(value={"/", ""}, method=RequestMethod.GET, params={"id"})
+	@RequestMapping(method=RequestMethod.GET, params={"folderId"})
 	@ResponseBody
-	public ReportAdapter reportOne(UserAuthentication userAuthentication, @RequestParam Integer id) {
-		return reportQueryService.reportOne(id);
+	public ReportAdapter reportOne(UserAuthentication userAuthentication, @RequestParam Integer folderId) {
+		return reportQueryService.reportOne(folderId);
 	}
 	
 	/**
@@ -98,187 +95,12 @@ public class ReportSearchController {
 	 * GET       /api/report?reportId
 	 */
 
-	@RequestMapping(value={"/", ""}, method=RequestMethod.GET, params={"reportId"})
+	@RequestMapping(method=RequestMethod.GET, params={"reportId"})
 	@ResponseBody
 	public String reporter(@RequestParam Integer reportId) {
 		return "{\"reporterId\":"+reportQueryService.reporter(reportId)+"}";
 	}
 	
-	/**
-	 * seleciona reportPhase por id.
-	 *
-	 * GET       /api/report/phase?id
-	 */
-
-	@RequestMapping(value={"/phase"}, method=RequestMethod.GET, params={"id"})
-	@ResponseBody
-	public ReportPhaseAdapter reportPhaseOne(UserAuthentication userAuthentication, @RequestParam Integer id) {
-		return reportQueryService.reportPhaseOpen(id);
-	}
-	
-	/**
-	 * Atualiza reportPhase.
-	 *
-	 * PUT		/api/report
-	 */
-
-	@RequestMapping(value={"/phase"}, method=RequestMethod.PUT , consumes="application/json")
-	@ResponseBody
-	public ReportPhaseAdapter reportPhase(UserAuthentication userAuthentication, @RequestBody ReportPhaseAdapter command) {
-		return reportCommandService.reportPhase(command);
-	}
-	
-	/**
-	 * Novo reportPhase.
-	 *
-	 * POST		/api/report/phase?folderId
-	 */
-
-	@RequestMapping(value={"/phase"}, method=RequestMethod.POST , params={"folderId"})
-	@ResponseBody
-	public ReportPhaseAdapter reportPhaseNew(UserAuthentication userAuthentication, @RequestParam Integer folderId) {
-		return reportCommandService.reportPhaseNew(folderId);
-	}
-	
-		// Membros da equipe
-
-		/**
-		 * Lista membros da equipe.
-		 *
-		 * GET		/api/report/staffMember?folderId
-		 */
-	
-		@RequestMapping(value={"/staffMember"}, method=RequestMethod.GET, params={"folderId"})
-		@ResponseBody
-		public Page<StaffMemberReadAdapter> staffMember(@RequestParam Integer folderId, 
-				@RequestParam(required = false, defaultValue = "0") Integer pageNumber) {
-			return reportQueryService.staffMemberList(folderId, pageNumber);
-		}
-		
-		
-		/**
-		 * Novo membro da equipe.
-		 *
-		 * POST		/api/report/staffMember?folderId
-		 */
-	
-		@RequestMapping(value={"/staffMember"}, method=RequestMethod.POST , params={"folderId"})
-		@ResponseBody
-		public StaffMemberReadAdapter staffMemberNew(@RequestParam Integer folderId) {
-			return reportCommandService.staffMemberNew(folderId);
-		}
-
-		/**
-		 * Membro da equipe.
-		 *
-		 * GET 	/app/report/staffMember?staffMemberId
-		 */
-	
-		@RequestMapping(value={"/staffMember"}, method=RequestMethod.GET, params={"staffMemberId"})
-		@ResponseBody
-		public StaffMemberReadAdapter staffMemberOpen(@RequestParam Integer staffMemberId) {
-			return reportQueryService.staffMemberOpen(staffMemberId);
-		}
-
-		/**
-		 * Remove membro da equipe.
-		 *
-		 * DELETE 	/api/report/staffMember?staffMemberId
-		 */
-	
-		@RequestMapping(value={"/staffMember"}, method=RequestMethod.DELETE, params={"targetId"})
-		@ResponseBody
-		public String staffMemberDelete(@RequestParam Integer targetId) {
-			return reportCommandService.staffMemberDelete(targetId);
-		}
-
-		/**
-		 * Atualizar membro da equipe.
-		 *
-		 * PUT 	/api/report/staffMember
-		 */
-	
-		@RequestMapping(value={"/staffMember"}, method=RequestMethod.PUT, consumes="application/json")
-		@ResponseBody
-		public StaffMemberReadAdapter staffMember(@RequestBody StaffMemberReadAdapter command) {
-			return reportCommandService.staffMember(command);
-		}
-		
-		//
-		
-	
-		@RequestMapping(value={"/staffMember"}, method=RequestMethod.GET, params={"users"})
-		@ResponseBody
-		public List<User> getUserList(UserAuthentication userAuthentication) {
-			return reportQueryService.getUserList(userAuthentication);
-		}
-		
-	
-		@RequestMapping(value={"/staffMember"}, method=RequestMethod.GET, params={"users", "search", "searchFolderId"})
-		@ResponseBody
-		public List<User> getUserList(UserAuthentication userAuthentication, @RequestParam String search, @RequestParam Integer searchFolderId) {
-			return reportQueryService.getUserListSearch(userAuthentication, search, searchFolderId);
-		}
-		
-	
-		@RequestMapping(value={"/staffMember"}, method=RequestMethod.GET, params={"users", "userId"})
-		@ResponseBody
-		public User getUser(UserAuthentication userAuthentication, @RequestParam Integer userId) {
-			return userQueryService.user(userAuthentication.getEntityId(), userId);
-		}
-		
-		
-		// Monitoramentos
-		//Correto /report/report em review???
-
-		/**
-		 * Lista monitoramento.
-		 *
-		 * GET		/api/report/report/review?reportId
-		 */
-	
-		@RequestMapping(value={"/review"}, method=RequestMethod.GET, params={"reportId"})
-		@ResponseBody
-		public Page<ReportReviewReadAdapter> reportReview(@RequestParam Integer reportId, @RequestParam(required = false, defaultValue = "0") Integer pageNumber) {
-			return reportQueryService.reportReview(reportId, pageNumber);
-		}
-
-		/**
-		 * Novo monitoramento.
-		 *
-		 * POST		/api/report/report/review?reportId
-		 */
-	
-		@RequestMapping(value={"/review"}, method=RequestMethod.POST , params={"reportId"})
-		@ResponseBody
-		public ReportReviewReadAdapter reportReviewNew(UserAuthentication userAuthentication, @RequestParam Integer reportId) {
-			return reportCommandService.reportReviewNew(reportId, userAuthentication.getIdentityId());
-		}
-
-		/**
-		 * Monitoramento.
-		 *
-		 * GET 	/api/report/report/review?reportReviewId
-		 */
-	
-		@RequestMapping(value={"/review"}, method=RequestMethod.GET, params={"reportReviewId"})
-		@ResponseBody
-		public ReportReviewReadAdapter reportReviewOpen(@RequestParam Integer reportReviewId) {
-			return reportQueryService.reportReviewOpen(reportReviewId);
-		}
-
-		/**
-		 * Atualizar monitoramento.
-		 *
-		 * PUT 	/api/report/report/review
-		 */
-	
-		@RequestMapping(value={"/review"}, method=RequestMethod.PUT, consumes="application/json")
-		@ResponseBody
-		public ReportReviewReadAdapter reportReview(UserAuthentication userAuthentication, @RequestBody ReportReviewReadAdapter command) {
-			return reportCommandService.reportReview(command, userAuthentication.getEntityId());
-		}
-		
 		/**
 		 * Gráfico de burn-up.
 		 *

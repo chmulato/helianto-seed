@@ -12,6 +12,7 @@ import org.helianto.task.def.ReportFolderContentType;
 import org.helianto.task.domain.ReportFolder;
 import org.helianto.user.domain.User;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.iservport.user.domain.UserJournal;
 
 /**
@@ -42,6 +43,7 @@ public class Project
 	@Lob
 	private String tools;
 	
+	@JsonIgnore
 	@OneToMany
 	private Set<UserJournal> userJournals;
 	
