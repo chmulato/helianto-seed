@@ -63,6 +63,15 @@ public interface ProjectRepository
 			+ "where project_.entity.id = ?1 "
 			+ "and project_.id = ?2 ")
 	Project findProjectByEntity_IdAndId(int entityId, int id);
+	
+	@Query(QUERY
+			+ "join project_.staff staff_ "
+			+ "where project_.entity.id = ?1 "
+			+ "and staff_.identity.id = ?2 "
+			+ "and project_.resolution = 'DOING' "
+			+ "order by staff_.joinDate ASC ")
+	List<Project> findByUser_Id(int entityId, int identityId);
+
 
 	/**
 	 * Page by category id.

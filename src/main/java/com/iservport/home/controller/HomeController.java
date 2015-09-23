@@ -33,7 +33,7 @@ public class HomeController {
 	 */
 	@RequestMapping(value={"/project"}, method=RequestMethod.GET)
 	public List<Project> project(UserAuthentication userAuthentication) {
-		return projectQueryService.projectList(userAuthentication.getEntityId());
+		return projectQueryService.projectList(userAuthentication.getEntityId(), userAuthentication.getIdentityId());
 	}
 
 }

@@ -80,6 +80,7 @@ public class ProjectCommandService {
 		project.setFolderCaption(command.getFolderCaption());
 		project.setParentPath(command.getParentPath());
 		project.setNature(command.getNature());
+		project.setResolution(command.getResolution());
 		project.setTraceabilityItems(command.getTraceabilityItems());
 		project.setStartDate(command.getStartDate());
 		project.setEndDate(command.getEndDate());
