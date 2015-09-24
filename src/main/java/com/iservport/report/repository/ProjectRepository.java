@@ -62,8 +62,14 @@ public interface ProjectRepository
 	@Query(QUERY
 			+ "where project_.entity.id = ?1 "
 			+ "and project_.id = ?2 ")
-	Project findProjectByEntity_IdAndId(int entityId, int id);
+	Project findProjectByEntity_IdAndId(int entityId, int projetcId);
 	
+	/**
+	 * Project by entityId and identityId
+	 * 
+	 * @param entityId
+	 * @param identityId
+	 */
 	@Query(QUERY
 			+ "join project_.staff staff_ "
 			+ "where project_.entity.id = ?1 "
