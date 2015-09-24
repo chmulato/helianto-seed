@@ -39,29 +39,25 @@
 		$scope.checkIn = function(value) {
 			$scope.testCheckedProject = value;
 		};
-		
-		$scope.adicionarProjeto = function (projeto) {
-			if (projeto != null) {
-				$scope.projetos.push(angular.copy(projeto));
- 				delete $scope.projeto;
- 				$scope.projetoForm.$setPristine();
-			}
-		};
-		$scope.apagarProjetos = function (projetos) {
-			$scope.projetos = projetos.filter(function (projeto) {
-				if (!projeto.selecionado) return projeto;
-			});
-		};
-		$scope.isProjetoSelecionado = function (projetos) {
-			return projetos.some(function (projeto) {
-				return projeto.selecionado;
-			});
-		};
-		$scope.classe1 = "selecionado";
-		$scope.classe2 = "negrito";
 		$scope.ordenarPor = function (campo) {
 			$scope.criterioDeOrdenacao = campo;
 			$scope.direcaoDaOrdenacao = !$scope.direcaoDaOrdenacao;				
+		};
+		$scope.confirmarProjeto = function () {
+			value = $scope.testCheckedProject;
+			if (value > 0) {
+				return value;
+			} else {
+				return 0;
+			}
+		};
+		$scope.ativarBtnConfirmar = function () {
+			value = $scope.testCheckedProject;
+			if (value > 0) {
+				return false;
+			} else {
+				return true;
+			}
 		};
 
 	}]); // HomeController

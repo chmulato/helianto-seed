@@ -29,14 +29,14 @@ public interface ReportTempRepository extends JpaRepository<Report, Serializable
 	 * @param entity
 	 */
 	@Query("select new "
-			+ "org.helianto.task.repository.ReportFolderCounter("
+			+ "org.helianto.core.internal.SimpleCounter("
 			+ "  report_.series.id"
 			+ ", count(report_.id)"
 			+ ") "
 			+ "from Report report_ "
 			+ "where report_.series in ?1 "
 			+ "group by report_.series.id ")
-	List<ReportFolderCounter> countByReportFolder(List<Project> list);
+	List<SimpleCounter> countByReportFolder(List<Project> list);
 	
 	/**
 	 * Count doing or done by folder.

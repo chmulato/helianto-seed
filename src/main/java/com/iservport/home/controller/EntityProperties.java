@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @author mauriciofernandesdecastro
  */
 @Component
-public class EntityProperties { 
+public class EntityProperties {
 
     private final String defaultAlias;
     

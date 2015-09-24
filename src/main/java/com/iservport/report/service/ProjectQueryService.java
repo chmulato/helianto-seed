@@ -1,5 +1,6 @@
 package com.iservport.report.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -131,39 +132,43 @@ public class ProjectQueryService {
 	 * @param projects
 	 */
 	protected Page<Project> countByFolder(Page<Project> projects) {
-		
-		// conta relatórios exibidos na pasta
-		List<SimpleCounter> counterList = 
-				reportTempRepository.countStartedByReportFolders(projects.getContent());
-
-		// conta relatórios exibidos iniciados na pasta
-		List<SimpleCounter> counterListStarted = 
-				reportTempRepository.countStartedByReportFolders(projects.getContent());
-
-		// conta relatórios exibidos atrasados na pasta
-		List<SimpleCounter> counterListLate = 
-				reportTempRepository.countLateByReportFolders(projects.getContent(), new DateMidnight().toDate());
-		
+		List<Integer> ids = new ArrayList<>();
 		for (Project p: projects) {
-			for (SimpleCounter s: counterList) {
-				if (p.getId() == ((Integer) s.getBaseClass()).intValue()) {
-					//total - usaremos countItems
-					p.setCountItems((int) s.getItemCount());
-				}
-			}
-			for (SimpleCounter s: counterListStarted) {
-				if (p.getId() == ((Integer) s.getBaseClass()).intValue()) {
-					//iniciados - usaremos countWarnings
-					p.setCountWarnings((int) s.getItemCount());
-				}
-			}
-			for (SimpleCounter s: counterListLate) {
-				if (p.getId() == ((Integer) s.getBaseClass()).intValue()) {
-					//atrasados - usaremos countAlerts
-					p.setCountAlerts((int) s.getItemCount());
-				}
-			}
+			
 		}
+		
+//		// conta relatórios exibidos na pasta
+//		List<SimpleCounter> counterList = 
+//				reportTempRepository.countByReportFolder(projects.getContent());
+//
+//		// conta relatórios exibidos iniciados na pasta
+//		List<SimpleCounter> counterListStarted = 
+//				reportTempRepository.countStartedByReportFolders(projects.getContent());
+//
+//		// conta relatórios exibidos atrasados na pasta
+//		List<SimpleCounter> counterListLate = 
+//				reportTempRepository.countLateByReportFolders(projects.getContent(), new DateMidnight().toDate());
+//		
+//		for (Project p: projects) {
+//			for (SimpleCounter s: counterList) {
+//				if (p.getId() == ((Integer) s.getBaseClass()).intValue()) {
+//					//total - usaremos countItems
+//					p.setCountItems((int) s.getItemCount());
+//				}
+//			}
+//			for (SimpleCounter s: counterListStarted) {
+//				if (p.getId() == ((Integer) s.getBaseClass()).intValue()) {
+//					//iniciados - usaremos countWarnings
+//					p.setCountWarnings((int) s.getItemCount());
+//				}
+//			}
+//			for (SimpleCounter s: counterListLate) {
+//				if (p.getId() == ((Integer) s.getBaseClass()).intValue()) {
+//					//atrasados - usaremos countAlerts
+//					p.setCountAlerts((int) s.getItemCount());
+//				}
+//			}
+//		}
 		return projects;
 
 	}

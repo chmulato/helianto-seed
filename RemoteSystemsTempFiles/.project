@@ -1,16 +1,5 @@
 <<<<<<< HEAD
-<?xml version="1.0" encoding="UTF-8"?>
-<projectDescription>
-	<name>RemoteSystemsTempFiles</name>
-	<comment></comment>
-	<projects>
-	</projects>
-	<buildSpec>
-	</buildSpec>
-	<natures>
-		<nature>org.eclipse.rse.ui.remoteSystemsTempNature</nature>
-	</natures>
-</projectDescription>
+<<<<<<< HEAD
 =======
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
@@ -24,4 +13,34 @@
 		<nature>org.eclipse.rse.ui.remoteSystemsTempNature</nature>
 	</natures>
 </projectDescription>
+=======
+>>>>>>> refs/remotes/christian/master
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>RemoteSystemsTempFiles</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.rse.ui.remoteSystemsTempNature</nature>
+	</natures>
+</projectDescription>
+<<<<<<< HEAD
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>RemoteSystemsTempFiles</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.rse.ui.remoteSystemsTempNature</nature>
+	</natures>
+</projectDescription>
+=======
+>>>>>>> refs/remotes/christian/master
 >>>>>>> refs/remotes/iservport/master
