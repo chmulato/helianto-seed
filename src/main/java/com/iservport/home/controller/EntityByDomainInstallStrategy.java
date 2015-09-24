@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class EntityByDomainInstallStrategy 
 	extends AbstractEntityInstallStrategy
 	implements InitializingBean
-{
+{ 
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @author mauriciofernandesdecastro
  */
 @Component
-public class TestItProperties {
+public class TestItProperties { 
 
     private final String defaultAlias;
     

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @author mauriciofernandesdecastro
  */
 @Component
-public final class ApplicationProperties {
+public final class ApplicationProperties { 
  
     private final String contextName;
     
