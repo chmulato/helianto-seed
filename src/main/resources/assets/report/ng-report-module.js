@@ -17,22 +17,6 @@
 	.controller('ReportController', ['$scope', '$window', '$http', 'resources', 'qualifierService', 'lang', '$log'
 	                                  , function($scope, $window, $http, resources, qualifierService, lang, $log) {
 		
-//		//to i18n
-//		$scope.localizationKeys = reportLocale._getLocalizationKeys();
-//		securityServices.getCategoryMap();
-//		$scope.showMenuItem =  function(code){
-//			return securityServices.showMenuItem(code);
-//		}
-//		securityServices.getAuthorizedRoles();
-//		$scope.isAuthorized = function(role, ext){
-//			return securityServices.isAuthorized(role, ext);
-//		}
-//		$scope.logout = function(){
-//			return securityServices.logout();
-//		}
-//		$http.get('/app/home/entity').success(function(data, status, headers, config) {
-//			return 	$scope.authorizedEntity = data;
-//		})
 		
 		/*
 		 * initializers
@@ -184,6 +168,9 @@
 				$scope.entitiesIds.push(id);
 			}
 		};
+		$scope.isProjectLate = function(project) {
+			return project.resolution!='DONE' && new Date().getDate() > new Date(project.endDate).getDate();
+		}
 		
 		/**
 		 * Ações
@@ -420,13 +407,6 @@
 				$scope.openForm('staff-member');
 			});
 		};
-		$scope.memberToDelete = function(id) {	
-			$scope.message=[];
-			resources.resource.get({method:'staff', staffMemberId: id}).$promise.then(
-			function(data) {
-				$scope.member = data;
-			});
-		};
 		$scope.updateStaffMember = function() {
 			resources.resource.save({method:'staff'}, $scope.staffMember).$promise.then(
 			function(data, getReponseHeaders) {
@@ -434,12 +414,17 @@
 				$("#modalBody").modal('hide');
 			});
 		};
+		$scope.memberToDelete = function(staffMember) {	
+			$scope.message=[];
+			$scope.memberToDelete = staffMember;
+		};
 		$scope.deleteMember = function(id) {
 			resources.resource.remove({method:'staff', targetId: id}).$promise.then(
 			function(data) {
 				$("#deleteStaffModal").modal('hide');
 				$scope.listStaffMembers($scope.folderValue);
 			});
+			$scope.memberToDelete = {};
 		};
 		/**
 		 * Chamada de pesquisa de usuário para typeAhead

@@ -9,6 +9,7 @@ import javax.persistence.OneToMany;
 
 import org.helianto.core.domain.Entity;
 import org.helianto.task.def.ReportFolderContentType;
+import org.helianto.task.def.Resolution2;
 import org.helianto.task.domain.ReportFolder;
 import org.helianto.user.domain.User;
 
@@ -136,6 +137,7 @@ public class Project
 			, Integer userGroupId
 			, String folderCaption
 			, String parentPath
+			, Resolution2 resolution
 			, String nature
 			, String traceabilityItems
 			, Date startDate
@@ -151,6 +153,7 @@ public class Project
 				categoryId, privacyLevel, zIndex, partnerId, userGroupId, folderCaption, parentPath, nature, traceabilityItems,
 				startDate, endDate, volumeTags, categoryOverrideAllowed);
 		setFolderName(folderName);
+		setResolution(resolution);
 		setBenefits(benefits);
 		setAssumptions(assumptions);
 		setDeliverables(deliverables);
@@ -209,5 +212,34 @@ public class Project
      public void setUserJournals(Set<UserJournal> userJournals) {
 		this.userJournals = userJournals;
 	 }
-    
+
+     /**
+      * Merger.
+      * 
+      * @param command
+      */
+     public Project merge(Project command) {
+ 		setFolderName(command.getFolderName());
+ 		setContent(command.getContent());
+ 		setEncoding(command.getEncoding());
+ 		setReportNumberPattern(command.getReportNumberPattern());
+ 		setPatternSuffix(command.getPatternSuffix());
+ 		setParsedContent(command.getParsedContent());
+ 		setPrivacyLevel(command.getPrivacyLevel());
+ 		setZIndex(command.getZIndex());
+ 		setFolderCaption(command.getFolderCaption());
+ 		setParentPath(command.getParentPath());
+ 		setNature(command.getNature());
+ 		setResolution(command.getResolution());
+ 		setTraceabilityItems(command.getTraceabilityItems());
+ 		setStartDate(command.getStartDate());
+ 		setEndDate(command.getEndDate());
+ 		setVolumeTags(command.getVolumeTags());
+ 		setCategoryOverrideAllowed(command.isCategoryOverrideAllowed());
+ 		setDeliverables(command.getDeliverables());
+ 		setAssumptions(command.getAssumptions());
+ 		setBenefits(command.getBenefits());
+ 		setTools(command.getTools());
+ 		return this;
+     }
 }

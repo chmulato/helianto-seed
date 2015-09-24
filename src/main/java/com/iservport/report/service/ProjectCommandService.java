@@ -1,5 +1,7 @@
 package com.iservport.report.service;
 
+import java.util.UUID;
+
 import javax.inject.Inject;
 
 import org.helianto.core.domain.Category;
@@ -45,17 +47,18 @@ public class ProjectCommandService {
 	 * @param command
 	 */
 	public Project project(int userId, Project command) {
-		User user = (User) userRepository.findOne(userId);
-		if (user==null) {
-			throw new IllegalArgumentException("Unable to persist, owner not found.");
-		}
 		Project project = null;
 		if (command==null) {
 			throw new IllegalArgumentException("Unable to persist null project.");
 		}
 		if (command.getId()==0) {
 			logger.debug("New project.");
+			User user = (User) userRepository.findOne(userId);
+			if (user==null) {
+				throw new IllegalArgumentException("Unable to persist, owner not found.");
+			}
 			project = command;
+			project.setFolderCode(UUID.randomUUID().toString());
 			project.setEntity(user.getEntity());
 			project.setOwner(user.getIdentity());
 			Category category = categoryRepository.findOne(command.getCategoryId());
@@ -68,28 +71,6 @@ public class ProjectCommandService {
 		else {
 			project = projectRepository.findOne(command.getId());
 		}
-		project.setFolderCode(command.getFolderCode());
-		project.setFolderName(command.getFolderName());
-		project.setContent(command.getContent());
-		project.setEncoding(command.getEncoding());
-		project.setReportNumberPattern(command.getReportNumberPattern());
-		project.setPatternSuffix(command.getPatternSuffix());
-		project.setParsedContent(command.getParsedContent());
-		project.setPrivacyLevel(command.getPrivacyLevel());
-		project.setZIndex(command.getZIndex());
-		project.setFolderCaption(command.getFolderCaption());
-		project.setParentPath(command.getParentPath());
-		project.setNature(command.getNature());
-		project.setResolution(command.getResolution());
-		project.setTraceabilityItems(command.getTraceabilityItems());
-		project.setStartDate(command.getStartDate());
-		project.setEndDate(command.getEndDate());
-		project.setVolumeTags(command.getVolumeTags());
-		project.setCategoryOverrideAllowed(command.isCategoryOverrideAllowed());
-		project.setDeliverables(command.getDeliverables());
-		project.setAssumptions(command.getAssumptions());
-		project.setBenefits(command.getBenefits());
-		project.setTools(command.getTools());
-		return projectRepository.saveAndFlush(project) ;
+		return projectRepository.saveAndFlush(project.merge(command)) ;
 	}
 }

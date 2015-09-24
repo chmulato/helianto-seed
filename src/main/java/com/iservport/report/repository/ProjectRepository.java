@@ -39,6 +39,7 @@ public interface ProjectRepository
 			+ "  project_.userGroup.id, "
 			+ "  project_.folderCaption, "
 			+ "  project_.parentPath, "
+			+ "  project_.resolution, "
 			+ "  project_.nature, "
 			+ "  project_.traceabilityItems, "
 			+ "  project_.startDate, "

@@ -1,6 +1,7 @@
 angular.module('app.services').
 value('lang', {
 	NO_CONTENT:'Não há conteúdo',
+	CLOSE:'Fechar',
 	ONE_INSTRUMENT:'Conteúdo',
 	MANY_INSTRUMENT:'@{}@ conteúdos',
 	STAFF_MEMBER_NOT_FOUND : 'Membro da Equipe não foi encontrado' , 

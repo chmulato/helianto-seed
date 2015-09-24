@@ -77,7 +77,7 @@
 	<li class="list-group-item" data-ng-repeat="staffMember in staffMembers">
 		<div class="media">
 			<button type="button" class="btn btn-xs btn-danger pull-right" data-toggle="modal"
-				data-ng-click="memberToDelete(staffMember.id)"
+				data-ng-click="memberToDelete(staffMember)"
 				data-target="#deleteStaffModal">
 				<i class="fa fa-remove"></i>
 			</button>
@@ -91,8 +91,6 @@
 				{{staffMember.identityFirstName}} {{staffMember.identityLastName}}
 			</div>
 		</div>
-		<div class="col-md-2">
-		</div>
 	</li>
 	</ul>
 	<div class="modal fade" id="deleteStaffModal" tabindex="-1" role="dialog"
@@ -104,23 +102,29 @@
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<h4 class="modal-title alert alert-danger" id="myModalLabel">
-						Área de Risco</h4>
+					<h4 class="modal-title" id="myModalLabel">Área de Risco</h4>
 				</div>
 				<div class="modal-body">
 					<div data-ng-show="message.error" class="alert alert-danger"
 						role="alert">{{message.errorMessage | i18n}}</div>
+					<div class="media">
+						<div class="media-left">
+							<img class="media-object img-circle" style="width: 45px"
+								data-ng-src="{{memberToDelete.identityImageUrl}}"
+								data-err-src="/images/user/gender64-N.png">
+						</div>
+						<div class="media-body">
+							<h4 class="media-heading">{{memberToDelete.identityDisplayName}}</h4>
+							{{memberToDelete.identityFirstName}} {{memberToDelete.identityLastName}}
+						</div>
+					</div>
 					<div class="alert alert-warning" role="alert">
-						Esta ação não poderá ser desfeita. Deseja realmente excluir <img
-							class="img-circle" style="width: 45px"
-							data-ng-src="{{member.userImageUrl}}"
-							data-err-src="/images/user/gender64-N.png">
-						({{member.displayName}}) do projeto?
+						Esta ação não poderá ser desfeita. Deseja realmente excluir o usuário acima do projeto?
 					</div>
 					<button type="button" class="btn btn-default"
 						data-ng-click="hideModal()">{{'CLOSE' | i18n}}</button>
 					<button type="button" class="btn btn-danger"
-						data-ng-click="deleteMember(member.id)">Confirmar
+						data-ng-click="deleteMember(memberToDelete.id)">Confirmar
 						Exclusão</button>
 				</div>
 

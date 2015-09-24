@@ -1,4 +1,4 @@
-<div data-modal-header-wrapper>Projeto</div>
+<div data-modal-header-wrapper>Projeto {{reportFolder.folderName}}</div>
   		
 <div class="modal-body">
 <form  data-ng-submit="updateReportFolder()" 
@@ -7,22 +7,6 @@
 	<div class="row">
 	<div class="col-md-8" >
 
-		<!--  Código do projeto -->
-		<div data-control-id="reportCode" data-form-group-wrapper data-label="Código do Projeto">
-		<input id="reportCode" type="text" 
-			name="reportCode" data-ng-model="reportFolder.reportCode" 
-			class="form-control" maxlength="128" readonly="readonly" />
-		</div>
-		<hr/>
-
-		<!--  Código do projeto -->
-		<div data-control-id="folderCode" data-form-group-wrapper data-label="Código Teste">
-		<input id="folderCode" type="text"  
-			name="folderCode" data-ng-model="reportFolder.folderCode"
-			placeholder=""
-		    class="form-control" maxlength="64" required/>
-		</div>
-		
 		<!--  Nome do projeto -->
 		<div id="form-group-folderName" class="form-group">
 			<label for="folderName" class="col-sm-3 control-label">Nome do Projeto</label>
@@ -43,14 +27,6 @@
 				<input id="numberPrefix" type="text" name="patternPrefix" required
 					data-ng-model="reportFolder.patternPrefix"
 					class="form-control" />			
-			</div>
-			<label for="numberOfDigits" class="col-sm-2 control-label">Máximo de tarefas</label>
-			<div class="col-sm-3">		
-				<select id="numberSuffix" name="numberOfDigits" class="form-control" data-ng-model="reportFolder.numberOfDigits" data-convert-to-number>
-					<option value="2"> 99</option>
-					<option value="3"> 999</option>
-					<option value="4" > 9999</option>
-				</select>
 			</div>
 		</div>
 
@@ -116,31 +92,31 @@
 		<div id="form-group-benefits" class="form-group"  data-ng-show="isProjectSection(0)">
 				<div class="col-sm-12">
 					<textarea id="contentAsString" data-redactor name="contentAsString" class="form-control" data-ng-model="reportFolder.contentAsString"
-						rows="3"></textarea>
+						rows="10"></textarea>
 				</div>
 		</div>
 		<div id="form-group-benefits" class="form-group"  data-ng-show="isProjectSection(1)">
 				<div class="col-sm-12">
 					<textarea id="benefits" data-redactor name="benefits" class="form-control" data-ng-model="reportFolder.benefits"
-						rows="3"></textarea>
+						rows="10"></textarea>
 				</div>
 		</div>
 		<div id="form-group-assumptions" class="form-group" data-ng-show="isProjectSection(2)">
 				<div class="col-sm-12">
 					<textarea id="assumptions" data-redactor name="assumptions" class="form-control" data-ng-model="reportFolder.assumptions"
-						rows="3"></textarea>
+						rows="10"></textarea>
 				</div>
 		</div>
 		<div id="form-group-deliverables" class="form-group" data-ng-show="isProjectSection(3)">
 				<div class="col-sm-12">
 					<textarea id="deliverables" data-redactor name="deliverables" class="form-control" data-ng-model="reportFolder.deliverables"
-						rows="3"></textarea>
+						rows="10"></textarea>
 				</div>
 		</div>
 		<div id="form-group-constraints" class="form-group" data-ng-show="isProjectSection(4)">
 				<div class="col-sm-12">
 					<textarea id="constraints" data-redactor name="constraints" class="form-control" data-ng-model="reportFolder.constraints"
-						rows="3"></textarea>
+						rows="10"></textarea>
 				</div>
 		</div>
 	</div><!-- col-md-8 -->

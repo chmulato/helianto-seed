@@ -29,12 +29,16 @@
 		<!-- descrição básica do projeto -->
 		<div class="col-md-8">
 	    <div class="ui-bullet">
-	        <div class="btn-icon btn-icon-round btn-icon-lg bg-primary">
-	            <i class="ti-cut"></i>
+	        <div class="size-h2 color-info" data-ng-hide="isProjectLate(folder)">
+	            <small><i class="glyphicon glyphicon-check"></i></small>
+	        </div>
+	        <div class="size-h2 color-warning" data-ng-show="isProjectLate(folder)">
+	            <small><i class="glyphicon glyphicon-alert"></i></small>
 	        </div>
 	        <div class="ui-bullet-content">
 	            <h4>{{folder.folderName}}</h4>
-	            <p data-ng-bind-html="folder.contentAsString | trustAsHtml"></p>
+	            <h6><small>{{folder.folderCode}}</small></h6>
+	            <p class="text-muted" data-ng-bind-html="folder.contentAsString | trustAsHtml"></p>
 	        </div>
 	    </div>
 		</div>
