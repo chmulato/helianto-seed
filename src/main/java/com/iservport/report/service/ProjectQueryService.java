@@ -1,6 +1,5 @@
 package com.iservport.report.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -22,7 +21,6 @@ import com.iservport.report.domain.Project;
 import com.iservport.report.repository.CategoryReportTmpRepository;
 import com.iservport.report.repository.ProjectRepository;
 import com.iservport.report.repository.ReportStatsRepository;
-import com.iservport.user.repository.UserJournalRepository;
 
 /**
  * Project query service.
@@ -37,9 +35,6 @@ public class ProjectQueryService {
 	@Inject
 	private ProjectRepository projectRepository;
 
-	@Inject
-	private UserJournalRepository userJournalRepository;
-	
 	@Inject
 	private ReportPhaseRepository reportPhaseRepository;
 	
@@ -105,6 +100,7 @@ public class ProjectQueryService {
 	/**
 	 * Projeto.
 	 * 
+	 * @param entityId
 	 * @param projectId
 	 */
 	public Project project(int entityId, Integer projectId) {
@@ -127,32 +123,9 @@ public class ProjectQueryService {
 	/**
 	 * Lista de projetos.
 	 * 
-	 * @param userId
+	 * @param entityId
+	 * @param identityId
 	 */
-//	public List<Project> projectList(int userId) {
-//		List<Project> result = null;		
-//		if (userId > 0) {
-//			boolean blnResult = true;
-//			List<SimpleCounter> listSimpleCounter = userJournalRepository.findByUser_Id(userId); 
-//			if ((listSimpleCounter != null) && (listSimpleCounter.size() > 0)) {
-//				for (SimpleCounter simpleCounter : listSimpleCounter) {
-//					if (simpleCounter.getBaseClass() != null) {
-//						int projectId = (int) simpleCounter.getBaseClass();
-//						Project project = projectRepository.findProjectByEntity_IdAndId(userId, projectId);
-//						if (project != null) {
-//							// found someone
-//							if (blnResult) {
-//								result = new ArrayList<Project>();
-//								blnResult = false;
-//							}
-//							result.add(project);
-//						}
-//					}
-//				}
-//			}
-//		}
-//		return result;
-//	}
 	public List<Project> projectList(int entityId, int identityId) {
 		return projectRepository.findByUser_Id(entityId, identityId);
 	}
