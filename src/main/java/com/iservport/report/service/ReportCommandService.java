@@ -57,43 +57,40 @@ public class ReportCommandService {
 	private static final Logger logger = LoggerFactory.getLogger(ReportCommandService.class);
 	
 	@Inject
-	protected CategoryRepository categoryRepository;
+	private CategoryRepository categoryRepository;
 
 	@Inject
-	protected ReportRepository reportRepository;
+	private ReportRepository reportRepository;
 
 	@Inject
-	protected ProjectRepository projectRepository;
+	private ProjectRepository projectRepository;
 
 	@Inject
-	protected ReportFolderRepository reportFolderRepository;
+	private ReportFolderRepository reportFolderRepository;
 	
 	@Inject
-	protected ReportStatsRepository reportStatsRepository;
+	private ReportStatsRepository reportStatsRepository;
 
 	@Inject
-	protected EntityRepository entityRepository;
+	private EntityRepository entityRepository;
 
 	@Inject 
-	protected StaffMemberTempRepository staffMemberTempRepository;
+	private StaffMemberTempRepository staffMemberTempRepository;
 
 	@Inject 
-	protected StaffMemberRepository staffMemberRepository;
-
-	@Inject 
-	protected IdentityRepository identityRepository;
+	private IdentityRepository identityRepository;
 
 	@Inject
-	protected ReportReviewTempRepository reportReviewTempRepository;  
+	private ReportReviewTempRepository reportReviewTempRepository;  
 
 	@Inject
-	protected ParticipantTempRepository participantTempRepository;
+	private ParticipantTempRepository participantTempRepository;
 
 	@Inject 
-	protected FollowUpTempRepository followUpTempRepository;
+	private FollowUpTempRepository followUpTempRepository;
 	
 	@Inject
-	protected ReportPhaseRepository reportPhaseRepository;
+	private ReportPhaseRepository reportPhaseRepository;
 	
 	//PASTA
 
@@ -228,108 +225,6 @@ public class ReportCommandService {
 	}
 	
 
-	// StaffMember
-	public Page<StaffMemberReadAdapter> listStaffMember(Integer folderId, Integer pageNumber){
-
-
-		Page<StaffMemberReadAdapter> staffMemberList = staffMemberTempRepository.findByFolderId(folderId, 
-				new PageRequest(pageNumber, 100, Direction.ASC, "identity.id"));
-
-		return staffMemberList;
-	}
-
-	/**
-	 * Cria uma instância de staffMember
-	 * @param folderId
-	 * @return
-	 */
-	public StaffMemberReadAdapter staffMemberNew(Integer folderId) {
-		ReportFolder folder = reportFolderRepository.findOne(folderId);
-		return new StaffMemberReadAdapter(new StaffMember()).build( folder, new Identity());
-	}
-
-	/**
-	 * Recupera um StaffMember baseado no Id.
-	 * @param staffMemberId
-	 * @return
-	 */
-	public StaffMemberReadAdapter staffMemberOpen(Integer staffMemberId) {
-		StaffMemberReadAdapter staffMemberReadAdapter = staffMemberTempRepository.findById(staffMemberId);
-		if (staffMemberReadAdapter!=null) {
-			return staffMemberReadAdapter;
-		}
-		throw new UnsupportedOperationException("staffMemberId required.");
-	}
-
-	/**
-	 * Atualiza.
-	 * 
-	 * @param command
-	 */
-	@Transactional
-	public StaffMemberReadAdapter staffMember(StaffMemberReadAdapter command) {
-		StaffMember target = null;
-		ReportFolder reportFolder = null;
-		Identity identity = null;
-		if (command.getId()==0) {
-			if (command.getReportFolderId()==null || command.getIdentityId()==null) {
-				throw new RuntimeException("Report Folder and identity required");
-			}
-			reportFolder = reportFolderRepository.findOne(command.getReportFolderId());
-			identity = identityRepository.findOne(command.getIdentityId());
-			if (reportFolder==null || identity ==null) {
-				throw new RuntimeException("Report Folder and identity required");
-			}
-
-			target = new StaffMember(reportFolder, identity);
-
-			Integer existing 
-			= 		staffMemberTempRepository.findByReportFolderIdAndIdentityId(reportFolder.getId(), identity.getId());
-			if (existing!=null)  {
-				throw new RuntimeException("StaffMember not unique.");
-			}
-
-		}
-		else {
-			target = staffMemberRepository.findOne(command.getId());
-		}
-		System.err.println(reportFolder.getId()+"; "+ identity.getId());
-		System.out.println(target.getReportFolder().getId()+"; "+target.getIdentity().getId());
-		System.err.println("target    "+target.getId());
-		target = staffMemberRepository.saveAndFlush(target);
-		return staffMemberTempRepository.findById(target.getId());
-	}
-
-	
-	public String staffMemberDelete(Integer staffMemberId) {
-			//TODO id direto deu erro pq? erro: java.lang.IllegalArgumentException: Not an entity:class java.lang.Integer
-//			at org.hibernate.ejb.AbstractEntityManagerImpl.contains(AbstractEntityManagerImpl.java:924)
-//			at sun.reflect.NativeMethodAccessorImpl.invoke
-			//staffMemberTempRepository.delete(staffMemberId);
-			StaffMember member = staffMemberRepository.findOne(staffMemberId);
-			if (member!=null) {
-				try {
-					staffMemberTempRepository.delete(member);	
-				} catch (Exception e) {
-					throw new RuntimeException("STAFF_MEMBER_CANNOT_DELETE");	
-				}
-			}else{
-				throw new RuntimeException("STAFF_MEMBER_NOT_FOUND");	
-			}			
-			return "{\"deleted\":true}";
-	}
-
-/**	public  class DeleteClassException extends RuntimeException{
-		/**
-		 * 
-		 */
-/**		private static final long serialVersionUID = 1L;
-		public DeleteClassException(int id, String errorMessage, int errorCode) {
-			super(id, errorMessage, errorCode);
-		}		
-	}
-**/
-	
 	//reportPhase
 	
 		/**

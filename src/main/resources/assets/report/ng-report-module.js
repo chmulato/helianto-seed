@@ -437,7 +437,7 @@
 		$scope.deleteMember = function(id) {
 			resources.resource.remove({method:'staff', targetId: id}).$promise.then(
 			function(data) {
-				$("#modalBody").modal('hide');
+				$("#deleteStaffModal").modal('hide');
 				$scope.listStaffMembers($scope.folderValue);
 			});
 		};

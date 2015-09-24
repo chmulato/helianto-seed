@@ -21,7 +21,7 @@
 			<div class="h4 pull-right">
 				<a data-ng-show="isSectionTabSet(-1)" data-ng-click="newReportFolder();clearReportFolder()" data-ng-hide="isExported(qualifier.entityId)" class="btn btn-danger">
 					Novo projeto</a>
-				<a data-ng-show="isSectionTabSet(0)" data-ng-click="newPhase(reportFolder.id)" data-ng-hide="isExported(reportFolder.exporterId)" class="btn btn-danger">
+				<a data-ng-show="isSectionTabSet(0)" data-ng-click="newReportPhase(reportFolder.id)" data-ng-hide="isExported(reportFolder.exporterId)" class="btn btn-danger">
 					Nova fase</a>
 				<a data-ng-show="isSectionTabSet(1)" data-ng-click="newReport(reportFolder.id)" data-ng-hide="isExported(reportFolder.exporterId)" class="btn btn-danger">
 					Nova tarefa</a>

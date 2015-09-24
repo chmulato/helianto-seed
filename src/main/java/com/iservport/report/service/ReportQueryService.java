@@ -6,24 +6,10 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.helianto.core.def.CategoryGroup;
-import org.helianto.core.internal.QualifierAdapter;
-import org.helianto.core.internal.SimpleCounter;
-import org.helianto.core.repository.CategoryReadAdapter;
-import org.helianto.core.repository.CategoryRepository;
-import org.helianto.core.repository.EntityRepository;
-import org.helianto.core.repository.IdentityRepository;
-import org.helianto.security.internal.UserAuthentication;
-import org.helianto.task.repository.FolderReadAdapter;
 import org.helianto.task.repository.ReportAdapter;
-import org.helianto.task.repository.ReportFolderRepository;
 import org.helianto.task.repository.ReportPhaseAdapter;
 import org.helianto.task.repository.ReportPhaseRepository;
 import org.helianto.task.repository.ReportRepository;
-import org.helianto.user.domain.User;
-import org.helianto.user.repository.UserRepository;
-import org.helianto.user.service.UserQueryService;
-import org.joda.time.DateMidnight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -32,12 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import com.iservport.report.repository.CategoryReportTmpRepository;
 import com.iservport.report.repository.ReportReviewReadAdapter;
 import com.iservport.report.repository.ReportReviewTempRepository;
-import com.iservport.report.repository.ReportStatsRepository;
-import com.iservport.report.repository.StaffMemberReadAdapter;
-import com.iservport.report.repository.StaffMemberTempRepository;
 
 /**
  * Report query service.
@@ -50,31 +32,13 @@ public class ReportQueryService {
 	private static final Logger logger = LoggerFactory.getLogger(ReportQueryService.class);
 	
 	@Inject
-	protected ReportFolderRepository reportFolderRepository;
-
-	@Inject
-	protected ReportRepository reportRepository;
+	private ReportRepository reportRepository;
 	
 	@Inject
-	protected EntityRepository entityRepository;
+	private ReportPhaseRepository reportPhaseRepository;
 	
 	@Inject
-	protected UserRepository userRepository;
-	
-	@Inject
-	protected IdentityRepository identityRepository;
-	
-	@Inject
-	protected ReportPhaseRepository reportPhaseRepository;
-	
-	@Inject 
-	protected StaffMemberTempRepository staffMemberTempRepository;
-	
-	@Inject 
-	private UserQueryService userQueryService;
-
-	@Inject
-	protected ReportReviewTempRepository reportReviewTempRepository;  
+	private ReportReviewTempRepository reportReviewTempRepository;  
 
 	/**
 	 * Lista relatórios de uma pasta.
@@ -134,32 +98,6 @@ public class ReportQueryService {
 		return reportPhaseRepository.findByReportFolderId(reportFolderId);
 	}
 	
-	public Page<StaffMemberReadAdapter> staffMemberList(Integer folderId, Integer pageNumber) {
-		Pageable page = new PageRequest(pageNumber, 100, Direction.ASC, "identity.displayName", "identity.personalData.firstName");
-		return staffMemberTempRepository.findByFolderId(folderId, page );
-	}
-
-	public List<User> getUserList(UserAuthentication userAuthentication) {
-		return userQueryService.userList(userAuthentication.getEntityId(), 'G', "A", 0, 1000).getContent();
-	}
-
-	public StaffMemberReadAdapter staffMemberOpen(Integer staffMemberId) {
-		return staffMemberTempRepository.findById(staffMemberId);
-
-	}
-	
-	public List<User> getUserListSearch(UserAuthentication userAuthentication, String searchString, Integer searchFolderId) {
-		List<Integer> exclusions = staffMemberTempRepository.findIdentityIdsByReportFolderOnStaffMember(searchFolderId);
-		// não há exclusões
-		exclusions.add(0);
-		Pageable page = new PageRequest(0, 1000, Direction.ASC, "userName", "userKey");
-		Page<User> userList = 
-				userRepository.searchByParentUserType(userAuthentication.getEntityId(), exclusions
-				, searchString, 'A', "A".toCharArray(), page);
-		
-		return userList.getContent();
-	}
-
 	/**
 	 * Listar monitoramento.
 	 * 
