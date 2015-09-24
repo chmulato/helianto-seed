@@ -117,9 +117,8 @@ public class ReportStaffController {
 	/**
 	 * Atualizar membro da equipe.
 	 *
-	 * PUT 	/api/report/staffMember
+	 * PUT 	/api/report/staff
 	 */
-	
 	@RequestMapping(method=RequestMethod.PUT, consumes="application/json")
 	public StaffMemberReadAdapter staffMember(@RequestBody StaffMemberReadAdapter command) {
 		return reportCommandService.staffMember(command);

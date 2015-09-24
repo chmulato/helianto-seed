@@ -275,7 +275,7 @@
 			}
 			resources.resource.get({folderId:folderValue, pageNumber: page, phases:$scope.phaseLiterals}).$promise.then(function(data) {
 				$scope.reportList = data;
-				if (data.content.length>1) {
+				if (angular.isDefined(data.content) && data.content.length>1) {
 					$scope.reports = data.content;
 				}
 			})
@@ -386,7 +386,7 @@
 		$scope.folderId =0;
 		$scope.listStaffMembers = function(folderId) {
 			$scope.folderId = folderId;
-			resources.resource.get({method:'staffMember', folderId: folderId}).$promise.then(
+			resources.resource.get({method:'staff', folderId: folderId}).$promise.then(
 			function(data) {
 				$scope.staffMemberList = data;
 				$scope.staffMembers = data.content;
@@ -394,7 +394,7 @@
 		};
 		$scope.getStaffMember = function(staffMemberId) {
 			$scope.message= [];
-			resources.resource.get({method:'staffMember', staffMemberId: staffMemberId}).$promise.then(
+			resources.resource.get({method:'staff', staffMemberId: staffMemberId}).$promise.then(
 			function(data) {
 				$scope.staffMember = data;
 				$scope.setStaffMember(data);
@@ -402,30 +402,40 @@
 		};
 		$scope.setStaffMember = function(staffMember) {
 		};
-		$scope.newStaffMember = function() {
-			$scope.staffMember = resources.resource.create({method:'staffMember', folderId: $scope.folderValue}, null).$promise.then(
+		$scope.newStaffMember = function(identityId) {
+			resources.resource.create({method:'staff', folderId: $scope.folderValue}, null).$promise.then(
 			function(data) {
 				$scope.staffMember = data;
 				$scope.setStaffMember(data);
+				
+//				$scope.staffMember = data;
+				console.log($scope.staffMember);
+				console.log(identityId);
+				$scope.staffMember.identityId = identityId;
+				console.log($scope.staffMember);
+//				$scope.updateStaffMember();
+				$scope.valueOnTypeAhead = "";
+				$scope.identityMember = {"userId" : -1};
+
 				$scope.openForm('staff-member');
 			});
 		};
 		$scope.memberToDelete = function(id) {	
 			$scope.message=[];
-			resources.resource.get({method:'staffMember', staffMemberId: id}).$promise.then(
+			resources.resource.get({method:'staff', staffMemberId: id}).$promise.then(
 			function(data) {
 				$scope.member = data;
 			});
 		};
 		$scope.updateStaffMember = function() {
-			resources.resource.save({method:'staffMember'}, $scope.staffMember).$promise.then(
+			resources.resource.save({method:'staff'}, $scope.staffMember).$promise.then(
 			function(data, getReponseHeaders) {
 				$scope.staffMember = data;
 				$("#modalBody").modal('hide');
 			});
 		};
 		$scope.deleteMember = function(id) {
-			resources.resource.remove({method:'staffMember', targetId: id}).$promise.then(
+			resources.resource.remove({method:'staff', targetId: id}).$promise.then(
 			function(data) {
 				$("#modalBody").modal('hide');
 				$scope.listStaffMembers($scope.folderValue);
@@ -435,7 +445,7 @@
 		 * Chamada de pesquisa de usuário para typeAhead
 		 */		
 		$scope.getStaffMembers = function(val){
-			return $scope.userList = resources.resource.query({method:'staffMember', users: true, search:val, searchFolderId: $scope.folderValue})
+			return $scope.userList = resources.resource.query({method:'staff', users: true, search:val, searchFolderId: $scope.folderValue})
 			.$promise.then(function(response) {
 				var items = response.map(function(e) {
 					if(e.userName==null || e.userName.length <=0){
@@ -451,17 +461,20 @@
 		 * Users.
 		 */
 		$scope.users = function(){
-			$scope.userList = resources.resource.query({method:'staffMember', users: true});
+			$scope.userList = resources.resource.query({method:'staff', users: true});
 		}
 		$scope.users();
 		
 		$scope.getUser = function(id){
-			return resources.resource.get({method:'staffMember', users: true, userId: id});
+			return resources.resource.get({method:'staff', users: true, userId: id});
 		}
 		$scope.identityMember = {"userId" : -1};
 		
 		$scope.onSelect = function ($item, $model, $label) {
 			$scope.identityMember  = $item;
+		};
+		$scope.showStaffAddButton = function() {
+			return ($scope.identityMember.identityId>0 );
 		};
 		$scope.confirmStaffMember = function(identityId){
 			$scope.newStaffMember().$promise.then(function(data) {
@@ -476,9 +489,6 @@
 			});
 			
 		}
-		
-		
-		
 		
 		/**
 		 * Review
