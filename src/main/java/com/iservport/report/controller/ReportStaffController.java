@@ -104,15 +104,15 @@ public class ReportStaffController {
 	}
 	
 	/**
-	 * Pesquisa usuários.
+	 * Pesquisa usuários que ainda não estão no projeto como membros.
 	 * 
 	 * @param userAuthentication
 	 * @param search
 	 * @param searchFolderId
 	 */
-	@RequestMapping(method=RequestMethod.GET, params={"users", "search", "searchFolderId"})
-	public List<User> getUserList(UserAuthentication userAuthentication, @RequestParam String search, @RequestParam Integer searchFolderId) {
-		return reportStaffQueryService.getUserListSearch(userAuthentication, search, searchFolderId);
+	@RequestMapping(method=RequestMethod.GET, params={"searchUser", "searchFolderId"})
+	public List<User> searchRemainingUsers(UserAuthentication userAuthentication, @RequestParam String searchUser, @RequestParam Integer searchFolderId) {
+		return reportStaffQueryService.searchRemainingUsers(userAuthentication.getEntityId(), searchUser, searchFolderId);
 	}
 	
 	/**

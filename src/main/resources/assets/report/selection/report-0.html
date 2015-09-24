@@ -58,7 +58,7 @@
 			<div class="input-group">
 				<input id="member" type="text" required="required" 
 					name="member" data-ng-model="valueOnTypeAhead"
-					data-typeahead="member.identityName for member in getStaffMembers($viewValue)"
+					data-typeahead="member.userName for member in searchRemainingUsers($viewValue)"
 					data-typeahead-loading="loadingMembers"
 					data-typeahead-on-select='onSelect($item, $model, $label)'
 					placeholder="Digite o Nome ou email"

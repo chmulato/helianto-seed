@@ -61,17 +61,17 @@ public class ReportStaffQueryService {
 	/**
 	 * Search users.
 	 * 
-	 * @param userAuthentication
+	 * @param entityId
 	 * @param searchString
 	 * @param searchFolderId
 	 */
-	public List<User> getUserListSearch(UserAuthentication userAuthentication, String searchString, Integer searchFolderId) {
+	public List<User> searchRemainingUsers(int entityId, String searchString, Integer searchFolderId) {
 		List<Integer> exclusions = staffMemberRepository.findIdentityIdsByReportFolderOnStaffMember(searchFolderId);
 		// não há exclusões
 		exclusions.add(0);
 		Pageable page = new PageRequest(0, 1000, Direction.ASC, "userName", "userKey");
 		Page<User> userList = 
-				userRepository.searchByParentUserType(userAuthentication.getEntityId(), exclusions
+				userRepository.searchByParentUserType(entityId, exclusions
 				, searchString, 'A', "A".toCharArray(), page);
 		return userList.getContent();
 	}

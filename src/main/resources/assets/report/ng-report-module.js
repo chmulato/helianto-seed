@@ -444,8 +444,8 @@
 		/**
 		 * Chamada de pesquisa de usuário para typeAhead
 		 */		
-		$scope.getStaffMembers = function(val){
-			return $scope.userList = resources.resource.query({method:'staff', users: true, search:val, searchFolderId: $scope.folderValue})
+		$scope.searchRemainingUsers = function(searchUser){
+			return $scope.userList = resources.resource.query({method:'staff', searchUser:searchUser, searchFolderId: $scope.folderValue})
 			.$promise.then(function(response) {
 				var items = response.map(function(e) {
 					if(e.userName==null || e.userName.length <=0){
@@ -456,6 +456,9 @@
 				return items;
 			});
 		}
+		$scope.onSelect = function ($item, $model, $label) {
+			$scope.identityMember  = $item;
+		};
 		
 		/**
 		 * Users.
@@ -470,9 +473,6 @@
 		}
 		$scope.identityMember = {"userId" : -1};
 		
-		$scope.onSelect = function ($item, $model, $label) {
-			$scope.identityMember  = $item;
-		};
 		$scope.showStaffAddButton = function() {
 			return ($scope.identityMember.identityId>0 );
 		};
