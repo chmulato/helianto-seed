@@ -1,5 +1,6 @@
 package com.iservport.home.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,15 +10,17 @@ import org.helianto.core.domain.City;
 import org.helianto.core.domain.Country;
 import org.helianto.core.domain.Entity;
 import org.helianto.core.domain.Identity;
+import org.helianto.core.domain.KeyType;
 import org.helianto.core.domain.Operator;
 import org.helianto.core.domain.State;
 import org.helianto.core.repository.CityRepository;
 import org.helianto.core.repository.CountryRepository;
 import org.helianto.core.repository.IdentityRepository;
+import org.helianto.core.repository.KeyTypeRepository;
 import org.helianto.core.repository.OperatorRepository;
 import org.helianto.core.repository.StateRepository;
 import org.helianto.install.service.AbstractEntityInstallStrategy;
-import org.helianto.install.service.EntityInstallService;
+import com.iservport.home.controller.LocalEntityInstallService;
 import org.helianto.install.service.UserInstallService;
 import org.helianto.user.domain.User;
 import org.slf4j.Logger;
@@ -28,6 +31,11 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 /**
  * Entity prototype generation.
@@ -55,6 +63,8 @@ public class EntityByPrincipalInstallStrategy
 	
     private static  final String INITIAL_SECRET = "123rooT#";
     
+	private static final String KEY_TYPE_PATH_FILE = "/META-INF/data/keyType/";
+	
     protected String contextDataPath;
     
 	@Inject
@@ -91,7 +101,13 @@ public class EntityByPrincipalInstallStrategy
 	private  UserInstallService userInstallService;
 	
 	@Inject
-	private EntityInstallService entityInstallService;
+	private LocalEntityInstallService entityInstallService;
+	
+	@Inject
+	private ObjectMapper mapper;
+	
+	@Inject
+	private KeyTypeRepository keyTypeRepository;
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -106,6 +122,7 @@ public class EntityByPrincipalInstallStrategy
 			Country country = installCountries(context);
 			City city = installStatesAndCities(context, country);
 			runOnce(context, city);
+			createKeyTypes(context);
 		}
 	}
 	
@@ -138,8 +155,8 @@ public class EntityByPrincipalInstallStrategy
 	 */
 	protected City installStatesAndCities(Operator context, Country country) {
 		String stateFile = env.getProperty("helianto.stateFile", DEFAULT_STATE_FILE);
-		String rootEntityStateCode = env.getRequiredProperty("rootEntityStateCode");
-		String rootEntityCityCode = env.getRequiredProperty("rootEntityCityCode");
+		String rootEntityStateCode = env.getRequiredProperty("helianto.rootEntityStateCode");
+		String rootEntityCityCode = env.getRequiredProperty("helianto.rootEntityCityCode");
 		
 		if (country==null) {
 			throw new IllegalArgumentException("Please, provide required country to allow for default city resolution.");
@@ -168,7 +185,7 @@ public class EntityByPrincipalInstallStrategy
 			logger.info("Error saving cities.");	
 		}
 		
-		City city = cityRepository.findByContextAndCityCode(context, rootEntityStateCode);
+		City city = cityRepository.findByContextAndCityCode(context, rootEntityCityCode);
 		if(city==null){
 			throw new IllegalArgumentException("Please, provide required data to allow for default city resolution.");
 		}
@@ -192,17 +209,15 @@ public class EntityByPrincipalInstallStrategy
 	protected void runOnce(Operator context, City rootCity) {
 		String rootEntityAlias = env.getProperty("helianto.rootEntityAlias", DEFAULT_CONTEXT_NAME);
 		String rootPrincipal = env.getRequiredProperty("helianto.rootPrincipal");
-		String noReplyEmail = env.getProperty("helianto.noReplyEmail", rootPrincipal);
 		String rootFirstName = env.getRequiredProperty("helianto.rootFirstName");
 		String rootLastName = env.getRequiredProperty("helianto.rootLastName");
 		String rootDisplayName = env.getProperty("helianto.rootDisplayName", rootFirstName);
-		String initialSecret = env.getProperty("iservport.initialSecret", INITIAL_SECRET);
-		String rootEntityStateCode = env.getRequiredProperty("rootEntityStateCode");
+		String initialSecret = env.getProperty("helianto.initialSecret", INITIAL_SECRET);
 		
 		// Root entity
 		Entity rootEntity = new Entity(context, rootEntityAlias);
 		rootEntity.setCity(rootCity);
-		rootEntity = entityInstallService.installEntity(rootEntity);
+		rootEntity = entityInstallService.installEntity(context, rootEntity);
 		Identity rootIdentity = identityRepository.findByPrincipal(rootPrincipal);
 		if(rootIdentity==null){
 			rootIdentity= new Identity(rootPrincipal);
@@ -222,15 +237,50 @@ public class EntityByPrincipalInstallStrategy
 	protected void runAfterInstall(Operator context, Entity rootEntity, User rootUser) {
 	}
 	
-	@Override
 	public List<Entity> generateEntityPrototypes(Object... params) {
 		if (params!=null && params.length>0 && params[0] instanceof Identity) {
 			Identity identity = (Identity) params[0];
 			List<Entity> entityList = new ArrayList<>();
-			entityList.add(createPrototype(identity.getPrincipal(), identity.getIdentityName(), 'F'));		
+			entityList.add(createPrototype(identity.getOptionalSourceAlias(), "", 'C'));
 			return entityList;
-		}	
-		throw new IllegalArgumentException("Identity required.");
+		}
+		throw new IllegalArgumentException("SignupForm required.");
+
 	}
+
+	public void createKeyTypes(Operator context) throws JsonParseException, JsonMappingException, IOException{
+		logger.debug("Creating Key types for {}.", context);
+		ClassPathResource resource =  new ClassPathResource(KEY_TYPE_PATH_FILE+"keyTypes.json");
+		ArrayList<KeyType> user = 
+				mapper.readValue(resource.getFile(), TypeFactory.defaultInstance().constructCollectionType(List.class,  
+				KeyType.class));
+			if(context!=null){
+			for (KeyType keyType : user) {
+				logger.debug("Search ketType to context {} with keyCode {}.", context, keyType.getKeyCode());
+				KeyType exists = keyTypeRepository.findByOperatorAndKeyCode(context, keyType.getKeyCode());
+				//update
+				if(exists!=null){
+					exists.setKeyCode(keyType.getKeyCode());
+					exists.setKeyGroup(keyType.getKeyGroup());
+					exists.setKeyName(keyType.getKeyName());
+					exists.setPurpose(keyType.getPurpose());
+					exists.setSynonyms(keyType.getSynonyms());
+					keyTypeRepository.saveAndFlush(exists);
+					logger.debug("update ketType to context {} with keyCode {} to {} .", context, exists.getKeyCode(), keyType);
+				}
+				//save
+				else{
+					keyType.setOperator(context);
+					keyType = keyTypeRepository.saveAndFlush(keyType);
+					logger.debug("saved ketType  {} .", keyType);
+
+				}
+			}
+		}else{
+			//TODO create?
+		}
+		
+	}
+
 
 }
