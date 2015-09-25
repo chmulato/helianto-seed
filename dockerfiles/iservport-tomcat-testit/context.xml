@@ -33,8 +33,6 @@
     
     <Parameter name="facebook.appSecret" value="xxx" override="false"/>
     
-    <Parameter name="iservport.defaultContextName" value="ISERVPORT" override="false"/>
-    
   <Parameter name="helianto.sendgrid.user" value="iservport" override="false"/>   
     
   <Parameter name="helianto.sendgrid.password" value="xxx" override="false"/>
