@@ -1,0 +1,13 @@
+sudo docker run --name iservport-mysql -v /var/lib/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=prime321 -d mysql:5.6.26
+
+sudo docker run -d -p 8080:8080 --link iservport-mysql:mysql --name iservport-testit -v /home/prime/webapps:/usr/local/tomcat/webapps iservport/iservport-tomcat-testit
+
+#local
+
+docker run --name iservport-mysql -v /usr/local/mysql/data/:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=helianto -d mysql:5.6.26
+
+docker run -d -p 9090:8080 --link iservport-mysql:mysql --name iservport-testit -v /Users/mauriciofernandesdecastro/workspace/iservport-testit/dist:/usr/local/tomcat/webapps iservport/iservport-tomcat-testit
+
+docker exec -i -t iservport-mysql mysql -u helianto -p"helianto"
+
+docker exec -i -t iservport-testit bash
