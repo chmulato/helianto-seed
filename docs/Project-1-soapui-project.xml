@@ -24,11 +24,55 @@
                   <!--Optional:-->
                   <justificativa>?</justificativa>
                </intervalos>
-               <chp>?</chp>
-               <ht>?</ht>
-               <htn>?</htn>
-               <hnt>?</hnt>
-               <hi>?</hi>
+               <chp>1</chp>
+               <ht>1</ht>
+               <htn>1</htn>
+               <hnt>1</hnt>
+               <hi>1</hi>
+               <faltas>?</faltas>
+               <!--Zero or more repetitions:-->
+               <extras>
+                  <banco>?</banco>
+                  <minutes>?</minutes>
+                  <noturno>?</noturno>
+                  <percentual>?</percentual>
+               </extras>
+               <!--Optional:-->
+               <dsr>
+                  <!--Optional:-->
+                  <modo>?</modo>
+                  <valor>?</valor>
+               </dsr>
+               <banco>?</banco>
+               <bancoAuto>?</bancoAuto>
+               <!--Optional:-->
+               <justParcial>
+                  <!--Optional:-->
+                  <descricao>?</descricao>
+                  <minutes>?</minutes>
+                  <!--Optional:-->
+                  <tipo>?</tipo>
+               </justParcial>
+            </itens>
+            <itens>
+               <!--Optional:-->
+               <data>?</data>
+               <!--Zero or more repetitions:-->
+               <intervalos>
+                  <!--Optional:-->
+                  <dataHora>?</dataHora>
+                  <!--Optional:-->
+                  <rep>?</rep>
+                  <!--Optional:-->
+                  <tipo>?</tipo>
+                  <!--Optional:-->
+                  <justificativa>?</justificativa>
+               </intervalos>
+               <chp>1</chp>
+               <ht>1</ht>
+               <htn>1</htn>
+               <hnt>1</hnt>
+               <hi>10</hi>
                <faltas>?</faltas>
                <!--Zero or more repetitions:-->
                <extras>

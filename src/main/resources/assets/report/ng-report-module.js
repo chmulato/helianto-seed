@@ -403,8 +403,8 @@
 //				$scope.updateStaffMember();
 				$scope.valueOnTypeAhead = "";
 				$scope.identityMember = {"userId" : -1};
-
-				$scope.openForm('staff-member');
+				$scope.updateStaffMember();
+//				$scope.openForm('staff-member');
 			});
 		};
 		$scope.updateStaffMember = function() {
