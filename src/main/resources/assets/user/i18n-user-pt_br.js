@@ -30,7 +30,7 @@ value('lang', {
 	
 	IDENTITY_TYPE:'O e-mail é',
 	IDENTITY_TYPE_NOT_ADDRESSABLE:'Somente para identificação',
-	IDENTITY_TYPE_ORGANIZATIONL_EMAIL:'Fornecido pela organização',
+	IDENTITY_TYPE_ORGANIZATIONAL_EMAIL:'Fornecido pela organização',
 	IDENTITY_TYPE_PERSONAL_EMAIL:'Pessoal',
 //	gender
 	IDENTITY_GENDER:'Gênero',
