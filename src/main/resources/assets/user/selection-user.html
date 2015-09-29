@@ -32,20 +32,22 @@
 		
 		</div>
 		<div class="col-md-4 col-xs-12">
-		<table class="table table-hover">
-		  <tbody>
-		    <tr data-ng-class="{active: userItem.id==user.id}" 
-		    	data-ng-click="getUser(userItem.id)"
-	 			data-ng-repeat="userItem in userList.content" >
-		      <td class="h4" style="min-width:72px; width: 72px;">
-		          <img class="media-object img-circle" style="width:45px" data-ng-src="{{userItem.userImageUrl}}" data-err-src="/images/user/gender64-N.png">
-		      </td>
-		      <td >{{userItem.userKey}}
-		        <h5>{{userItem.displayName.length>0?userItem.displayName:userItem.userName}}</h5>
-		      </td>
-		    </tr>
-		  </tbody>
-		</table>
+		<div class="panel panel-profile">
+            <div class="panel-heading bg-danger clearfix">
+                <a href="" class="pull-left profile">
+                	<img class="img-circle img80_80" data-ng-src="{{userItem.userImageUrl}}" data-err-src="/images/user/gender64-N.png">
+                </a>
+                <h3 class="ng-binding">{{userItem.displayName.length>0?userItem.displayName:userItem.userName}}</h3>
+                <p>{{userItem.userKey}}</p>
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span class="badge">14</span>
+                    <i class="ti-email"></i>
+                    Cras justo odio
+                </li>
+            </ul>
+      </div>
 		</div>
 		<div class="col-md-8 col-xs-12">
 		<table class="table">

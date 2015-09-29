@@ -5,9 +5,11 @@ import org.helianto.install.service.EntityInstallStrategy;
 import org.helianto.network.service.RootQueryService;
 import org.helianto.seed.AbstractRootContextConfig;
 import org.helianto.user.service.UserQueryService;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -34,6 +36,7 @@ import com.iservport.install.strategy.EntityByDomainInstallStrategy;
 		basePackages={
 				"com.iservport.*.repository", "org.helianto.*.repository"
 		})
+@PropertySource("classpath:/META-INF/app.properties")
 public class RootContextConfig extends AbstractRootContextConfig {
 
 	/**
@@ -54,6 +57,7 @@ public class RootContextConfig extends AbstractRootContextConfig {
 	}
 	
 	@Override
+	@Bean
 	public EntityInstallStrategy entityInstallStrategy() {
 		return new EntityByDomainInstallStrategy();
 	}

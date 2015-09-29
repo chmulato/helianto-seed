@@ -52,9 +52,10 @@
 		 */
 		$scope.user = {};
 		$scope.userId = 0;
-		$scope.listUsers = function(value, pageNumber) {
+		$scope.listUsers = function(userType, pageNumber) {
+			$scope.userType = userType;
 			$scope.userList = resources.user.get(
-				{userType: value, userStates: $scope.userStates, pageNumber: pageNumber, itemsPerPage: $scope.itemsPerPage})
+				{userType: userType, userStates: $scope.userStates, pageNumber: pageNumber, itemsPerPage: $scope.itemsPerPage})
 			$scope.userList.$promise.then(function(data) {
 				if (data.content.length>0) {
 					if ($scope.userId === 0  && externalId==0) {
@@ -85,9 +86,6 @@
 		
 		$scope.newUser = function(){
 			$scope.openForm('user-new');	
-		};
-		$scope.updateUser = function() {
-			console.log($scope.identity);
 		};
 		/**
 		 * Procura usuário antes de criar um novo.
@@ -148,6 +146,7 @@
 			$scope.identity.$promise.then(function(data) {
 				if(data.id>0){
 					$("#modalBody").modal('hide');	
+					$scope.listUsers($scope.userType, 1);
 					$scope.myIdentity= false;
 				}
 			});
