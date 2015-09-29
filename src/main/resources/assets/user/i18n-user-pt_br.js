@@ -15,6 +15,7 @@ value('lang', {
 	
 	NEW_PERSON:'Nova pessoa',
 	PERSONAL_DATA_FOR:'Dados pessoais para ',
+	USER_DATA_FOR:'Dados do usuário para ',
 	SEARCH:'Procurar e-mail',
 	SEARCH_ALERT:'Antes de cadastrar um novo usuário, é preciso verificar se o e-mail já foi utilizado previamente.',
 	SEARCH_ALERT_EXISTS:'Usuário existente!',

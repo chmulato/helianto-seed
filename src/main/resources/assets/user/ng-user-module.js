@@ -60,7 +60,7 @@
 				if (data.content.length>0) {
 					if ($scope.userId === 0  && externalId==0) {
 						$scope.user = data.content[0];
-						$scope.userId = user.id;
+						$scope.setUser($scope.user);
 					}
 				}
 			})
@@ -73,15 +73,16 @@
 			$scope.itemsPerPage = value;
 		    $scope.listUsers($scope.qualifierValue, 1);
 		}
-		$scope.getUser = function(value) {
-			$scope.user = resources.user.get(
-				{userId: value});
-			$scope.user.$promise.then(function(data) {
-				if (data.length>0) {
-					$scope.user = data;
-					$scope.userId = user.id;
-				}
-			})
+		$scope.setUser = function(user) {
+			$scope.userId = $scope.user.id;
+		}
+		$scope.getUser = function(userId) {
+			resources.resource.get({userId: userId}).$promise.then(
+			function(data) {
+				$scope.user = data;
+				$scope.setUser($scope.user);
+				$scope.openForm('user');
+			});
 		}
 		
 		$scope.newUser = function(){
@@ -115,6 +116,7 @@
 						$scope.openForm('identity');	
 					}
 				}
+				$scope.search = "";
 				console.log(data);
 			});
 		};
