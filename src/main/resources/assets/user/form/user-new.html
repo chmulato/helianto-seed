@@ -7,9 +7,6 @@
 	<form  class="form-horizontal" role="form" data-ng-submit="userSearch()">
 	
 		<div class="row" >
-			<div class="col-md-12" data-ng-show="searchDetails.identityId!=-1"> 
-				<div class="alert alert-danger" role="alert" data-ng-show="searchDetails.cannotCreate"> O usuário {{searchDetails.userName}} já existe</div>
-			</div>
 			
 			<div class="col-md-8" >
 			
@@ -27,7 +24,8 @@
 					
 			</div><!-- col-md-8 -->
 			<div class="col-md-4" >
-			
+				<div  data-ng-show="searchDetails.identityId==-1" class="alert alert-info">{{'SEARCH_ALERT' | i18n}}</div>
+				<div  data-ng-hide="searchDetails.identityId==-1" class="alert alert-danger">{{'SEARCH_ALERT_EXISTS' | i18n}}</div>
 			</div><!-- col-md-4 -->
 			
 		</div><!-- row -->

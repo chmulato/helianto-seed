@@ -13,6 +13,9 @@ value('lang', {
 	NO_CONTENT_MSG :'<strong>Não há documentos!</strong> clique no botão abaixo para cadastrar um Documento',
 	
 	NEW_PERSON:'Nova pessoa',
+	SEARCH:'Procurar e-mail',
+	SEARCH_ALERT:'Antes de cadastrar um novo usuário, é preciso verificar se o e-mail já foi utilizado previamente.',
+	SEARCH_ALERT_EXISTS:'Usuário existente!',
 	
 	//geral
 	ISSUE_DATE:'Incluído em',
