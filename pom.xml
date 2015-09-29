@@ -31,10 +31,24 @@
     	<spring-social.version>1.1.0.RELEASE</spring-social.version>
     	<spring.version>4.1.7.RELEASE</spring.version>
     	<org.aspectj-version>1.8.1</org.aspectj-version>
+     	<iservport-install.version>0.0.1-SNAPSHOT</iservport-install.version>
 		<helianto.version>0.5.0-SNAPSHOT</helianto.version>
 	</properties>
 	
 	<dependencies>
+	
+		<dependency>
+   			<groupId>org.helianto</groupId>
+   			<artifactId>helianto-seed</artifactId>
+   			<version>${helianto.version}</version>
+   		</dependency>
+
+   		<dependency>
+   			<groupId>com.iservport</groupId>
+   			<artifactId>iservport-install</artifactId>
+   			<version>${iservport-install.version}</version>
+   		</dependency>
+
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
@@ -81,12 +95,6 @@
 			<version>${org.aspectj-version}</version>
 		</dependency>
 		
-		<dependency>
-   			<groupId>org.helianto</groupId>
-   			<artifactId>helianto-seed</artifactId>
-   			<version>${helianto.version}</version>
-   		</dependency>
-
 	    <dependency>
 	        <groupId>org.springframework.ws</groupId>
 	        <artifactId>spring-ws-core</artifactId>

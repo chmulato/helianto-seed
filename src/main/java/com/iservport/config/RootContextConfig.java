@@ -1,6 +1,7 @@
 package com.iservport.config;
 
 import org.helianto.core.config.HeliantoServiceConfig;
+import org.helianto.install.service.EntityInstallStrategy;
 import org.helianto.network.service.RootQueryService;
 import org.helianto.seed.AbstractRootContextConfig;
 import org.helianto.user.service.UserQueryService;
@@ -9,6 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import com.iservport.install.strategy.EntityByDomainInstallStrategy;
 
 /**
  * Configurações Java em geral.
@@ -50,5 +53,10 @@ public class RootContextConfig extends AbstractRootContextConfig {
 		return new UserQueryService(InternalUserType.values());
 	}
 	
+	@Override
+	public EntityInstallStrategy entityInstallStrategy() {
+		return new EntityByDomainInstallStrategy();
+	}
+
 }
 
