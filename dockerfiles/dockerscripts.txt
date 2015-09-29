@@ -11,3 +11,5 @@ docker run -d -p 9090:8080 --link iservport-mysql:mysql --name iservport-testit 
 docker exec -i -t iservport-mysql mysql -u helianto -p"helianto"
 
 docker exec -i -t iservport-testit bash
+
+mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '' WITH GRANT OPTION; FLUSH PRIVILEGES;"

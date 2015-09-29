@@ -8,3 +8,5 @@ release.properties
 .DS_Store
 /bin/
 dist
+.vagrant
+

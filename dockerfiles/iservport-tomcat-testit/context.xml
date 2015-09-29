@@ -5,7 +5,7 @@
 
   <Parameter name="helianto.db.driver" value="com.mysql.jdbc.Driver" override="false"/>   
     
-  <Parameter name="helianto.db.url" value="jdbc:mysql://iservport-mysql:3306/phase23?autoReconnect=true" override="false"/>   
+  <Parameter name="helianto.db.url" value="jdbc:mysql://localhost:3306/phase23?autoReconnect=true" override="false"/>   
     
   <Parameter name="helianto.db.username" value="helianto" override="false"/>   
     
