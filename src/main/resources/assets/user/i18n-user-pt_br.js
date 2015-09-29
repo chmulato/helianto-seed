@@ -1,6 +1,7 @@
 angular.module('app.services').
 value('lang', {
 	NO_CONTENT:'Não há conteúdo',
+	SAVE:'Criar usuário',
 	CLOSE:'Fechar',
 	ONE_INSTRUMENT:'Conteúdo',
 	MANY_INSTRUMENT:'@{}@ conteúdos',
@@ -13,6 +14,7 @@ value('lang', {
 	NO_CONTENT_MSG :'<strong>Não há documentos!</strong> clique no botão abaixo para cadastrar um Documento',
 	
 	NEW_PERSON:'Nova pessoa',
+	PERSONAL_DATA_FOR:'Dados pessoais para ',
 	SEARCH:'Procurar e-mail',
 	SEARCH_ALERT:'Antes de cadastrar um novo usuário, é preciso verificar se o e-mail já foi utilizado previamente.',
 	SEARCH_ALERT_EXISTS:'Usuário existente!',

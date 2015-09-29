@@ -107,10 +107,12 @@
 							$scope.identity = data;
 							$scope.identity.principal = userName;
 							$scope.identity.notification = 'A';
+							$scope.identity.identityType = 'ORGANIZATIONAL_EMAIL';
 							$scope.openForm('identity');	
 						});
+					}
 					//existe identity mas não usuário amarrá-los	
-					}else if(data.createUser){
+					else if(data.createUser){
 						$scope.identity = resources.identityResource.get({identityId: data.identityId});
 						$scope.openForm('identity');	
 					}
