@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import org.helianto.core.domain.Entity;
 import org.helianto.task.def.ReportFolderContentType;
@@ -45,8 +46,11 @@ public class Project
 	private String tools;
 	
 	@JsonIgnore
-	@OneToMany
+	@OneToMany(mappedBy="reportFolder")
 	private Set<UserJournal> userJournals;
+
+	@Transient
+    private Date checkinDate;
 	
 	/**
 	 * Default constructor.
@@ -213,6 +217,13 @@ public class Project
 		this.userJournals = userJournals;
 	 }
 
+ 	public Date getCheckinDate() {
+ 		return checkinDate;
+ 	}
+ 	public void setCheckinDate(Date checkinDate) {
+ 		this.checkinDate = checkinDate;
+ 	}
+
      /**
       * Merger.
       * 
@@ -234,6 +245,7 @@ public class Project
  		setTraceabilityItems(command.getTraceabilityItems());
  		setStartDate(command.getStartDate());
  		setEndDate(command.getEndDate());
+ 		setCheckinDate(command.getCheckinDate());
  		setVolumeTags(command.getVolumeTags());
  		setCategoryOverrideAllowed(command.isCategoryOverrideAllowed());
  		setDeliverables(command.getDeliverables());

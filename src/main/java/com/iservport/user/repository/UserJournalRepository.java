@@ -22,6 +22,19 @@ public interface UserJournalRepository extends JpaRepository<UserJournal, Serial
 	 * Find by natural key.
 	 */
 	UserJournal findByUserAndIssueDate(User user, Date issueDate);
+
+	/**
+	 * Recuperar uma lista de jornadas do usuario.
+	 * 
+	 * @param userId
+	 * @return List<UserJornal>
+	 */
+	@Query("select userJournal_ "
+			+ "from UserJournal userJournal_ "
+			+ "where userJournal_.user.id = ?1 "
+			+ "and userJournal_.userJournalType = 'PRJ_CHECK_IN' "
+			+ "order by userJournal_.issueDate DESC ")
+	List<UserJournal> findCheckinByUserAndProject(int userId);
 	
 	/**
 	 * Last user journal project check-in.

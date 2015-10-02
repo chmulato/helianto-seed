@@ -45,7 +45,7 @@ public class RootContextConfig extends AbstractRootContextConfig {
 	protected String[] getPacakgesToScan() {
 		return new String[] {"org.helianto.*.domain", "com.iservport.*.domain"};
 	}
-	
+
 	@Override
 	public RootQueryService rootQueryService() {
 		return new RootQueryService(InternalEntityType.values());
@@ -63,4 +63,3 @@ public class RootContextConfig extends AbstractRootContextConfig {
 	}
 
 }
-

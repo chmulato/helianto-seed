@@ -1,6 +1,9 @@
 package com.iservport.report.service;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -9,9 +12,14 @@ import org.helianto.core.def.CategoryGroup;
 import org.helianto.core.internal.QualifierAdapter;
 import org.helianto.core.internal.SimpleCounter;
 import org.helianto.core.repository.CategoryReadAdapter;
+import org.helianto.task.domain.ReportFolder;
 import org.helianto.task.repository.ReportPhaseAdapter;
 import org.helianto.task.repository.ReportPhaseRepository;
+import org.helianto.user.domain.User;
+import org.helianto.user.repository.UserGroupRepository;
 import org.joda.time.DateMidnight;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +30,9 @@ import com.iservport.report.domain.Project;
 import com.iservport.report.repository.CategoryReportTmpRepository;
 import com.iservport.report.repository.ProjectRepository;
 import com.iservport.report.repository.ReportStatsRepository;
-import com.iservport.report.repository.ReportTempRepository;
+import com.iservport.user.domain.UserJournal;
+import com.iservport.user.domain.UserJournalType;
+import com.iservport.user.repository.UserJournalRepository;
 
 /**
  * Project query service.
@@ -31,6 +41,8 @@ import com.iservport.report.repository.ReportTempRepository;
  */
 @Service
 public class ProjectQueryService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(ProjectQueryService.class);
 	
 	public static final int DAYS_TO_WARN = 30;
 	
@@ -44,10 +56,13 @@ public class ProjectQueryService {
 	private CategoryReportTmpRepository categoryReportTmpRepository;
 	
 	@Inject
-	private ReportTempRepository reportTempRepository;
+	private ReportStatsRepository reportStatsRepository;
 	
 	@Inject
-	private ReportStatsRepository reportStatsRepository;
+	private UserJournalRepository userJournalRepository;
+	
+	@Inject
+	protected UserGroupRepository userRepository;
 	
 	/**
 	 * Lista categorias de relatórios.
@@ -132,43 +147,10 @@ public class ProjectQueryService {
 	 * @param projects
 	 */
 	protected Page<Project> countByFolder(Page<Project> projects) {
-		List<Integer> ids = new ArrayList<>();
+		List<Integer> ids = new ArrayList<Integer>();
 		for (Project p: projects) {
 			
 		}
-		
-//		// conta relatórios exibidos na pasta
-//		List<SimpleCounter> counterList = 
-//				reportTempRepository.countByReportFolder(projects.getContent());
-//
-//		// conta relatórios exibidos iniciados na pasta
-//		List<SimpleCounter> counterListStarted = 
-//				reportTempRepository.countStartedByReportFolders(projects.getContent());
-//
-//		// conta relatórios exibidos atrasados na pasta
-//		List<SimpleCounter> counterListLate = 
-//				reportTempRepository.countLateByReportFolders(projects.getContent(), new DateMidnight().toDate());
-//		
-//		for (Project p: projects) {
-//			for (SimpleCounter s: counterList) {
-//				if (p.getId() == ((Integer) s.getBaseClass()).intValue()) {
-//					//total - usaremos countItems
-//					p.setCountItems((int) s.getItemCount());
-//				}
-//			}
-//			for (SimpleCounter s: counterListStarted) {
-//				if (p.getId() == ((Integer) s.getBaseClass()).intValue()) {
-//					//iniciados - usaremos countWarnings
-//					p.setCountWarnings((int) s.getItemCount());
-//				}
-//			}
-//			for (SimpleCounter s: counterListLate) {
-//				if (p.getId() == ((Integer) s.getBaseClass()).intValue()) {
-//					//atrasados - usaremos countAlerts
-//					p.setCountAlerts((int) s.getItemCount());
-//				}
-//			}
-//		}
 		return projects;
 
 	}
@@ -176,13 +158,113 @@ public class ProjectQueryService {
 	/**
 	 * Lista de projetos.
 	 * 
+	 * @param userId
 	 * @param entityId
 	 * @param identityId
+	 * @return List<Project> projectList
 	 */
-	public List<Project> projectList(int entityId, int identityId) {
-		return projectRepository.findByUser_Id(entityId, identityId);
+	public List<Project> projectList(int userId, int entityId, int identityId) {
+		List<Project> projectList = null;
+		if ((userId > 0) && (entityId > 0) && (identityId > 0)) {
+			projectList = projectRepository.findByUser_Id(entityId, identityId);
+			if ((projectList != null) && (projectList.size() > 0)) {
+				for(Project p : projectList) {
+					List<SimpleCounter> simpleCounterList = userJournalRepository.findByProjectCheckIn(userId);
+					if ((simpleCounterList != null) && (simpleCounterList.size() > 0)) {
+						// ordenar lista por firstCheckDate
+						Collections.sort(simpleCounterList);
+						int count = 0;
+						int total = simpleCounterList.size();
+						for (SimpleCounter simpleCounter : simpleCounterList) {
+							if (count == (total - 1)) {
+								Serializable s = simpleCounter.getBaseClass();
+								int id = (int) s;
+								if (p.getId() == id) {
+									p.setCheckinDate(simpleCounter.getFirstCheckDate());
+									break;
+								}
+							}
+							count = count + 1;
+						} // end for
+					}
+				}
+			}
+		}
+		return projectList;
 	}
 
+	/**
+	 * Persistir projeto com a data de checkin.
+	 * 
+	 * @param userId
+	 * @param project
+	 * @return Project class
+	 * 
+	 */
+	public Project projectChecked(int userId, Project project) {
+		int projectId = 0;
+		boolean blnCheckout = false;
+		Project result = null;
+		User user = null;
+		if (project == null) {
+			throw new IllegalArgumentException("Unable to persist null project.");
+		}
+		projectId = project.getId();
+		if (project.getCheckinDate() == null) {
+			throw new IllegalArgumentException("Unable to persist, checkin date of project is null.");
+		}
+		user = (User) userRepository.findOne(userId);
+		if (user == null) {
+			throw new IllegalArgumentException("Unable to persist, owner not found.");
+		}
+		logger.debug("Project checked.");
+		if (projectId == 0) {
+			result = project;
+		} else {
+			List<UserJournal> userJournalList =  userJournalRepository.findCheckinByUserAndProject(userId);
+			if ((userJournalList == null) || (userJournalList.size() == 0)) {
+				throw new IllegalArgumentException("Unable to persist, checkin project not found.");
+			} else {
+				// ordenar lista por issueDate
+				Collections.sort(userJournalList);
+				int count = 0;
+				int total = userJournalList.size();
+				for (UserJournal userJournal : userJournalList) {
+					if (userJournal.getUserJournalType() == UserJournalType.PRJ_CHECK_IN) {
+						if ((count == (total - 1)) && (userJournal.getReportFolder() != null)) {
+							saveUserJournal(userJournal);
+							blnCheckout = true;
+						}
+					}
+					count = count + 1;
+				}; // end for
+			}
+			result = projectRepository.findOne(project.getId());
+			if ((result != null) && (user != null) && (blnCheckout)) {
+				ReportFolder reportFolder = (ReportFolder) result;
+				UserJournal userJournal = new UserJournal();
+				userJournal.setUser(user);
+				userJournal.setReportFolder(reportFolder);
+				userJournal.setUserJournalType(UserJournalType.PRJ_CHECK_IN);
+				userJournal.setIssueDate(project.getCheckinDate());
+				userJournal.setVersion(Integer.valueOf(1));
+				userJournal.setJournalCode("");
+				userJournalRepository.save(userJournal);
+			}
+		}
+		return projectRepository.saveAndFlush(result.merge(project)) ;
+	}
+	
+	private void saveUserJournal(UserJournal userJournal) {
+		UserJournal userJournalSave = new UserJournal(
+				userJournal.getVersion(),
+				userJournal.getUser(),
+				new Date(),
+				UserJournalType.PRJ_CHECK_OUT, "",
+				userJournal.getReportFolder()
+		);
+		userJournalRepository.save(userJournalSave);
+	}
 	
     /**
      * Total da estimativa das fases.

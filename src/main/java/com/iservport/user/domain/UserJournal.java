@@ -23,7 +23,7 @@ import org.helianto.user.domain.User;
 @javax.persistence.Entity
 @Table(name="core_journal",
        uniqueConstraints={@UniqueConstraint(columnNames={"userId","issueDate"})})
-public class UserJournal implements Serializable {
+public class UserJournal implements Serializable, Comparable<UserJournal>  {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -60,6 +60,18 @@ public class UserJournal implements Serializable {
 		this();
 		this.user = user;
 		this.issueDate = issueDate;
+	}
+
+	public UserJournal(Integer version, User user, Date issueDate,
+			UserJournalType userJournalType, String journalCode,
+			ReportFolder reportFolder) {
+		super();
+		this.version = version;
+		this.user = user;
+		this.issueDate = issueDate;
+		this.userJournalType = userJournalType;
+		this.journalCode = journalCode;
+		this.reportFolder = reportFolder;
 	}
 
 	public int getId() {
@@ -140,5 +152,12 @@ public class UserJournal implements Serializable {
 		} else if (!user.equals(other.user))
 			return false;
 		return true;
+	}
+	
+	@Override
+	public int compareTo(UserJournal o) {
+	    if (getIssueDate() == null || o.getIssueDate() == null)
+	      return 0;
+	    return getIssueDate().compareTo(o.getIssueDate());
 	}
 }
