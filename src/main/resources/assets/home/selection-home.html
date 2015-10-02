@@ -43,7 +43,7 @@
 						   		<a>{{projeto.folderName | uppercase}}</a>
 							</div>
 					        <div class="form-group">
-					            <div class="input-group date" data-ng-if="isUserCheckedInProject(projeto.id)">
+					            <div class="input-group date" data-ng-if="isUserCheckedInProject(projeto)">
 						            <!-- Date Picker -->                
 									<input class="form-control" id="date_picker" type="date" data-ng-model="now" data-ng-bind="convertToDate(now) | date:'dd/MM/yyyy'" name="date_checkin" placeholder="dd/mm/aaaa" data-ng-required="true" />
 					                 <span class="input-group-addon">
@@ -59,16 +59,16 @@
 						</div>
 					</td>
 					<td>
-						<div data-ng-show="isUserCheckedInProject(projeto.id)">
+						<div data-ng-show="isUserCheckedInProject(projeto)">
 						  	{{projeto.startDate | date:'dd/MM/yyyy'}}
 		  				</div>
 					</td>
 					<td>
 						<div class="pull-right">
-						   <div class="input-group" data-ng-show="isUserCheckedInProject(projeto.id)">
+						   <div class="input-group" data-ng-show="isUserCheckedInProject(projeto)">
 						   		<a class="btn btn-sm btn-danger" data-ng-click="">Check-in</a>
 							</div>		    
-							<div class="pull-right" data-ng-hide="isUserCheckedInProject(projeto.id)">
+							<div class="pull-right" data-ng-hide="isUserCheckedInProject(projeto)">
 							   	<a class="btn btn-sm btn-info" data-ng-click="checkIn(projeto)">Check-out</a>
 							</div>
 						</div>
@@ -87,6 +87,11 @@
 			</div>
 			<div data-ng-show="(projetoForm.hour_checkin.$error.time)" class="alert alert-danger">
 				O campo hora deve ter o formato hh:mm.
+			</div>
+			<!--  message checkin inativo -->
+			<div data-ng-show="checkout" class="alert alert-danger">
+				Selecione um projeto para você atuar com checkin!
+
 			</div>
 			<!--  message success -->
 			<div data-ng-show="getChecked()" class="alert alert-success">

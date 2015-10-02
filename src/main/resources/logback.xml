@@ -21,7 +21,7 @@
   <logger name="org.springframework.validation" level="OFF"/>
   <logger name="org.springframework.web.servlet.config" level="OFF"/>
   <logger name="org.springframework.web.servlet.DispatcherServlet" level="OFF"/>
-  <logger name="org.springframework.web" level="ON"/>
+  <logger name="org.springframework.web" level="OFF"/>
   
   <logger name="org.hibernate" level="OFF"/>
   <logger name="org.hibernate.SQL" level="ON"/>
@@ -32,6 +32,8 @@
   <logger name="org.aopalliance" level="OFF"/>
   
   <logger name="com.iservport" level="ON"/>
+  <logger name="org.helianto.seed" level="ON"/>
+  <logger name="org.helianto.install" level="ON"/>
   
   <logger name="com.iservport.home.controller" level="DEBUG"/>
   <logger name="com.iservport.content.controller" level="DEBUG"/>

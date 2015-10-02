@@ -19,6 +19,7 @@
 		 * Lista projetos do usuário logado.
 		 */
 		$scope.checked = false;
+		$scope.checkout = false;
 		$scope.testCheckedProject = 0;
 
 		/**
@@ -26,6 +27,24 @@
 		 */
 		$scope.getChecked = function() {
 			return $scope.checked;
+		};
+
+		/**
+		 * nenhum projeto checkin ativo.
+		 */
+		$scope.getCheckout = function() {
+			var checkout = $scope.checkout;
+			var projetos = $scope.projetos;
+			if ((projetos != null) && (projetos.length > 0)) {
+				for (i = 0; i < projetos.length; i++) { 
+					if (projetos[i].checkinDate == null) {
+						checkout = true;
+					} else {
+						checkout = false;
+					}
+				}
+			}
+			$scope.checkout = checkout;
 		};
 		
 		/**
@@ -35,43 +54,30 @@
 			resources.resource.query({method:'project'}).$promise.then(
 			function(data) {
 				$scope.projetos = data;
+				console.log("recuperando lista de projetos ...")
 				if ($scope.testCheckedProject==0) {
 					$scope.testCheckedProject = data[0];
 				}
 			})
 		};
 		$scope.listProjects();
+		$scope.getCheckout();
 		$scope.getChecked();
-		
-		/**
-		 * recupera o projeto que esta em checkin.
-		 */
-		$scope.checkinDate = function(projetos) {
-			if (projetos != null) {
-				for (var i = 0; i < projetos.length; i++) {
-					var projeto = projetos[i];
-					if (projeto.checkinDate != null) {
-						console.log("value  [i] => " + i);
-						console.log("project id => " + projeto.id);
-						$scope.testCheckedProject = projeto.id;	
-					}
-				}
-			}
-		};
-		$scope.checkinDate($scope.listProjects());
-		
+
 		/**
 		 * Verdadeiro se o projeto é o atual para o usuário.
 		 */
-		$scope.isUserCheckedInProject = function(value) {
-			var id = $scope.testCheckedProject.id;
-			if (value == id) {
-				return true;
-			} else {
+		$scope.isUserCheckedInProject = function(projeto) {
+			if (projeto == null) {
 				return false;
+			} else {
+				if (projeto.checkinDate == null) {
+					return false;
+				} else {
+					return true;
+				}
 			}
 		};
-		$scope.isUserCheckedInProject($scope.testCheckedProject);
 		
 		/**
 		 * recuperar a data de agora para o checkin do projeto.
@@ -116,9 +122,36 @@
 			return day + "/" + month + "/" + year + " " + hour + ":" + minute + ":" + second;
 		};
 
-		$scope.checkIn = function(value) {
-			$scope.testCheckedProject = value;
+		$scope.setCheckinDateNull = function() {
+			var projetos = $scope.projetos;
+			if ((projetos != null) && (projetos.length > 0)) {
+				for (i = 0; i < projetos.length; i++) { 
+					projetos[i].checkinDate = null;
+				}
+				$scope.projetos = projetos;
+			}
 		};
+
+		$scope.setCheckinDateNow = function(projeto) {
+			var projetoId = projeto.id;
+			var projetos = $scope.projetos;
+			if ((projetos != null) && (projetos.length > 0)) {
+				for (i = 0; i < projetos.length; i++) { 
+					if (projetoId == projetos[i].id) {
+						projetos[i].checkinDate = $scope.now;
+					}
+				}
+				$scope.projetos = projetos;
+			}
+		};
+		
+		$scope.checkIn = function(projeto) {
+			$scope.checked = false;
+			$scope.setCheckinDateNull();
+			$scope.setCheckinDateNow(projeto);
+			$scope.testCheckedProject = projeto;
+		};
+		
 		$scope.ordenarPor = function (campo) {
 			$scope.criterioDeOrdenacao = campo;
 			$scope.direcaoDaOrdenacao = !$scope.direcaoDaOrdenacao;				
@@ -138,8 +171,10 @@
 				return 0;
 			}
 		};
-		$scope.setCheckedProject = function(project) {
-			$scope.testCheckedProject = project;
+		$scope.setCheckedProject = function(projeto) {
+			console.log("set projeto retornado");
+			$scope.testCheckedProject = projeto;
+			$scope.projetos.push(projeto);
 			$scope.listProjects();
 		};
 		$scope.updateCheckedProject = function() {
@@ -149,6 +184,7 @@
 			resources.resource.save({method:'project'}, $scope.testCheckedProject).$promise.then(
 			function(data, getReponseHeaders) {
 				console.log("data log => " + data);
+				console.log("response project id => " + data.id);
 				$scope.setCheckedProject(data);
 				$scope.checked = true;
 			});

@@ -8,11 +8,13 @@ import org.helianto.user.service.UserQueryService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.iservport.install.service.KeyTypeInstallService;
 import com.iservport.install.strategy.EntityByDomainInstallStrategy;
 
 /**
@@ -56,10 +58,16 @@ public class RootContextConfig extends AbstractRootContextConfig {
 		return new UserQueryService(InternalUserType.values());
 	}
 	
-	@Override
 	@Bean
 	public EntityInstallStrategy entityInstallStrategy() {
+		System.err.println("--------!!");
 		return new EntityByDomainInstallStrategy();
+	}
+	
+	@Bean
+	@DependsOn("entityInstallStrategy")
+	public KeyTypeInstallService keyTypeInstallService() {
+		return new KeyTypeInstallService();
 	}
 
 }
