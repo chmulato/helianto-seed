@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,7 +32,7 @@ public class SignUpController
 	extends AbstractCryptoController
 {
 
-	public static final String SIGN_UP = "/signup/";
+	public static final String SIGN_UP = "/signup";
 	
 	public static final String SIGN_UP_TEMPLATE = "security/signup";
 	
@@ -52,7 +53,9 @@ public class SignUpController
 	 * @param signup
 	 */
 	public String sendConfirmation(Signup signup) {
-		if (userConfirmationSender.send(signup.getPrincipal(), signup.getFirstName(), signup.getLastName(), "", signup.getToken())) {
+		System.err.println("Signup: " + signup.getPrincipal());
+
+		if (userConfirmationSender.send(signup.getPrincipal(), signup.getFirstName(), signup.getLastName(), "Email Confirmação", "confirmationToken", signup.getToken())) {
 			return "true";
 		}
 		return "false";
@@ -77,18 +80,40 @@ public class SignUpController
 	}
 	
 	/**
-	 * Save the lead.
+	 * Check if email exists.
 	 * 
 	 * @param model
 	 * @param principal
 	 */
-	@RequestMapping(value={"/", ""}, method=RequestMethod.GET, params="tempEmail", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value={"/", ""}, method=RequestMethod.GET, params="principal", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public String saveLead(@RequestParam String principal) {
-		if(signupService.saveLead(principal)){
+	public String verify(@RequestParam String principal) {
+		return "{\"exists\":" + !signupService.searchPrincipal(new Signup(0, principal)) + "}";
+	}
+	
+	/**
+	 * Save Lead
+	 * @param principal
+	 * @return
+	 */
+	@RequestMapping(value={"/", ""}, method=RequestMethod.POST, params="tempEmail", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String saveLead(@RequestParam String tempEmail) {
+		if(signupService.saveLead(tempEmail)){
 			return "{\"exists\": true}";
 		}
 		return "{\"exists\": false}";
+	}
+	
+
+	/**
+	 * Check if email exists.
+	 * 
+	 */
+	@RequestMapping(value={"/", ""}, method=RequestMethod.POST, params="emailChecked", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String checkMail(@RequestBody Signup form) {
+		return "{\"notExists\":" + signupService.searchPrincipal(form) + "}";
 	}
 	
 	/**
@@ -101,7 +126,6 @@ public class SignUpController
 	 */
 	@RequestMapping(value={"/", ""}, method= RequestMethod.POST)
 	public String postSignupPage(Model model, @Valid Signup signup, BindingResult error, HttpServletRequest request) {
-		
 		String ipAddress = request.getHeader("X-FORWARDED-FOR");  
 		if (ipAddress == null) {  
 			  ipAddress = request.getRemoteAddr();  
@@ -111,7 +135,8 @@ public class SignUpController
 		signup = signupService.saveSignup(signup, ipAddress);
 		boolean userExists = signupService.allUsersForIdentityAreValid(signup);
 		model.addAttribute("userExists", userExists);
-		if (!userExists) {
+
+		if (userExists) {
 			model.addAttribute("sender", env.getProperty("iservport.sender.mail"));
 			model.addAttribute("emailSent", sendConfirmation(signup));
 		}

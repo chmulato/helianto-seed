@@ -1,33 +1,37 @@
 package org.helianto.seed;
 
 import javax.inject.Inject;
-import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.helianto.core.config.HeliantoServiceConfig;
+import org.helianto.install.service.EntityInstallStrategy;
 import org.helianto.sendgrid.config.SendGridConfig;
 import org.hibernate.ejb.HibernatePersistence;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jndi.JndiObjectFactoryBean;
-import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 
 
 /**
- * Basic Java configuration.
+ * Basic Java configuration. 
  * 
  * @author mauriciofernandesdecastro
  */
 @Configuration
 @EnableWebMvc
-@Import({HeliantoServiceConfig.class, SendGridConfig.class})
+@Import({HeliantoServiceConfig.class, SendGridConfig.class, OAuth2ClientConfig.class})
 @ComponentScan(
 	basePackages = {
 		"org.helianto.*.controller"
@@ -36,12 +40,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
     basePackages={"org.helianto.*.repository"})
 public abstract class AbstractRootContextConfig extends AbstractContextConfig {
 	
-	/**
-	 * Override to set JNDI name.
-	 */
-	protected String getJndiName() {
-		return "jdbc/iservportDB";
-	}
+	private static final Logger logger = LoggerFactory.getLogger(AbstractRootContextConfig.class);
+	
+	@Inject
+	protected Environment env;
 	
 	/**
 	 * Override to set packages to scan.
@@ -50,51 +52,63 @@ public abstract class AbstractRootContextConfig extends AbstractContextConfig {
 		return new String[] {"org.helianto.*.domain"};
 	}
 	
-	@Inject
-	private DataSource dataSource;
-	
-	@Inject
-	private JpaVendorAdapter vendorAdapter;
-	
 	/**
-	 * JNDI factory.
-	 * 
-	 * @throws IllegalArgumentException
-	 * @throws NamingException
-	 */
-	@Bean
-	public Object jndiObjectFactoryBean() throws IllegalArgumentException, NamingException {
-		JndiObjectFactoryBean jndiFactory = new JndiObjectFactoryBean();
-		jndiFactory.setJndiName(getJndiName());
-		jndiFactory.setResourceRef(true);
-		jndiFactory.afterPropertiesSet();
-		return jndiFactory.getObject();
-	}
-	
-	/**
-	 * Substitui a configuração original do <code>EntityManagerFactory</code>
-	 * para incluir novos pacotes onde pesquisar por entidades persistentes.
+	 * Entity manager factory.
 	 */
 	@Bean 
 	public EntityManagerFactory entityManagerFactory() {
+		HibernateJpaVendorAdapter vendor = new HibernateJpaVendorAdapter();
+		vendor.setGenerateDdl(env.getProperty("helianto.sql.generateDdl", Boolean.class, Boolean.TRUE));
+		vendor.setDatabasePlatform(env.getProperty("helianto.db.dialect", "org.hibernate.dialect.MySQL5Dialect"));
+		DataSource dataSource = dataSource();
+		logger.info("Creating entity manager from {}", dataSource);
 		LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
 		bean.setDataSource(dataSource);
 		bean.setPackagesToScan(getPacakgesToScan());
-		bean.setJpaVendorAdapter(vendorAdapter);
+		bean.setJpaVendorAdapter(vendor);
 		bean.setPersistenceProvider(new HibernatePersistence());
 		bean.afterPropertiesSet();
         return bean.getObject();
 	}
 	
+//	/**
+//	 * Simple data source.
+//	 * 
+//	 * @throws NamingException 
+//	 * @throws IllegalArgumentException 
+//	 */
+//	@Bean
+//	public DataSource dataSource() throws IllegalArgumentException {
+//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+//        
+//        dataSource.setDriverClassName(env.getRequiredProperty("helianto.db.driver"));
+//        dataSource.setUrl(env.getRequiredProperty("helianto.db.url"));
+//        dataSource.setUsername(env.getRequiredProperty("helianto.db.username"));
+//        dataSource.setPassword(env.getRequiredProperty("helianto.db.password"));
+//         
+//        return dataSource;
+//	}
+//	
 	/**
-	 * JNDI data source.
-	 * 
-	 * @throws NamingException 
-	 * @throws IllegalArgumentException 
+	 * Data source.
 	 */
 	@Bean
-	public DataSource dataSource() throws IllegalArgumentException, NamingException {
-		return (DataSource) jndiObjectFactoryBean();
+	public DataSource dataSource() {
+		try {
+			ComboPooledDataSource ds = new ComboPooledDataSource();
+			ds.setDriverClass(env.getProperty("helianto.jdbc.driverClassName", "org.hsqldb.jdbcDriver"));
+			ds.setJdbcUrl(env.getProperty("helianto.jdbc.url", "jdbc:hsqldb:file:target/testdb/db2;shutdown=true"));
+			ds.setUser(env.getProperty("helianto.jdbc.username", "sa"));
+			ds.setPassword(env.getProperty("helianto.jdbc.password", ""));
+			ds.setAcquireIncrement(5);
+			ds.setIdleConnectionTestPeriod(60);
+			ds.setMaxPoolSize(100);
+			ds.setMaxStatements(50);
+			ds.setMinPoolSize(10);
+			return ds;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
-	
+
 }

@@ -22,22 +22,27 @@ import javax.inject.Inject;
 import org.helianto.core.domain.Entity;
 import org.helianto.core.domain.Identity;
 import org.helianto.core.domain.Lead;
+import org.helianto.core.domain.Operator;
 import org.helianto.core.domain.Signup;
 import org.helianto.core.repository.IdentityRepository;
 import org.helianto.core.repository.LeadRepository;
+import org.helianto.core.repository.OperatorRepository;
 import org.helianto.core.repository.SignupRepository;
-import org.helianto.install.service.EntityInstallService;
 import org.helianto.install.service.EntityInstallStrategy;
 import org.helianto.install.service.UserInstallService;
 import org.helianto.security.domain.IdentitySecret;
 import org.helianto.security.internal.UserDetailsAdapter;
+import org.helianto.security.repository.SignupTmpRepository;
 import org.helianto.security.service.AuthorizationChecker;
 import org.helianto.security.util.SignInUtils;
 import org.helianto.user.domain.User;
 import org.joda.time.DateMidnight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInUtils;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,20 +51,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
 /**
- * Verify controller.
+ * Base class to verify controllers.
+ * 
+ * Subclasses must implement the prototype generation strategy accordingly.
  * 
  * @author mauriciofernandesdecastro
  */
+@Controller
 @RequestMapping("/verify")
-public abstract class AbstractVerifyController
+public class VerifyController
 	extends AbstractCryptoController
 {
 	
-	private static final Logger logger = LoggerFactory.getLogger(AbstractVerifyController.class);
+	private static final Logger logger = LoggerFactory.getLogger(VerifyController.class);
 	
-	public static final String PWD_CREATE = "/verify/createPassword";
+	public static final String PWD_CREATE = "/security/passwordCreate";
 	
-	public static final String PWD_VERIFY = "/verify/password";
+	public static final String PWD_VERIFY = "/security/password";
+	
+	@Inject 
+	private OperatorRepository contextRepository;
 	
 	@Inject 
 	private IdentityRepository identityRepository;
@@ -71,10 +82,7 @@ public abstract class AbstractVerifyController
 	private UserInstallService userInstallService;
 	
 	@Inject
-	private EntityInstallService entityInstallService;
-	
-	@Inject
-	protected EntityInstallStrategy entityInstallStrategy;
+	private EntityInstallStrategy entityInstallStrategy;
 	
 	@Inject
 	private SignupRepository signupRepository;
@@ -83,7 +91,13 @@ public abstract class AbstractVerifyController
 	private AuthorizationChecker authorizationChecker;
 	
 	@Inject
-	private ProviderSignInUtils providerSignInUtils;
+	private SignupTmpRepository signupTmpRepository;
+
+	@Inject
+	private UsersConnectionRepository connectionRepository;
+	
+	@Inject
+	private ConnectionFactoryLocator connectionFactoryLocator;
 
 	/**
 	 * Create = true if identity not yet exists.
@@ -123,13 +137,13 @@ public abstract class AbstractVerifyController
 	 * @param expirationLimit
 	 */
 	protected int findPreviousSignupAttempt(String confirmationToken, int expirationLimit) {
-		Lead lead = leadRepository.findByToken(confirmationToken);
-		if (lead!=null) {
-			if (expirationLimit>0 && lead.getIssueDate()!=null) {
-				DateMidnight expirationDate = new DateMidnight(lead.getIssueDate()).plusDays(expirationLimit + 1);
+		Signup signup = signupTmpRepository.findByToken(confirmationToken);
+		if (signup!=null) {
+			if (expirationLimit>0 && signup.getIssueDate()!=null) {
+				DateMidnight expirationDate = new DateMidnight(signup.getIssueDate()).plusDays(expirationLimit + 1);
 				logger.debug("Previous signup attempt valid to {} ", expirationDate);
-				if (!expirationDate.isAfterNow()) {
-					return identityRepository.findByPrincipal(lead.getPrincipal()).getId();
+				if (expirationDate.isAfterNow()) {
+					return identityRepository.findByPrincipal(signup.getPrincipal()).getId();
 				}
 			}
 		}
@@ -138,6 +152,7 @@ public abstract class AbstractVerifyController
 	}
 	
 	/**
+	 * Authorize.
 	 * 
 	 * @param user
 	 * @param request
@@ -146,6 +161,7 @@ public abstract class AbstractVerifyController
 		if (user != null) {
 			UserDetailsAdapter userDetails = authorizationChecker.updateAuthorities(new UserDetailsAdapter(user));
 			SignInUtils.signin(userDetails);
+			ProviderSignInUtils providerSignInUtils = new ProviderSignInUtils(connectionFactoryLocator, connectionRepository);
 			providerSignInUtils.doPostSignUp(user.getId()+"", request);
 		}
 	}
@@ -203,9 +219,10 @@ public abstract class AbstractVerifyController
 			logger.info("Will install identity secret for {}.", identity);
 			identitySecret = createIdentitySecret(identity, password);
 		}
+		Operator context = contextRepository.findOne(contextId);
 		Signup signup = getSignup(contextId, identity);
 		List<Entity> prototypes = generateEntityPrototypes(signup);
-		createEntities(prototypes, identity);
+		createEntities(context, prototypes, identity);
 		model.addAttribute("passError", "false");
 		
 		return SignUpController.WELCOME_TEMPLATE;
@@ -227,7 +244,9 @@ public abstract class AbstractVerifyController
 	 * 
 	 * @param identity
 	 */
-	protected abstract List<Entity> generateEntityPrototypes(Signup signup);
+	protected List<Entity> generateEntityPrototypes(Signup signup){
+		return entityInstallStrategy.generateEntityPrototypes(signup);
+	}
 
 	/**
 	 * Create entities.
@@ -235,10 +254,10 @@ public abstract class AbstractVerifyController
 	 * @param prototypes
 	 * @param identity
 	 */
-	protected void createEntities(List<Entity> prototypes, Identity identity) {
+	protected void createEntities(Operator context, List<Entity> prototypes, Identity identity) {
 		Entity entity = null;
 		for (Entity prototype: prototypes) {
-			entity = entityInstallService.installEntity(prototype);
+			entity = entityInstallStrategy.installEntity(context, prototype);
 			if(entity!=null){
 				createUser(entity, identity);
 			}
@@ -264,14 +283,6 @@ public abstract class AbstractVerifyController
 		}
 	}
 
-
-//	List<Entity> prototypes = entityInstallStrategy.generateEntityPrototypes(identity);
-//	Entity entity = null;
-//	for (Entity prototype: prototypes) {
-//		entity = entityInstallService.installEntity(prototype);
-//	}
-//	logger.debug("entity {} created", entity.getAlias());
-	
 	/**
 	 * Remove temporary lead.
 	 * 
