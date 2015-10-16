@@ -26,18 +26,16 @@
   <logger name="org.hibernate" level="OFF"/>
   <logger name="org.hibernate.SQL" level="ON"/>
   <logger name="org.hibernate.type" level="OFF"/>
-  <logger name="org.hibernate.jdbc" level="ON"/>
+  <logger name="org.hibernate.jdbc" level="OFF"/>
   <logger name="org.hibernate.jdbc.AbstractBatcher" level="OFF"/>
   <logger name="org.hibernate.impl" level="OFF"/>
   <logger name="org.aopalliance" level="OFF"/>
   
   <logger name="com.iservport" level="ON"/>
-  <logger name="org.helianto.seed" level="ON"/>
-  <logger name="org.helianto.install" level="ON"/>
   
-  <logger name="com.iservport.home.controller" level="DEBUG"/>
-  <logger name="com.iservport.content.controller" level="DEBUG"/>
-  <logger name="com.iservport.tfs.controller.AbstractServiceClass" level="ON"/>
+  <logger name="com.iservport.home.controller" level="OFF"/>
+  <logger name="com.iservport.content.controller" level="OFF"/>
+  <logger name="com.iservport.tfs.controller.AbstractServiceClass" level="OFF"/>
   
   <root level="INFO">          
     <appender-ref ref="STDOUT" />
