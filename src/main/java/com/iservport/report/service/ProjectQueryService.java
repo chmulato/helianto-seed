@@ -43,8 +43,21 @@ import com.iservport.user.repository.UserJournalRepository;
 public class ProjectQueryService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ProjectQueryService.class);
-	
+
 	public static final int DAYS_TO_WARN = 30;
+	
+	public static final int SECONDS_TO_CHECKIN = 1000;
+	
+	public static final int ONLY_ONE_EVENT = -1;
+
+	// finalizar projeto em andamento
+	public static final Integer VERSION_PAIR_END = Integer.valueOf(1);
+	
+	// iniciar outro projeto
+	public static final Integer VERSION_PAIR_START = Integer.valueOf(2);
+
+	// iniciar projeto novo
+	public static final Integer VERSION_ONLY_START = Integer.valueOf(1);
 	
 	@Inject
 	private ProjectRepository projectRepository;
@@ -156,6 +169,82 @@ public class ProjectQueryService {
 	}
 	
 	/**
+	 * Check if there is already the checkout ongoing project.
+	 * 
+	 * @param userId
+	 * @param projectId
+	 * @param checkinDate
+	 * @return boolean
+	 */
+	private boolean isThereACheckOut(int userId, int projectId, Date checkinDate) {
+		boolean result = false;
+		if ((userId > 0) && (projectId > 0) && (checkinDate != null)) {
+			List<SimpleCounter> simpleCounterList = userJournalRepository.findByProjectCheckOut(userId);
+			if ((simpleCounterList != null) && ( simpleCounterList.size() > 0)) {
+				// ordenar lista por firstCheckDate
+				Collections.sort(simpleCounterList);
+				int count = 0;
+				int total = simpleCounterList.size();
+				for (SimpleCounter simpleCounter : simpleCounterList) {
+					if (count == (total - 1)) {
+						Serializable s = simpleCounter.getBaseClass();
+						int id = (int) s;
+						if ((id == projectId) && (simpleCounter.getFirstCheckDate() != null)) {
+							Date dateCheckOut = simpleCounter.getFirstCheckDate();
+							if (dateCheckOut.after(checkinDate)) {
+								result = true;
+								break;
+							}
+						}
+					}
+					count = count + 1;
+				} // end for
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Check for check-out before.
+	 * 
+	 * @param userId
+	 * @param projectId
+	 * @param checkinDate
+	 * @return boolean
+	 */
+	private UserJournal getCheckOutBefore(User user, int projectId, Date checkinDate) {
+		UserJournal result = null;
+		if ((user != null) && (projectId > 0) && (checkinDate != null) && (user.getId() > 0)) {
+			int userId = user.getId();
+			List<SimpleCounter> simpleCounterList = userJournalRepository.findByProjectCheckOut(userId);
+			if ((simpleCounterList != null) && ( simpleCounterList.size() > 0)) {
+				// ordenar lista por firstCheckDate
+				Collections.sort(simpleCounterList);
+				int count = 0;
+				int total = simpleCounterList.size();
+				for (SimpleCounter simpleCounter : simpleCounterList) {
+					if (count == (total - 1)) {
+						Serializable s = simpleCounter.getBaseClass();
+						int id = (int) s;
+						if ((id == projectId) && (simpleCounter.getFirstCheckDate() != null)) {
+							Date dateCheckOut = simpleCounter.getFirstCheckDate();
+							if (dateCheckOut.before(checkinDate)) {
+								UserJournal userJournalCheckout = userJournalRepository.findByUserAndIssueDate(user, dateCheckOut);
+								if (userJournalCheckout != null) {
+									result = userJournalCheckout;
+									break;
+								}
+							}
+						}
+					}
+					count = count + 1;
+				} // end for
+			}
+		}
+		return result;
+	}
+	
+	/**
 	 * Lista de projetos.
 	 * 
 	 * @param userId
@@ -180,8 +269,11 @@ public class ProjectQueryService {
 								Serializable s = simpleCounter.getBaseClass();
 								int id = (int) s;
 								if (p.getId() == id) {
-									p.setCheckinDate(simpleCounter.getFirstCheckDate());
-									break;
+									Date checkinDate = simpleCounter.getFirstCheckDate();
+									if (!isThereACheckOut(userId, id, checkinDate)) {
+										p.setCheckinDate(checkinDate);
+										break;
+									}
 								}
 							}
 							count = count + 1;
@@ -203,9 +295,13 @@ public class ProjectQueryService {
 	 */
 	public Project projectChecked(int userId, Project project) {
 		int projectId = 0;
+		Date checkinDate = null;
+		UserJournal userJournalCheckout = null;
 		boolean blnCheckout = false;
 		Project result = null;
 		User user = null;
+		int[] ids = new int[2];
+		// inicio de validacao do projeto
 		if (project == null) {
 			throw new IllegalArgumentException("Unable to persist null project.");
 		}
@@ -213,57 +309,154 @@ public class ProjectQueryService {
 		if (project.getCheckinDate() == null) {
 			throw new IllegalArgumentException("Unable to persist, checkin date of project is null.");
 		}
+		checkinDate = project.getCheckinDate();
 		user = (User) userRepository.findOne(userId);
 		if (user == null) {
 			throw new IllegalArgumentException("Unable to persist, owner not found.");
 		}
-		logger.debug("Project checked.");
+		// log console
+		logger.debug("Validar projeto checkin...");
+		logger.debug("UserId: " + userId);
+		logger.debug("CheckinDate: " + (project.getCheckinDate() != null ? project.getCheckinDate() : "vazio"));
+		// final de validacao do projeto
 		if (projectId == 0) {
 			result = project;
 		} else {
-			List<UserJournal> userJournalList =  userJournalRepository.findCheckinByUserAndProject(userId);
-			if ((userJournalList == null) || (userJournalList.size() == 0)) {
-				throw new IllegalArgumentException("Unable to persist, checkin project not found.");
-			} else {
-				// ordenar lista por issueDate
-				Collections.sort(userJournalList);
-				int count = 0;
-				int total = userJournalList.size();
-				for (UserJournal userJournal : userJournalList) {
-					if (userJournal.getUserJournalType() == UserJournalType.PRJ_CHECK_IN) {
-						if ((count == (total - 1)) && (userJournal.getReportFolder() != null)) {
-							saveUserJournal(userJournal);
-							blnCheckout = true;
+			int doing = 0;
+			do {
+				List<UserJournal> userJournalList =  userJournalRepository.findCheckinByUserAndProject(userId);
+				if ((userJournalList == null) || (userJournalList.size() == 0)) {
+					throw new IllegalArgumentException("Unable to persist, checkin project not found.");
+				} else {
+					// ordenar lista por issueDate
+					Collections.sort(userJournalList);
+					int count = 0;
+					int total = userJournalList.size();
+					for (UserJournal userJournal : userJournalList) {
+						if (userJournal.getUserJournalType() == UserJournalType.PRJ_CHECK_IN) {
+							// selecionar o ultimo item da lista com checkin
+							if ((count == (total - 1)) && (userJournal.getReportFolder() != null)) {
+								userJournalCheckout = getCheckOutBefore(user, projectId, checkinDate);
+								if (userJournalCheckout == null) {
+									// fazer o checkout no projeto em andamento com a data de checkin
+									userJournal.setIssueDate(checkinDate);
+									userJournalCheckout = saveUserJournal(userJournal);
+									if ((userJournalCheckout != null) && (userJournalCheckout.getId() > 0)) {
+										ids[0] = userJournalCheckout.getId();
+										blnCheckout = true;
+									}
+								} else {
+									ids[0] = ONLY_ONE_EVENT;
+									blnCheckout = true;
+								}
+							}
 						}
+						count = count + 1;
+					}; // end for
+				}
+				result = projectRepository.findOne(project.getId());
+				if ((result != null) && (user != null)) {
+					if (blnCheckout) {
+						if (isThereUserJournalCheckout(userJournalCheckout)) {
+							ReportFolder reportFolder = (ReportFolder) result;
+							UserJournal userJournal = new UserJournal();
+							userJournal.setUser(user);
+							userJournal.setReportFolder(reportFolder);
+							userJournal.setUserJournalType(UserJournalType.PRJ_CHECK_IN);
+							// preparar data para o checkin no proximo projeto
+							userJournal.setIssueDate(dateCheckin(checkinDate));
+							userJournal.setVersion(VERSION_PAIR_START);
+							userJournal.setJournalCode("");
+							userJournal = userJournalRepository.save(userJournal);
+							if ((userJournal != null) && (userJournal.getId() > 0)) {
+								ids[1] = userJournal.getId();
+							}
+						}
+					} else {
+						// nao existe ainda nenhum projeto em aberto
+						ReportFolder reportFolder = (ReportFolder) result;
+						UserJournal userJournal = new UserJournal();
+						userJournal.setUser(user);
+						userJournal.setReportFolder(reportFolder);
+						userJournal.setUserJournalType(UserJournalType.PRJ_CHECK_IN);
+						userJournal.setIssueDate(checkinDate);
+						userJournal.setVersion(VERSION_ONLY_START);
+						userJournal.setJournalCode("");
+						userJournalRepository.save(userJournal);
+						ids[1] = ONLY_ONE_EVENT;
 					}
-					count = count + 1;
-				}; // end for
-			}
-			result = projectRepository.findOne(project.getId());
-			if ((result != null) && (user != null) && (blnCheckout)) {
-				ReportFolder reportFolder = (ReportFolder) result;
-				UserJournal userJournal = new UserJournal();
-				userJournal.setUser(user);
-				userJournal.setReportFolder(reportFolder);
-				userJournal.setUserJournalType(UserJournalType.PRJ_CHECK_IN);
-				userJournal.setIssueDate(project.getCheckinDate());
-				userJournal.setVersion(Integer.valueOf(1));
-				userJournal.setJournalCode("");
-				userJournalRepository.save(userJournal);
-			}
+				}
+				doing = doing + 1;
+			} while((!isSaveAll(ids)) && (doing < 2));
 		}
 		return projectRepository.saveAndFlush(result.merge(project)) ;
 	}
 	
-	private void saveUserJournal(UserJournal userJournal) {
-		UserJournal userJournalSave = new UserJournal(
-				userJournal.getVersion(),
+    /**
+     * Verificar se salvou corretamente o par de checkout/checkin.
+     */
+	private boolean isSaveAll(int[] ids) {
+		boolean isOK = false;
+		if (ids.length > 0) {
+			for (int i = 0; i < ids.length; i++) {
+				// valida se o checkout e checkin foram salvos corretamente na base
+				if (ids[i] > 0) {
+					int userJournalId = ids[i];
+					UserJournal userJournalCheckout = userJournalRepository.findOne(userJournalId);
+					if (userJournalCheckout != null) {
+						isOK = true;
+					} else {
+						isOK = false;
+					}
+				} else {
+					isOK = false;
+				}
+				// condicao para quando nao existe nenhum projeto ainda em aberto
+				if (ids[i] == ONLY_ONE_EVENT) {
+					isOK = true;
+				}
+			} // end for
+		}
+		return isOK;
+	}
+	
+    /**
+     * Verifica se o checkout foi persistido com sucesso.
+     */
+	private boolean isThereUserJournalCheckout(UserJournal userJournal) {
+		boolean isOK = false;
+		if ((userJournal !=null) && (userJournal.getId() > 0)) {
+			int userJournalId = userJournal.getId();
+			UserJournal userJournalCheckout = userJournalRepository.findOne(userJournalId);
+			if (userJournalCheckout != null) {
+				isOK = true;
+			}
+		}
+		return isOK;
+	}
+	
+    /**
+     * Salva horário de checkout.
+     */
+	private UserJournal saveUserJournal(UserJournal userJournal) {
+		UserJournal result = null;
+		UserJournal userJournalSave = new UserJournal (
+				VERSION_PAIR_END,
 				userJournal.getUser(),
-				new Date(),
+				userJournal.getIssueDate(),
 				UserJournalType.PRJ_CHECK_OUT, "",
 				userJournal.getReportFolder()
 		);
-		userJournalRepository.save(userJournalSave);
+		result = userJournalRepository.save(userJournalSave);
+		return result;
+	}
+	
+    /**
+     * Recuperar data para o checkin do projeto.
+     */
+	private Date dateCheckin(Date date) {
+		Date result = new Date(date.getTime() + SECONDS_TO_CHECKIN);
+		return result;
 	}
 	
     /**
