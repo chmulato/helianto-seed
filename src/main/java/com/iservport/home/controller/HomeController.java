@@ -15,7 +15,7 @@ import com.iservport.report.domain.Project;
 import com.iservport.report.service.ProjectQueryService;
 
 /**
- * Controlador home
+ * Controlador Home
  * 
  * @author mauriciofernandesdecastro
  */
@@ -44,14 +44,7 @@ public class HomeController {
 	 */
 	@RequestMapping(value={"/project"}, method=RequestMethod.PUT, consumes="application/json")
 	public Project projectNew(UserAuthentication userAuthentication, @RequestBody Project project) {
-		int userId = 0;
-		if ((userAuthentication != null) && (project != null) && (userAuthentication.getUserId() > 0)) {
-			userId = userAuthentication.getUserId();
-			// log console
-			System.out.println("UserId: " + userAuthentication.getUserId());
-			System.out.println("CheckinDate: " + (project.getCheckinDate() != null ? project.getCheckinDate() : "vazio"));
-		}
-		return  projectQueryService.projectChecked(userId, project);
+		return projectQueryService.projectChecked(userAuthentication.getUserId(), project);
 	}
-
+	
 }
