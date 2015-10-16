@@ -22,9 +22,9 @@
 			<div class="form-group">
 				<label  class="col-sm-3 control-label">{{'ISSUE_DATE'| i18n}}</label>
 				<div class="input-group col-md-9" >
-					<input type="hidden" name="issueDate"
-						value="{{issueDate.getTime()}}" />
-					<div data-ng-click="open($event,1)" id="issueDatePicker"
+					<input type="hidden" name="issueDate" value="{{issueDate.getTime()}}" />
+					<div data-ng-click="open($event,1)"
+					    id="issueDatePicker"
 						class="input-group"
 						data-ng-init="action.issueDate= ((action.issueDate>0 ? action.issueDate : dateNow.getTime()) | date:'shortDate')">
 						<input type="text" class="form-control"
@@ -44,9 +44,7 @@
 			<div class="form-group">
 				<label  class="col-sm-3 control-label">{{'MEMBER'| i18n}}</label>
 				<div class="input-group col-md-9" >
-					<select id="reporterId" 
-						class="form-control" name="reporterId" 
-						data-ng-model="staffMember.identityId" class="form-control" >
+					<select id="reporterId" class="form-control" name="reporterId" data-ng-model="staffMember.identityId" class="form-control" >
 								<option value="{{reporterOption.userId}}" data-ng-repeat="reporterOption in userList" >
 									{{reporterOption.userName!=null && reporterOption.userName.length > 0?reporterOption.userName:reporterOption.userKey}}
 								</option>

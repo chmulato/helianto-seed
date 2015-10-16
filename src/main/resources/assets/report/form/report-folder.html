@@ -1,279 +1,162 @@
 <div data-modal-header-wrapper>Projeto {{reportFolder.folderName}}</div>
   		
 <div class="modal-body">
-<form  data-ng-submit="updateReportFolder()" 
-	class="form-horizontal" >
-
+<form id="form-update-report-folder" data-ng-submit="updateReportFolder()" class="form-horizontal" >
 	<div class="row">
-	<div class="col-md-8" >
-
-		<!--  Nome do projeto -->
-		<div id="form-group-folderName" class="form-group">
-			<label for="folderName" class="col-sm-3 control-label">Nome do Projeto</label>
-			<div class="col-sm-9">
-				<input id="folderName" type="text" required name="folderName"
-					maxlength="64"
-					data-ng-model="reportFolder.folderName"
-					placeholder=""
-				    class="form-control" />
+		<div class="col-md-8" >
+			<!--  Nome do projeto -->
+			<div id="form-group-folderName" class="form-group">
+				<label for="folderName" class="col-sm-3 control-label">Nome do Projeto</label>
+				<div class="col-sm-9">
+					<input id="folderName" type="text" required name="folderName" maxlength="64" data-ng-model="reportFolder.folderName" placeholder="" class="form-control" />
+				</div>
+			</div>	
+			<!--  Prefixo -->
+			<div id="form-group-patternPrefix" class="form-group">
+				<label for="patternPrefix" class="col-sm-3 control-label">Prefixo</label>
+				<div class="col-sm-4">				
+					<input id="numberPrefix" type="text" name="patternPrefix" required data-ng-model="reportFolder.patternPrefix" class="form-control" />			
+				</div>
 			</div>
-		</div>	
+	
+			<!--  Situacao -->
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Situa&ccedil;&atilde;o</label>
+				<div class="col-md-6">
+					<select class="form-control" data-ng-model="reportFolder.resolution" >
+						<option value="TODO">Em an&aacute;lise</option>
+						<option value="DOING">Em andamento</option>
+						<option value="DONE">Encerrada</option>
+					</select>
+				</div>
+			</div>
 			
-		<!--  Prefixo -->
-		<div id="form-group-patternPrefix"
-			class="form-group">
-			<label for="patternPrefix" class="col-sm-3 control-label">Prefixo</label>
-			<div class="col-sm-4">				
-				<input id="numberPrefix" type="text" name="patternPrefix" required
-					data-ng-model="reportFolder.patternPrefix"
-					class="form-control" />			
+			<!-- Data de inicio  -->
+			<div class="form-group" >
+				<label for="startDatePicker" class="col-md-3 control-label">Data de in&iacute;cio</label>
+				<div class="col-sm-6">
+					<div data-ng-click="open($event,1)" id="startDatePicker" class="input-group" >
+						<input type="text" class="form-control" data-ng-model="reportFolder.startDate" data-is-open="datePicker[1]" data-datepicker-options="dateOptions" data-datepicker-popup="shortDate" data-ng-required="true" data-close-text="Close" /> 
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+						</span>
+					</div>
+				</div>
+			</div>
+			
+			<!-- Previsto para  -->
+			<div class="form-group" >
+				<label for="endDatePicker" class="col-md-3 control-label">Previsto para</label>
+				<div class="col-sm-6">
+					<div data-ng-click="open($event,2)" id="endDatePicker" class="input-group">
+						<input type="text" class="form-control" data-ng-model="reportFolder.endDate" data-is-open="datePicker[2]" data-datepicker-options="dateOptions" data-datepicker-popup="shortDate" data-ng-required="true" data-close-text="Close" /> 
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+						</span>
+					</div>
+				</div>
+			</div>
+			
+			<!-- navegação para campos texto -->
+			<ul class="nav nav-tabs">
+			  <li role="presentation" data-ng-class="{'active':isProjectSection(0)}"><a data-ng-click="setProjectSection(0)">Objetivos</a></li>
+			  <li role="presentation" data-ng-class="{'active':isProjectSection(1)}"><a data-ng-click="setProjectSection(1)">Benef&iacute;cios</a></li>
+			  <li role="presentation" data-ng-class="{'active':isProjectSection(2)}"><a data-ng-click="setProjectSection(2)">Premissas</a></li>
+			  <li role="presentation" data-ng-class="{'active':isProjectSection(3)}"><a data-ng-click="setProjectSection(3)">Entregas</a></li>
+			  <li role="presentation" data-ng-class="{'active':isProjectSection(4)}"><a data-ng-click="setProjectSection(4)">Restri&ccedil;&otilde;es</a></li>
+			</ul>
+	
+			<div id="form-group-benefits" class="form-group" data-ng-show="isProjectSection(0)">
+				<div class="col-sm-12">
+					<textarea id="contentAsString" data-redactor name="contentAsString" class="form-control" data-ng-model="reportFolder.contentAsString" rows="10"></textarea>
+				</div>
+			</div>
+			<div id="form-group-benefits" class="form-group" data-ng-show="isProjectSection(1)">
+				<div class="col-sm-12">
+					<textarea id="benefits" data-redactor name="benefits" class="form-control" data-ng-model="reportFolder.benefits" rows="10"></textarea>
+				</div>
+			</div>
+			<div id="form-group-assumptions" class="form-group" data-ng-show="isProjectSection(2)">
+				<div class="col-sm-12">
+					<textarea id="assumptions" data-redactor name="assumptions" class="form-control" data-ng-model="reportFolder.assumptions" rows="10"></textarea>
+				</div>
+			</div>
+			<div id="form-group-deliverables" class="form-group" data-ng-show="isProjectSection(3)">
+				<div class="col-sm-12">
+					<textarea id="deliverables" data-redactor name="deliverables" class="form-control" data-ng-model="reportFolder.deliverables" rows="10"></textarea>
+				</div>
+			</div>
+			<div id="form-group-constraints" class="form-group" data-ng-show="isProjectSection(4)">
+				<div class="col-sm-12">
+					<textarea id="constraints" data-redactor name="constraints" class="form-control" data-ng-model="reportFolder.constraints" rows="10"></textarea>
+				</div>
 			</div>
 		</div>
-
-		<!--  Situação -->
-		<div class="form-group">
-			<label  class="col-sm-3 control-label">Situação</label>
-			<div class="col-md-9" >
-				<select class="form-control" data-ng-model="reportFolder.resolution" >
-					<option value="TODO">Em análise</option>
-					<option value="DOING">Em andamento</option>
-					<option value="DONE">Encerrada</option>
-				</select>
-			</div>
-		</div>
-		
-		<!-- Início  -->
-		<div class="form-group" >
-		<label for="startDatePicker" class="col-md-3 control-label">Data de início</label>
-		<div class="col-sm-9">
-		<div data-ng-click="open($event,1)" id="startDatePicker"
-			class="input-group">
-			<input type="text" class="form-control" data-ng-model="reportFolder.startDate"
-				data-is-open="datePicker[1]" data-datepicker-options="dateOptions"
-				data-datepicker-popup="shortDate" data-ng-required="true"
-				data-close-text="Close" /> 
-			<span class="input-group-btn">
-				<button type="button" class="btn btn-default">
-					<i class="glyphicon glyphicon-calendar"></i>
-				</button>
-			</span>
-		</div>
-		</div>
-		</div>
-		
-		<!-- Previsto para  -->
-		<div class="form-group" >
-		<label for="endDatePicker" class="col-md-3 control-label">Previsto para</label>
-		<div class="col-sm-9">
-		<div data-ng-click="open($event,2)" id="endDatePicker"
-			class="input-group">
-			<input type="text" class="form-control" data-ng-model="reportFolder.endDate"
-				data-is-open="datePicker[2]" data-datepicker-options="dateOptions"
-				data-datepicker-popup="shortDate" data-ng-required="true"
-				data-close-text="Close" /> 
-			<span class="input-group-btn">
-				<button type="button" class="btn btn-default">
-					<i class="glyphicon glyphicon-calendar"></i>
-				</button>
-			</span>
-		</div>
-		</div>
-		</div>
-		
-		<!-- navegação para campos texto -->
-		<ul class="nav nav-tabs">
-		  <li role="presentation" data-ng-class="{'active':isProjectSection(0)}"><a data-ng-click="setProjectSection(0)">Objetivos</a></li>
-		  <li role="presentation" data-ng-class="{'active':isProjectSection(1)}"><a data-ng-click="setProjectSection(1)">Benefícios</a></li>
-		  <li role="presentation" data-ng-class="{'active':isProjectSection(2)}"><a data-ng-click="setProjectSection(2)">Premissas</a></li>
-		  <li role="presentation" data-ng-class="{'active':isProjectSection(3)}"><a data-ng-click="setProjectSection(3)">Entregas</a></li>
-		  <li role="presentation" data-ng-class="{'active':isProjectSection(4)}"><a data-ng-click="setProjectSection(4)">Restrições</a></li>
-		</ul>
-
-		<div id="form-group-benefits" class="form-group"  data-ng-show="isProjectSection(0)">
-				<div class="col-sm-12">
-					<textarea id="contentAsString" data-redactor name="contentAsString" class="form-control" data-ng-model="reportFolder.contentAsString"
-						rows="10"></textarea>
-				</div>
-		</div>
-		<div id="form-group-benefits" class="form-group"  data-ng-show="isProjectSection(1)">
-				<div class="col-sm-12">
-					<textarea id="benefits" data-redactor name="benefits" class="form-control" data-ng-model="reportFolder.benefits"
-						rows="10"></textarea>
-				</div>
-		</div>
-		<div id="form-group-assumptions" class="form-group" data-ng-show="isProjectSection(2)">
-				<div class="col-sm-12">
-					<textarea id="assumptions" data-redactor name="assumptions" class="form-control" data-ng-model="reportFolder.assumptions"
-						rows="10"></textarea>
-				</div>
-		</div>
-		<div id="form-group-deliverables" class="form-group" data-ng-show="isProjectSection(3)">
-				<div class="col-sm-12">
-					<textarea id="deliverables" data-redactor name="deliverables" class="form-control" data-ng-model="reportFolder.deliverables"
-						rows="10"></textarea>
-				</div>
-		</div>
-		<div id="form-group-constraints" class="form-group" data-ng-show="isProjectSection(4)">
-				<div class="col-sm-12">
-					<textarea id="constraints" data-redactor name="constraints" class="form-control" data-ng-model="reportFolder.constraints"
-						rows="10"></textarea>
-				</div>
-		</div>
-	</div><!-- col-md-8 -->
-	<!-- col-md-4 -->
-
+		<!-- col-md-8 -->
+		<!-- col-md-4 -->
 		<div class="col-md-4">
 			<div id="form-group-priority" class="form-group">
 				<label for="priority" class="col-sm-8 control-label">Categoria</label>
 			</div>	
 			<hr>
 			<div class="form-group" >	
-				<label for="actualEndDate" class="col-md-5 control-label">Concluído em</label>
- 				<div class="col-sm-7">
-					<input type="hidden" name="actualEndDate"
-						value="{{reportFolder.actualEndDate.getTime()}}" />
-			</div>
-			
-			<hr>
-			 <!-- 
-                 ! Equipe
-                 -->
-         		<!--    	<div id="form-group-priority" class="form-group">
-						<label for="priority" class="col-sm-8 control-label">Equipe</label>
-					</div>	
-					<hr>
-
-					<div id="form-group-member" class="form-group row">
-
-					<div data-ng-controller="MemberController as memberCtrl">
-					<div class="row" data-ng-hide="isAddMember()">
-						<div class="col-sm-3" >
-						      <img class="media-object img-circle" data-ng-click="setAddMember(true)" style="width:45px" src="/images/user/gender64-N.png">
-						</div>
+				<label for="actualEndDate" class="col-md-5 control-label">Conclu&iacute;do</label>
+					<div class="col-sm-7">
+					<div data-ng-click="open($event,3)" id="actualEndDate" class="input-group">
+						<input type="text" class="form-control" data-ng-model="reportFolder.actualEndDate" data-is-open="datePicker[3]" data-datepicker-options="dateOptions" data-datepicker-popup="shortDate" data-ng-required="false" data-close-text="Close" /> 
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+						</span>
 					</div>
-					<div id="form-group-member" class="form-group row" data-ng-show="isAddMember()">
-
-						<div class="col-sm-7">
-							<div class="input-group">
-								<input id="member" type="text" required="required" 
-									name="member" data-ng-model="valueOnTypeAhead"
-									data-typeahead="member.userName for member in getStaffMembers($viewValue)"
-									data-typeahead-loading="loadingMembers"
-									data-typeahead-on-select='onSelect($item, $model, $label)'
-									placeholder="Digite o Nome ou email"
-									class="form-control"> <i
-									data-ng-show="loadingMembers" class="glyphicon glyphicon-refresh"></i>
-							</div>
-						</div>
-						<div class="col-sm-5">
-							<div style="font-size: 12px; line-height: 1.5em;" data-ng-hide="identityMember.userId>0 || valueOnTypeAhead.length==0">
-								<i class="fa fa-angle-left"></i> Incluir Membro
-							</div>
-						</div>
-						<div  class="col-sm-4" data-ng-show="identityMember.userId>0 && valueOnTypeAhead.length>0">
-							<button class="btn btn-primary" data-ng-click="confirmStaffMember(identityMember.userId)"> Incluir {{identityMember.userName}} </button>
-						</div>
-
-					</div>
-				 --> 	
-	              	<!-- tabela com a equipe -->
-	              <!--  	<div class="row" >
-	              		<div data-ng-repeat="staffMember in staffMembers">
-	              		<div class="col-md-8" >
-		              	<div class="media" >
-						  <div class="media-left">
-						      <img class="media-object img-circle" style="width:45px" data-ng-src="{{staffMember.userImageUrl}}" data-err-src="/images/user/gender64-N.png">
-						  </div>
-						  <div class="media-body">
-						    <h4 class="media-heading">{{staffMember.displayName}}</h4>
-						    {{staffMember.firstName}} {{staffMember.lastName}}
-						  </div>
-						</div>
-						</div>
-						<div class="col-md-4">
-						  <button type="button" class="btn btn-danger" data-toggle="modal" data-ng-click="memberToDelete(staffMember.id)" data-target="#myModal">
-							<i class="fa fa-remove"></i>						 
-						  </button>
-						</div>
-						<div class="col-md-12"><br></div>
-						</div>
-		            </div> 	          
-
-		            </div>
-		          </div><!-- memberCtrl -->      
-  <!-- 
-					<div class="modal fade" id="myModal" tabindex="-1" 
-					role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-					  <div class="modal-dialog">
-					    <div class="modal-content">
-					      <div class="modal-header">
-					        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					        <h4 class="modal-title alert alert-danger" id="myModalLabel">
-					        	 Área de Risco
-					        </h4>
-					      </div>
-					      <div class="modal-body">
-					      <div data-ng-show="message.error" class="alert alert-danger" role="alert"> 
-						 	 {{message.errorMessage}}
-						   </div>
-					      <div class="alert alert-warning" role="alert">
-					      	Esta ação não poderá ser desfeita. Deseja realmente excluir 
-					      	<img class="img-circle" style="width:45px" 
-					      		data-ng-src="{{member.userImageUrl}}" 
-					      		data-err-src="/images/user/gender64-N.png"> ({{member.displayName}}) do projeto?
-					      </div>
-					      	 <button type="button" class="btn btn-default" data-ng-click="hideModal()">{{'CLOSE'}}</button>
-					        <button type="button" class="btn btn-danger" data-ng-click="deleteMember(member.id)" >Confirmar Exclusão</button>
-					    
-					     </div>
-					    
-					    </div>
-					  </div>
-					</div>
+				</div>
 				<hr>
-		 -->
-		 <div data-tools-wrapper data-parsed-model="reportFolder.tools"></div>
-		 <div data-tech-wrapper data-parsed-model="reportFolder.tools"></div>
-		 
-			<div id="form-group-tecnologiaempregada" class="form-group">
-					<label for="tecnologiaempregada" class="col-sm-8 control-label">Técnologia Empregada</label>
-			</div>	
-			<hr>	
+		        <div data-tools-wrapper data-parsed-model="reportFolder.tools">
+		        </div>
+		 	    <div data-tech-wrapper data-parsed-model="reportFolder.tools">
+		 	    </div>
+				<div id="form-group-tecnologiaempregada" class="form-group">
+					<label for="tecnologiaempregada" class="col-sm-8 control-label">T&eacute;cnologia Empregada</label>
+				</div>
+				<hr>
 				<div class="form-group">
 					<div class="col-sm-12">
 						<label class="checkbox"> 
-							<input type="checkbox" name="android" data-ng-model="reportFolder.android" id="android" value="0" checked="checked"> Android
+							<input type="checkbox" name="android" data-ng-model="reportFolder.android" id="android" value="0" checked="checked">Android
 						</label> 
 					</div>
 					<div class="col-sm-12">
 						<label class="checkbox"> 
-							<input type="checkbox"	name="pdv" data-ng-model="reportFolder.pdv" id="pdv" value="1"> PDV
+							<input type="checkbox" name="pdv" data-ng-model="reportFolder.pdv" id="pdv" value="1">PDV
 						</label> 
 					</div>
-					
 				</div>
-				<div class="form-group"><label class="col-md-3 text-left" for="folderOther">Outros</label>
+				<div class="form-group">
+					<label class="col-md-3 text-left" for="folderOther">Outros</label>
 					<div class="col-md-7">
 						<input type="text" id="outros" name="folderName" maxlength="64" data-ng-model="reportFolder.folderOther" placeholder="" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched">
-					</div></div>
-				</div>	
-				<hr>
-	</div>	
+					</div>
+				</div>
+			</div>	
+			<hr>
+		</div>	
 	</div>
+	<!-- row -->
 	<hr />
-
 	<!-- ! Submit row !-->
 	<div class="row">
 		<div class="col-md-12">
 			<!-- ! Submit button !-->
 			<div class="pull-right"> 
-				<button type="submit" name="submit" value="0" class="btn btn-primary">Salvar
-				Projeto</button>
-				<a data-dismiss="modal"  class="btn btn-default">Fechar</a>
+				<button type="submit" name="submit" value="0" class="btn btn-primary">Salvar Projeto</button>
+				<a data-dismiss="modal" class="btn btn-default">Fechar</a>
 			</div>
 		</div>
 	</div>
-
-	<!-- row -->
 </form>
 </div>
