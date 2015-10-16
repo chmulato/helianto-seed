@@ -8,7 +8,7 @@
 	<div class="col-md-8" >
 
 		<!--  Código do projeto -->
-		<div data-control-id="reportCode" data-form-group-wrapper data-label="Código do Projeto">
+		<div data-control-id="reportCode" data-form-group-wrapper data-label="C&oacute;digo do Projeto">
 		<input id="reportCode" type="text" 
 			name="reportCode" data-ng-model="reportFolder.reportCode" 
 			class="form-control" maxlength="128" readonly="readonly" />
@@ -16,11 +16,9 @@
 		<hr/>
 
 		<!--  Código do projeto -->
-		<div data-control-id="folderCode" data-form-group-wrapper data-label="Código Teste">
-		<input id="folderCode" type="text"  
-			name="folderCode" data-ng-model="reportFolder.folderCode"
-			placeholder=""
-		    class="form-control" maxlength="64" required/>
+		<div data-control-id="folderCode" data-form-group-wrapper data-label="C&oacute;digo Teste">
+		<input id="folderCode" type="text" name="folderCode" data-ng-model="reportFolder.folderCode" placeholder=""
+		    class="form-control" maxlength="64" required />
 		</div>
 
 			<div id="form-group-folderName" class="form-group">
@@ -38,16 +36,14 @@
 				class="form-group">
 				<label for="numberPrefix" class="col-sm-3 control-label">Prefixo</label>
 				<div class="col-sm-4">				
-					<input id="numberPrefix" type="text" name="numberPrefix" required
-						data-ng-model="reportFolder.numberPrefix"
-						class="form-control" />			
+					<input id="numberPrefix" type="text" name="numberPrefix" required data-ng-model="reportFolder.numberPrefix" class="form-control" />			
 				</div>
-				<label for="numberSuffix" class="col-sm-2 control-label">Máximo de tarefas</label>
+				<label for="numberSuffix" class="col-sm-2 control-label">M&aacute;ximo de tarefas</label>
 				<div class="col-sm-3">		
 					<select id="numberSuffix" name="numberSuffix" class="form-control" data-ng-model="reportFolder.numberSuffix">
 						<option value="2"> 99</option>
 						<option value="3"> 999</option>
-						<option value="4" > 9999</option>
+						<option value="4"> 9999</option>
 					</select>
 				</div>
 			</div>
@@ -56,20 +52,18 @@
 				<label  class="col-sm-3 control-label">Cliente</label>
 				<div class="col-md-9" >
 					<select class="form-control" data-ng-model="reportFolder.resolution" >
-						<option value="T">Em análise</option>
+						<option value="T">Em an&aacute;lise</option>
 						<option value="P">Em andamento</option>
 						<option value="D">Encerrada</option>
 					</select>
 				</div>
 			</div>	
 			<div class="form-group" >	
-		
-				<label for="startDate" class="col-md-3 control-label">Incluído em</label>
-				
+				<label for="startDate" class="col-md-3 control-label">Inclu&iacute;do em</label>
  				<div class="col-sm-9">
-					<input type="hidden" name="startDate"
-						value="{{reportFolder.startDate.getTime()}}" />
-					<div data-ng-click="open($event,0)" id="startDatePicker"
+					<input type="hidden" name="startDate" value="{{reportFolder.startDate.getTime()}}" />
+					<div data-ng-click="open($event,0)"
+					    id="startDatePicker"
 						class="input-group"
 						data-ng-init="reportFolder.startDate = ((reportFolder.startDate>0 ? reportFolder.startDate : dateNow.getTime()) | date:'shortDate')">
 						<input type="text" class="form-control" data-ng-model="reportFolder.startDate"
@@ -86,14 +80,15 @@
 			<div id="form-group-taskDesc" class="form-group">
 				<label for="taskDesc" class="col-sm-3 control-label">Objetivos</label>
 				<div class="col-sm-9">
-					<textarea id="taskDesc" data-redactor name="taskDesc" class="form-control" data-ng-model="reportFolder.taskDesc"
-						rows="3"></textarea>
+					<textarea id="taskDesc" data-redactor name="taskDesc" class="form-control" data-ng-model="reportFolder.taskDesc" rows="3">
+					</textarea>
 				</div>
 			</div>
 		<div class="form-group" >	
 			<label for="nextCheckDate" class="col-md-3 control-label">Previsto para</label>	
 			<div class="col-sm-9">
-				<div data-ng-click="open($event,1)" id="nextCheckDatePicker"
+				<div data-ng-click="open($event,1)"
+				        id="nextCheckDatePicker"
 						class="input-group"
 						data-ng-init="reportFolder.nextCheckDate = ((reportFolder.nextCheckDate>0 || reportFolder.nextCheckDate!=null ? reportFolder.nextCheckDate : dateNow.getTime()) | date:'shortDate')">
 						<input type="text" class="form-control" data-ng-model="reportFolder.nextCheckDate"
@@ -108,48 +103,47 @@
 			</div>	
 		</div>
 		<div id="form-group-benefits" class="form-group">
-				<label for="benefits" class="col-sm-3 control-label">Benefícios</label>
-				<div class="col-sm-9">
-					<textarea id="benefits" data-redactor name="benefits" class="form-control" data-ng-model="reportFolder.benefits"
-						rows="3"></textarea>
-				</div>
+			<label for="benefits" class="col-sm-3 control-label">Benef&iacute;cios</label>
+			<div class="col-sm-9">
+				<textarea id="benefits" data-redactor name="benefits" class="form-control" data-ng-model="reportFolder.benefits" rows="3">
+				</textarea>
+			</div>
 		</div>
 		<div id="form-group-assumptions" class="form-group">
 				<label for="assumptions" class="col-sm-3 control-label">Premissas</label>
 				<div class="col-sm-9">
-					<textarea id="assumptions" data-redactor name="assumptions" class="form-control" data-ng-model="reportFolder.assumptions"
-						rows="3"></textarea>
+					<textarea id="assumptions" data-redactor name="assumptions" class="form-control" data-ng-model="reportFolder.assumptions" rows="3">
+					</textarea>
 				</div>
 		</div>
 		<div id="form-group-deliverables" class="form-group">
 				<label for="deliverables" class="col-sm-3 control-label">Entregas</label>
 				<div class="col-sm-9">
-					<textarea id="deliverables" data-redactor name="deliverables" class="form-control" data-ng-model="reportFolder.deliverables"
-						rows="3"></textarea>
+					<textarea id="deliverables" data-redactor name="deliverables" class="form-control" data-ng-model="reportFolder.deliverables" rows="3">
+					</textarea>
 				</div>
 		</div>
 		<div id="form-group-constraints" class="form-group">
-				<label for="constraints" class="col-sm-3 control-label">Restrições</label>
+				<label for="constraints" class="col-sm-3 control-label">Restri&ccedil;&otilde;es</label>
 				<div class="col-sm-9">
-					<textarea id="constraints" data-redactor name="constraints" class="form-control" data-ng-model="reportFolder.constraints"
-						rows="3"></textarea>
+					<textarea id="constraints" data-redactor name="constraints" class="form-control" data-ng-model="reportFolder.constraints" rows="3">
+					</textarea>
 				</div>
 		</div>
 	</div>	
 	<!-- col-md-8 -->
 	<!-- col-md-4 -->
-
 		<div class="col-md-4">
 			<div id="form-group-priority" class="form-group">
 				<label for="priority" class="col-sm-8 control-label">Categoria</label>
 			</div>	
 			<hr>
 			<div class="form-group" >	
-				<label for="issueDate" class="col-md-5 control-label">Concluído em</label>
+				<label for="issueDate" class="col-md-5 control-label">Conclu&iacute;do em</label>
  				<div class="col-sm-7">
-					<input type="hidden" name="actualEndDate"
-						value="{{reportFolder.actualEndDate.getTime()}}" />
-					<div data-ng-click="open($event,0)" id="actualEndDate"
+					<input type="hidden" name="actualEndDate" value="{{reportFolder.actualEndDate.getTime()}}" />
+					<div data-ng-click="open($event,0)"
+					 	id="actualEndDate"
 						class="input-group"
 						data-ng-init="reportFolder.actualEndDate = ((reportFolder.actualEndDate>0 ? reportFolder.actualEndDate : dateNow.getTime()) | date:'shortDate')">
 						<input type="text" class="form-control" data-ng-model="reportFolder.actualEndDate"
@@ -167,9 +161,9 @@
 			<div class="form-group" >
 				<label for="issueDate" class="col-md-5 control-label">Iniciado em</label>
 				<div class="col-md-7">
-					<input type="hidden" name="issueDate"
-						value="{{review.nextCheckDate.getTime()}}" />
-					<div data-ng-click="open($event,1)" id="nextCheckDatePicker"
+					<input type="hidden" name="issueDate" value="{{review.nextCheckDate.getTime()}}" />
+					<div data-ng-click="open($event,1)"
+					    id="nextCheckDatePicker"
 						class="input-group"
 						data-ng-init="review.nextCheckDate = ((review.nextCheckDate>0 || review.nextCheckDate!=null ? review.nextCheckDate : dateNow.getTime()) | date:'shortDate')">
 						<input type="text" class="form-control" data-ng-model="review.nextCheckDate"
@@ -283,9 +277,8 @@
 		 -->
 		 <div data-tools-wrapper data-parsed-model="reportFolder.tools"></div>
 		 <div data-tech-wrapper data-parsed-model="reportFolder.tools"></div>
-		 
 			<div id="form-group-tecnologiaempregada" class="form-group">
-					<label for="tecnologiaempregada" class="col-sm-8 control-label">Técnologia Empregada</label>
+				<label for="tecnologiaempregada" class="col-sm-8 control-label">T&eacute;cnologia Empregada</label>
 			</div>	
 			<hr>	
 				<div class="form-group">
@@ -296,33 +289,30 @@
 					</div>
 					<div class="col-sm-12">
 						<label class="checkbox"> 
-							<input type="checkbox"	name="pdv" data-ng-model="reportFolder.pdv" id="pdv" value="1"> PDV
+							<input type="checkbox"name="pdv" data-ng-model="reportFolder.pdv" id="pdv" value="1"> PDV
 						</label> 
 					</div>
-					
 				</div>
-				<div class="form-group"><label class="col-md-3 text-left" for="folderOther">Outros</label>
+				<div class="form-group">
+					<label class="col-md-3 text-left" for="folderOther">Outros</label>
 					<div class="col-md-7">
 						<input type="text" id="outros" name="folderName" maxlength="64" data-ng-model="reportFolder.folderOther" placeholder="" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched">
-					</div></div>
-				</div>	
-				<hr>
-	</div>	
-
+					</div>
+				</div>
+			</div>	
+			<hr>
+		</div>	
 	<hr />
-
 	<!-- ! Submit row !-->
 	<div class="row">
 		<div class="col-md-12">
 			<!-- ! Submit button !-->
 			<div class="pull-right"> 
-				<button type="submit" name="submit" value="0" class="btn btn-primary">Salvar
-				Projeto</button>
-				<a data-dismiss="modal"  class="btn btn-default">Fechar</a>
+				<button type="submit" name="submit" value="0" class="btn btn-primary">Salvar Projeto</button>
+				<a data-dismiss="modal" class="btn btn-default">Fechar</a>
 			</div>
 		</div>
 	</div>
-
 	<!-- row -->
 </form>
 </div>

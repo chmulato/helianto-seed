@@ -1,7 +1,7 @@
 
     <div class="panel panel-default">
 	<!--
-	 ! Título
+	 ! Titulo
 	 !-->
 	<div class="panel-body">
 	<div class="row">
@@ -27,7 +27,7 @@
 		    <a class="list-group-item" data-ng-click="setReportSection(1)">Monitoramento</a>
 		  </li>
 		  <li data-ng-class="{active:isReportSection(2),disabled:report.id==-1}">
-		    <a class="list-group-item" data-ng-click="setReportSection(2)">Conteúdo</a>
+		    <a class="list-group-item" data-ng-click="setReportSection(2)">Conte&uacute;do</a>
 		  </li>
 		</ul>
 	</div>
@@ -124,11 +124,11 @@
             </div>
          <!-- 
           !
-          ! SEÇÃO -1 Pastas 
+          ! SEÃ‡ÃƒO -1 Pastas 
           ! -->
             <div class="col-md-6 col-xs-12" data-ng-show="isReportSection(-1)">
                 <!-- 
-                 ! Descrição do projeto.
+                 ! DescriÃ§Ã£o do projeto.
                  -->
                 <accordion close-others="true">
                		<accordion-group  is-open="status.open">
@@ -139,7 +139,7 @@
 						 </accordion-heading>	
               			<div data-ng-bind-html="reportFolder.contentAsString"></div>
               			 <!--
-						 ! Botão [Editar]
+						 ! BotÃ£o [Editar]
 						 !-->
 						<small class="pull-right">
 						<i class="fa fa-lock" data-ng-show="isExported(reportFolder.exporterId)"></i>
@@ -260,7 +260,7 @@
 					      <div class="modal-header">
 					        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					        <h4 class="modal-title alert alert-danger" id="myModalLabel">
-					        	 Área de Risco
+					        	 Ã�rea de Risco
 					        </h4>
 					      </div>
 					      <div class="modal-body">
@@ -268,13 +268,13 @@
 						 	 {{message.errorMessage}}
 						   </div>
 					      <div class="alert alert-warning" role="alert">
-					      	Esta ação não poderá ser desfeita. Deseja realmente excluir 
+					      	Esta aÃ§Ã£o nÃ£o poderÃ¡ ser desfeita. Deseja realmente excluir 
 					      	<img class="img-circle" style="width:45px" 
 					      		data-ng-src="{{member.userImageUrl}}" 
 					      		data-err-src="/images/user/gender64-N.png"> ({{member.displayName}}) do projeto?
 					      </div>
 					      	 <button type="button" class="btn btn-default" data-ng-click="hideModal()">{{'CLOSE'}}</button>
-					        <button type="button" class="btn btn-danger" data-ng-click="deleteMember(member.id)" >Confirmar Exclusão</button>
+					        <button type="button" class="btn btn-danger" data-ng-click="deleteMember(member.id)" >Confirmar ExclusÃ£o</button>
 					    
 					     </div>
 					    
@@ -287,7 +287,7 @@
 				</div>
          <!-- 
           !
-          ! SEÇÃO 0 Tarefas
+          ! SEÃ‡ÃƒO 0 Tarefas
           ! -->
             <div class="col-md-6 col-xs-12" data-ng-show="isReportSection(0)">
               <div class="panel panel-default" data-ng-show="report.id>0" >
@@ -300,7 +300,7 @@
 				<div class="h4"><small>{{report.reportCode}}</small></div>
 				<div class="h5" >
 					<!--
-					 ! Botão [Editar]
+					 ! BotÃ£o [Editar]
 					 !-->
 					<small class="pull-right">
 					<button  data-ng-click="getReport(report.id, null, null, true)" class="btn btn-sm btn-primary active" role="button">
@@ -312,20 +312,20 @@
             </div>
          <!-- 
           !
-          ! SEÇÃO 1
-          ! Aba Descrição 
+          ! SEÃ‡ÃƒO 1
+          ! Aba DescriÃ§Ã£o 
           !
           ! -->
             <div class="col-md-6 col-xs-12" data-ng-show="isReportSection(0)">
             <div class="panel panel-default" >
                 <div class="panel-heading">
                   <a data-ng-show="getChangeState(0)" href="" data-ng-click="openForm('form-report-aaa')" class="btn btn-default pull-right">{{'EDIT'}}</a>
-                  <div class="h4">Descrição</div>
+                  <div class="h4">DescriÃ§Ã£o</div>
                 </div>
                 <div class="panel-body" data-ng-show="customProperties.copyCategoryText=='beforeReportDesc'" style="background-color: #eee;" data-ng-bind-html="reportCategory.contentAsString">
                 <i class="fa fa-magic pull-right"></i>
                 </div>
-                <div class="panel-body" data-ng-bind-html="report.taskDesc">Descrição aqui ...</div> 
+                <div class="panel-body" data-ng-bind-html="report.taskDesc">DescriÃ§Ã£o aqui ...</div> 
               </div>
             </div>
             
@@ -348,7 +348,7 @@
             </div>
             <div class="h5" data-ng-show="report.id>0 && isReportSection(0)">
 					<!--
-					 ! Botão [Editar]
+					 ! BotÃ£o [Editar]
 					 !-->
 					<small class="pull-right">
 					<button  data-ng-click="getReport(report.id, null, null, true)" class="btn btn-sm btn-primary active" role="button">
@@ -359,8 +359,8 @@
 
          <!-- 
           !
-          ! SEÇÃO 2
-          ! Aba conteúdo 
+          ! SEÃ‡ÃƒO 2
+          ! Aba conteÃºdo 
           !
           ! -->
             <div class="col-md-6 col-xs-12" data-ng-show="isReportSection(2)"> 
@@ -375,7 +375,7 @@
          			
 		 <!-- 
           !
-          ! SEÇÃO 1
+          ! SEÃ‡ÃƒO 1
           ! Aba Monitoramento
           !
           ! -->
@@ -432,7 +432,7 @@
         </div><!-- panel-body -->
          <!-- 
           !
-          ! Rodapé 
+          ! RodapÃ© 
           !
           ! -->
         <div class="panel-footer" >
@@ -446,7 +446,7 @@
 				</button>				
         </div><!-- panel-footer folders -->
 
-        <!--panel-footer  rodapé -->
+        <!--panel-footer  rodapÃ© -->
       </div>
 
 

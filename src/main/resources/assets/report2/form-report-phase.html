@@ -6,8 +6,7 @@
 </div><!-- modal-header-->
   		
 <div class="modal-body">
-<form method="POST" data-ng-submit="updateReportPhase()" id="saveReportPhase"
-	class="form-horizontal" role="form">
+<form method="POST" data-ng-submit="updateReportPhase()" id="saveReportPhase" class="form-horizontal" role="form">
 
 	<div class="row" >
 
@@ -15,7 +14,7 @@
 		
 			<div id="form-group-literal"
 				class="form-group">
-				<label for="literal" class="col-sm-3 control-label">Código da Fase.</label>
+				<label for="literal" class="col-sm-3 control-label">C&oacute;digo da Fase.</label>
 				<div class="col-sm-9">
 					<input id="literal" type="text" name="literal"
 						data-ng-model="reportPhase.literal" class="form-control" maxlength="1"/>
@@ -41,7 +40,7 @@
 			</div>
 
 			<div id="form-group-content" class="form-group">
-				<label for="content" class="col-sm-3 control-label">Conteúdo</label>
+				<label for="content" class="col-sm-3 control-label">Conte&uacute;do</label>
 				<div class="col-sm-9">
 					<textarea  name="contentAsString" data-redactor data-ng-model="reportPhase.contentAsString"
 					 id="contentAsString" class="form-control" rows="3"></textarea>
@@ -49,13 +48,13 @@
 			</div>
 			
 			<div id="form-group-scheduledStartDate" class="form-group">
-				<label for="scheduledStartDate" class="col-sm-3 control-label">Data de Início</label>
+				<label for="scheduledStartDate" class="col-sm-3 control-label">Data de In&iacute;cio</label>
 				<div class="col-sm-9">
-					<input type="hidden" name="scheduledStartDate"
-						value="{{scheduledStartDate.getTime()}}" />
-					<div data-ng-click="open($event,1)" id="scheduledStartDatePicker"
+					<input type="hidden" name="scheduledStartDate" value="{{scheduledStartDate.getTime()}}" />
+					<div data-ng-click="open($event,1)"
+						id="scheduledStartDatePicker"
 						class="input-group"
-						data-ng-init="reportPhase.scheduledStartDate= ((reportPhase.scheduledStartDate>0 ? reportPhase.scheduledStartDate : dateNow.getTime()) | date:'shortDate')">
+						data-ng-init="reportPhase.scheduledStartDate = ((reportPhase.scheduledStartDate>0 ? reportPhase.scheduledStartDate : dateNow.getTime()) | date:'shortDate')">
 						<input type="text" class="form-control" data-ng-model="reportPhase.scheduledStartDate"
 							data-is-open="datePicker[1]" data-datepicker-options="dateOptions"
 							data-datepicker-popup="shortDate" data-ng-required="true"
@@ -71,11 +70,11 @@
 			<div id="form-group-scheduledEndDate" class="form-group">
 			<label for="scheduledEndDate" class="col-sm-3 control-label">Data de Encerramento</label>
 				<div class="col-sm-9">
-					<input type="hidden" name="scheduledEndDate"
-						value="{{scheduledEndDate.getTime()}}" />
-					<div data-ng-click="open($event,2)" id="scheduledEndDatePicker"
+					<input type="hidden" name="scheduledEndDate" value="{{scheduledEndDate.getTime()}}" />
+					<div data-ng-click="open($event,2)"
+					    id="scheduledEndDatePicker"
 						class="input-group"
-						data-ng-init="reportPhase.scheduledEndDate= (reportPhase.scheduledEndDate>0 ?reportPhase.scheduledEndDate:dateNow.getTime() | date:'shortDate')">
+						data-ng-init="reportPhase.scheduledEndDate = (reportPhase.scheduledEndDate>0 ?reportPhase.scheduledEndDate:dateNow.getTime() | date:'shortDate')">
 						<input type="text" class="form-control" data-ng-model="reportPhase.scheduledEndDate"
 							data-is-open="datePicker[2]" data-datepicker-options="dateOptions"
 							data-datepicker-popup="shortDate" data-ng-required="true"
@@ -106,9 +105,8 @@
 		<div class="col-md-12">
 			<!-- ! Submit button !-->
 			<div class="pull-right"> 
-				<button type="submit" name="submit" value="0" class="btn btn-primary">Salvar
-				fase</button>
-				<a data-dismiss="modal"  class="btn btn-default">Fechar</a>
+				<button type="submit" name="submit" value="0" class="btn btn-primary">Salvar fase</button>
+				<a data-dismiss="modal" class="btn btn-default">Fechar</a>
 			</div>
 		</div>
 	</div>

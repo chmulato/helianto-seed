@@ -15,7 +15,7 @@
 		
 			<div id="form-group-reportCode"
 				class="form-group">
-				<label for="reportCode" class="col-sm-3 control-label">Código</label>
+				<label for="reportCode" class="col-sm-3 control-label">C&oacute;digo</label>
 				<div class="col-sm-9">
 					<input id="reportCode" type="text" readonly="readonly" name="reportCode"
 						maxlength="128"
@@ -25,32 +25,24 @@
 			</div>
 
 			<label for="issueDate" class="col-sm-3 control-label"></label>
-			<label for="nextCheckDate" class="col-sm-4 control-label"><p class="pull-left">Próxima verificação</p></label>
-			<label for="scheduledEndDate" class="col-sm-4 control-label"><p class="pull-left">Término da tarefa</p></label>
+			<label for="nextCheckDate" class="col-sm-4 control-label"><p class="pull-left">Pr&oacute;xima verifica&ccedil;&atilde;o</p></label>
+			<label for="scheduledEndDate" class="col-sm-4 control-label"><p class="pull-left">T&eacute;rmino da tarefa</p></label>
 			
 			<div id="form-group-dates" class="form-group">
 		
 				<div class="col-sm-3">
-					<input type="hidden" name="issueDate"
-						value="{{dateNow.getTime()}}" />
-
+					<input type="hidden" name="issueDate" value="{{dateNow.getTime()}}" />
 						<input type="hidden" name="id" value="{{(report.id || 0)}}" />
-						
-						<input type="hidden" name="folderId"
-						value="{{aggregate}}" />
-						
-						<input type="hidden" name="categoryId"
-						value="{{categoryId}}" />
-						
-						
+						<input type="hidden" name="folderId" value="{{aggregate}}" />
+						<input type="hidden" name="categoryId" value="{{categoryId}}" />
 				</div>
 				
 				<div class="col-sm-4">
-					<input type="hidden" name="nextCheckDate"
-						value="{{nextCheckDate.getTime()}}" />
-					<div data-ng-click="open($event,1)" id="nextCheckDatePicker"
+					<input type="hidden" name="nextCheckDate" value="{{nextCheckDate.getTime()}}" />
+					<div data-ng-click="open($event,1)"
+						id="nextCheckDatePicker"
 						class="input-group"
-						data-ng-init="nextCheckDate= ((report.nextCheckDate>0 ? report.nextCheckDate : dateNow.getTime()) | date:'shortDate')">
+						data-ng-init="nextCheckDate = ((report.nextCheckDate>0 ? report.nextCheckDate : dateNow.getTime()) | date:'shortDate')">
 						<input type="text" class="form-control" data-ng-model="nextCheckDate"
 							data-is-open="datePicker[1]" data-datepicker-options="dateOptions"
 							data-datepicker-popup="shortDate" data-ng-required="true"
@@ -62,11 +54,11 @@
 					</div>
 				</div>
 				<div class="col-sm-4">
-					<input type="hidden" name="scheduledEndDate"
-						value="{{scheduledEndDate.getTime()}}" />
-					<div data-ng-click="open($event,2)" id="scheduledEndDatePicker"
+					<input type="hidden" name="scheduledEndDate" value="{{scheduledEndDate.getTime()}}" />
+					<div data-ng-click="open($event,2)"
+					    id="scheduledEndDatePicker"
 						class="input-group"
-						data-ng-init="scheduledEndDate= (report.scheduledEndDate>0 ?report.scheduledEndDate:dateNow.getTime() | date:'shortDate')">
+						data-ng-init="scheduledEndDate = (report.scheduledEndDate>0 ?report.scheduledEndDate:dateNow.getTime() | date:'shortDate')">
 						<input type="text" class="form-control" data-ng-model="scheduledEndDate"
 							data-is-open="datePicker[2]" data-datepicker-options="dateOptions"
 							data-datepicker-popup="shortDate" data-ng-required="true"
@@ -81,13 +73,9 @@
 			</div>
 
 			<div id="form-group-nextCheckDate" class="form-group">
-
-
 			</div>		
 			<div id="form-group-scheduledEndDate" class="form-group">
-				
 			</div>
-
 			<div id="form-group-summary" class="form-group">
 				<label for="summary" class="col-sm-3 control-label">Resumo</label>
 				<div class="col-sm-9">
@@ -96,18 +84,18 @@
 			</div>
 
 			<div id="form-group-taskDesc" class="form-group">
-				<label for="taskDesc" class="col-sm-3 control-label">Descrição</label>
+				<label for="taskDesc" class="col-sm-3 control-label">Descri&ccedil;&atilde;o</label>
 				<div class="col-sm-9">
-					<textarea id="taskDesc" data-redactor name="taskDesc" class="form-control" data-ng-model="report.taskDesc"
-						rows="3"></textarea>
+					<textarea id="taskDesc" data-redactor name="taskDesc" class="form-control" data-ng-model="report.taskDesc" rows="3">
+					</textarea>
 				</div>
 			</div>
 
 			<div id="form-group-content" class="form-group">
-				<label for="content" class="col-sm-3 control-label">Conteúdo</label>
+				<label for="content" class="col-sm-3 control-label">Conte&uacute;do</label>
 				<div class="col-sm-9">
-					<textarea  name="contentAsString" data-redactor data-ng-model="report.contentAsString"
-					 id="contentAsString" class="form-control" rows="3"></textarea>
+					<textarea name="contentAsString" data-redactor data-ng-model="report.contentAsString" id="contentAsString" class="form-control" rows="3">
+					</textarea>
 				</div>
 			</div>
 			<div class="form-group">
@@ -140,7 +128,7 @@
 
 			<div id="uploadMsg" class="alert alert-warning"
 				role="alert">				
-				<strong>Aba Avançado</strong>
+				<strong>Aba Avan&ccedil;ado</strong>
 				
 			</div>
 			<hr />
@@ -180,7 +168,7 @@
 			</div>
 
 			<div id="form-group-frequency" class="form-group">
-				<label for="frequency" class="col-sm-3 control-label">Notificação</label>
+				<label for="frequency" class="col-sm-3 control-label">Notifica&ccedil;&atilde;o</label>
 				<div class="col-sm-9">
 					<!--  este? linhas separadas 12 ou 6 mesmo linha? -->
 					<div class="col-sm-12">
@@ -198,7 +186,7 @@
 			</div>
 			
 			<div data-ng-show="message.exist" class="alert alert-danger col-sm-12"  role="alert"> 
-				<div class="col-sm-7"> Código Existente. </div>
+				<div class="col-sm-7"> C&oacute;digo Existente. </div>
 				<div class="col-sm-5">
 					<a href data-ng-click="getReport(message.id)" data-dismiss="modal" class="btn btn-sm btn-primary">
 						Abrir Tarefa
@@ -206,7 +194,7 @@
 				</div>
 			</div>
 			<div data-ng-show="message.filled" class="alert alert-danger col-sm-12"  role="alert"> 
-				<div class="col-sm-12"> Número máximo de Tarefas nesta pasta atingido </div>
+				<div class="col-sm-12"> N&uacute;mero m&aacute;ximo de Tarefas nesta pasta atingido </div>
 				
 			</div>
 			
@@ -216,7 +204,7 @@
 			</div>
 			
 			<div data-ng-show="message.exist" class="alert alert-danger"  role="alert"> 
-						  Código Existente.
+						  C&oacute;digo Existente.
 						<a href data-ng-click="getReport(message.id)" data-dismiss="modal" class="btn btn-sm btn-primary">
 							Abrir Tarefa
 						</a>
@@ -235,9 +223,8 @@
 		<div class="col-md-12">
 			<!-- ! Submit button !-->
 			<div class="pull-right"> 
-				<button type="submit" name="submit" value="0" class="btn btn-primary">Salvar
-				tarefa</button>
-				<a data-dismiss="modal"  class="btn btn-default">Fechar</a>
+				<button type="submit" name="submit" value="0" class="btn btn-primary">Salvar tarefa</button>
+				<a data-dismiss="modal" class="btn btn-default">Fechar</a>
 			</div>
 		</div>
 	</div>
