@@ -55,5 +55,25 @@ public interface UserJournalRepository extends JpaRepository<UserJournal, Serial
 			+ "group by project_.id "
 			+ "order by userJournal_.issueDate DESC ")
 	List<SimpleCounter> findByProjectCheckIn(int userId);
+	
+	/**
+	 * Last user journal project check-out.
+	 * 
+	 * @param userId
+	 */
+	@Query("select new "
+			+ "org.helianto.core.internal.SimpleCounter("
+			+ "  project_.id"
+			+ ", count(project_.id)"
+			+ ", max(userJournal_.issueDate)"
+			+ ") "
+			+ "from Project project_ "
+			+ "join project_.userJournals userJournal_ "
+			+ "where userJournal_.user.id = ?1 "
+			+ "and project_.resolution = 'DOING' "
+			+ "and userJournal_.userJournalType = 'PRJ_CHECK_OUT' "
+			+ "group by project_.id "
+			+ "order by userJournal_.issueDate DESC ")
+	List<SimpleCounter> findByProjectCheckOut(int userId);
 
 }
