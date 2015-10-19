@@ -1,5 +1,7 @@
 package com.iservport.config;
 
+import javax.sql.DataSource;
+
 import org.helianto.core.config.HeliantoServiceConfig;
 import org.helianto.install.service.EntityInstallStrategy;
 import org.helianto.network.service.RootQueryService;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.iservport.install.service.KeyTypeInstallService;
 import com.iservport.install.strategy.EntityByDomainInstallStrategy;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
  * Configurações Java em geral.
@@ -69,5 +72,24 @@ public class RootContextConfig extends AbstractRootContextConfig {
 	public KeyTypeInstallService keyTypeInstallService() {
 		return new KeyTypeInstallService();
 	}
+	
+//	@Bean
+//	public DataSource dataSource() {
+//		try {
+//			ComboPooledDataSource ds = new ComboPooledDataSource();
+//			ds.setDriverClass(this.env.getProperty("helianto.db.driverClassName", "com.mysql.jdbc.Driver"));
+//			ds.setJdbcUrl(this.env.getProperty("helianto.db.url","jdbc:mysql://localhost:3306/phase23?autoreconnect=true"));
+//			ds.setUser(this.env.getProperty("helianto.db.username", "root"));
+//			ds.setPassword(this.env.getProperty("helianto.db.password", "admin"));
+//			ds.setAcquireIncrement(5);
+//			ds.setIdleConnectionTestPeriod(60);
+//			ds.setMaxPoolSize(100);
+//			ds.setMaxStatements(50);
+//			ds.setMinPoolSize(10);
+//			return ds;
+//		} catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
+//	}
 
 }

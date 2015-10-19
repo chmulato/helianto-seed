@@ -41,7 +41,7 @@ public class UserJournal implements Serializable, Comparable<UserJournal>  {
 	private Date issueDate;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(length=14)
+	@Column(length=24)
 	private UserJournalType userJournalType;
 	
 	@Column(length=24)

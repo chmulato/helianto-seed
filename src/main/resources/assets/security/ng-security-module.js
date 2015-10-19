@@ -1,7 +1,7 @@
 (function() {
 	app = angular.module('security', ['ui.bootstrap', 'app.services']);
 	
-	app.controller('LoginController', ['$scope', '$window', '$http', '$resource' , 'genericServices', 'securityServices'
+	app.controller('SecurityController', ['$scope', '$window', '$http', '$resource' , 'genericServices', 'securityServices'
 	                                  , function($scope, $window, $http, $resource, genericServices, securityServices) {
 	
 		$scope.baseName = "home";
@@ -18,7 +18,6 @@
 				$scope.authList = data.content;
 			});
 		}
-		
 		$scope.cannotChangePassword = true;
 		$scope.$watch('[password,cpassword]', function () { 
 			$scope.cannotChangePassword = !genericServices.verifyPassword($scope.password, $scope.cpassword);
