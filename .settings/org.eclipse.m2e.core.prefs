@@ -1,4 +1,8 @@
 activeProfiles=
 eclipse.preferences.version=1
+<<<<<<< HEAD
 resolveWorkspaceProjects=true
+=======
+resolveWorkspaceProjects=false
+>>>>>>> refs/remotes/choose_remote_name/test
 version=1

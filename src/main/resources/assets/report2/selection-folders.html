@@ -1,0 +1,29 @@
+
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">{{'FOLDER'}}</h3>
+	</div>
+
+	<div class="list-group">
+		<a class="list-group-item" 
+			data-ng-show="personalReportFolder.id!=undefined && personalReportFolder.id>0" 
+			data-ng-click="setExternalId(0);listReports(personalReportFolder.id)" 
+			data-ng-hide="reportFolder.id == personalReportFolder.id || personalReportFolder.id==undefined ">
+			<span class="h4">{{personalReportFolder.folderName}}</span>
+			<span class="badge alert-danger" data-ng-show="personalReportFolder.countAlerts>0">{{personalReportFolder.countAlerts}}</span>
+			<span class="badge alert-warning" data-ng-show="personalReportFolder.countWarnings>0 && folder.countAlerts==0">{{personalReportFolder.countWarnings}}</span>
+			<br/><span style="font-size: 70%; color: #aaa;">{{personalReportFolder.countItems}} itens</span>
+		</a>
+	
+		<a class="list-group-item" data-ng-repeat="folder in reportFolders" data-ng-show="reportFolder.id!= folder.id" data-ng-click="setExternalId(0);listReports(folder.id)" data-ng-show="section==folder.reportType">
+			<span class="h4">{{folder.folderName}} <i data-ng-show="isExported(folder.exporterId)" class="fa fa-lock"></i></span>
+			<span class="badge alert-danger" data-ng-show="folder.countAlerts>0">{{folder.countAlerts}}</span>
+			<span class="badge alert-warning" data-ng-show="folder.countWarnings>0 && folder.countAlerts==0">{{folder.countWarnings}}</span>
+			<br/><span style="font-size: 70%; color: #aaa;">{{folder.countItems}} itens</span>
+		</a>
+		
+	</div>
+
+
+</div>

@@ -1,0 +1,12 @@
+[
+	/** 
+	 * Config file to KeyType, the parser must be allow comments to parsing this file.
+	 **/
+	  {"keyCode":"CNPJ","keyGroup":"A", "keyName":"CNPJ","purpose":"Cadastro Nacional da pessoas Jurídicas","synonyms":"CNPJ", "contextId":1}
+	, {"keyCode":"CPF","keyGroup":"A", "keyName":"CPF","purpose":"Cadastro Nacional de Pessoas Físicas","synonyms":"CPF"}
+	, {"keyCode":"PIS","keyGroup":"A", "keyName":"PIS","purpose":" Programa de Integração Social","synonyms":"PASEP"}
+	
+]
+
+
+ 

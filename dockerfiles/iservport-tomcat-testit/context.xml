@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context allowCasualMultipartParsing="true">
+    <!-- Default set of monitored resources -->
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+
+  <Parameter name="helianto.db.driver" value="com.mysql.jdbc.Driver" override="false"/>   
+    
+  <Parameter name="helianto.db.url" value="jdbc:mysql://localhost:3306/phase23?autoReconnect=true" override="false"/>   
+    
+  <Parameter name="helianto.db.username" value="helianto" override="false"/>   
+    
+  <Parameter name="helianto.db.password" value="helianto" override="false"/>   
+    
+  <!-- ISERVPORT -->
+  
+  <Parameter name="iservport.api.url" value="https://api.iservport.com" override="false"/>   
+    
+    <Parameter name="spring.profiles.default" value="standard" override="false"/>
+    
+    <Parameter name="security.encryptSalt" value="5010" override="false"/>
+    
+    <Parameter name="security.encryptPassword" value="21aa96c8bc23259d0dd2ab99e496c306" override="false"/>
+    
+  <Parameter name="iservport.s3.url" value="https://s3-sa-east-1.amazonaws.com" override="false"/>   
+    
+  <Parameter name="iservport.s3.accessKey" value="AKIAJVQFLXHQGO6DHHMA" override="false"/>   
+    
+  <Parameter name="iservport.s3.secretKey" value="xxx" override="false"/>   
+    
+  <Parameter name="iservport.sender.mail" value="mauricio@iservport.com" override="false"/>
+    
+    <Parameter name="facebook.appKey" value="1416263925347293" override="false"/>
+    
+    <Parameter name="facebook.appSecret" value="xxx" override="false"/>
+    
+  <Parameter name="helianto.sendgrid.user" value="iservport" override="false"/>   
+    
+  <Parameter name="helianto.sendgrid.password" value="xxx" override="false"/>
+  
+</Context>

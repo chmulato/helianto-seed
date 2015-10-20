@@ -1,0 +1,116 @@
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+	<h4 class="modal-title" id="modalLabel"></h4>
+	<h5>Fase {{reportPhase.literal}}</h5>
+</div><!-- modal-header-->
+  		
+<div class="modal-body">
+<form method="POST" data-ng-submit="updateReportPhase()" id="saveReportPhase"
+	class="form-horizontal" role="form">
+
+	<div class="row" >
+
+		<div class="col-md-8">
+		
+			<div id="form-group-literal"
+				class="form-group">
+				<label for="literal" class="col-sm-3 control-label">C&oacute;digo da Fase.</label>
+				<div class="col-sm-9">
+					<input id="literal" type="text" name="literal"
+						data-ng-model="reportPhase.literal" class="form-control" maxlength="1"/>
+				</div>
+			</div>
+		
+			<div id="form-group-phaseName"
+				class="form-group">
+				<label for="phaseName" class="col-sm-3 control-label">Nome</label>
+				<div class="col-sm-9">
+					<input id="phaseName" type="text" name="phaseName"
+						data-ng-model="reportPhase.phaseName" class="form-control" />
+				</div>
+			</div>
+		
+			<div id="form-group-estimate"
+				class="form-group">
+				<label for="estimate" class="col-sm-3 control-label">Estimativa(HH)</label>
+				<div class="col-sm-9">
+					<input id="estimate" type="text" name="estimate"
+						data-ng-model="reportPhase.estimate" class="form-control" />
+				</div>
+			</div>
+
+			<div id="form-group-content" class="form-group">
+				<label for="content" class="col-sm-3 control-label">Conte&uacute;do</label>
+				<div class="col-sm-9">
+					<textarea  name="contentAsString" data-redactor data-ng-model="reportPhase.contentAsString"
+					 id="contentAsString" class="form-control" rows="3"></textarea>
+				</div>
+			</div>
+			
+			<div id="form-group-scheduledStartDate" class="form-group">
+				<label for="scheduledStartDate" class="col-sm-3 control-label">Data de In&iacute;cio</label>
+				<div class="col-sm-9">
+					<input type="hidden" name="scheduledStartDate" value="{{scheduledStartDate.getTime()}}" />
+					<div data-ng-click="open($event,1)"
+					    id="scheduledStartDatePicker"
+						class="input-group"
+						data-ng-init="reportPhase.scheduledStartDate= ((reportPhase.scheduledStartDate>0 ? reportPhase.scheduledStartDate : dateNow.getTime()) | date:'shortDate')">
+						<input type="text" class="form-control" data-ng-model="reportPhase.scheduledStartDate"
+							data-is-open="datePicker[1]" data-datepicker-options="dateOptions"
+							data-datepicker-popup="shortDate" data-ng-required="true"
+							data-close-text="Close" /> <span class="input-group-btn">
+							<button type="button" class="btn btn-default">
+								<i class="glyphicon glyphicon-th"></i>
+							</button>
+						</span>
+					</div>
+				</div>
+			</div>
+			
+			<div id="form-group-scheduledEndDate" class="form-group">
+			<label for="scheduledEndDate" class="col-sm-3 control-label">Data de Encerramento</label>
+				<div class="col-sm-9">
+					<input type="hidden" name="scheduledEndDate" value="{{scheduledEndDate.getTime()}}" />
+					<div data-ng-click="open($event,2)"
+					    id="scheduledEndDatePicker"
+						class="input-group"
+						data-ng-init="reportPhase.scheduledEndDate= (reportPhase.scheduledEndDate>0 ?reportPhase.scheduledEndDate:dateNow.getTime() | date:'shortDate')">
+						<input type="text" class="form-control" data-ng-model="reportPhase.scheduledEndDate"
+							data-is-open="datePicker[2]" data-datepicker-options="dateOptions"
+							data-datepicker-popup="shortDate" data-ng-required="true"
+							data-close-text="Close" /> <span class="input-group-btn">
+							<button type="button" class="btn btn-default">
+								<i class="glyphicon glyphicon-th"></i>
+							</button>
+						</span>
+					</div>
+				</div>
+			</div>
+			
+
+		</div>
+		<!-- col-md-8 -->
+		<div class="col-md-4">
+
+		</div>
+		<!-- col-md-4 -->
+
+	</div>
+	<!-- row -->
+
+	<hr />
+
+	<!-- ! Submit row !-->
+	<div class="row">
+		<div class="col-md-12">
+			<!-- ! Submit button !-->
+			<div class="pull-right"> 
+				<button type="submit" name="submit" value="0" class="btn btn-primary">Salvar fase</button>
+				<a data-dismiss="modal"  class="btn btn-default">Fechar</a>
+			</div>
+		</div>
+	</div>
+	<!-- row -->
+</form>
+</div>

@@ -1,0 +1,108 @@
+
+<!-- 
+ ! Conteudo principal
+ !-->
+<div class="col-md-12">
+<div class="row">
+
+<!-- Welcome -->
+<div class="col-md-3 col-sm-12">
+
+<div class="panel panel-default">
+<div class="panel-body" >
+<h2><small>Bem-vindo,</small> <span data-authorized-user data-type-name="display"></span></h2>
+</div>
+</div>
+
+</div><!-- Welcome -->
+
+<!-- Main -->
+<div class="col-sm-9">
+
+<!-- 
+ - consulta para staffMember onde o user.identity.id = staffMember.identity.id, retornando lista de projetos associada
+ - 
+ -->
+	<div class="col-sm-12">
+	  <div class="panel panel-default" >
+	    <div class="panel-body">
+	      <h4>Meus projetos</h4>
+	    </div>
+		<input class="form-control" type="text" data-ng-model="criterioDeBusca" placeholder="Qual projeto voc&ecirc; busca?" data-ng-show="(projetos.length > 0)" />
+		<form name="projetoForm" data-ng-submit="updateCheckedProject()">
+			<table data-ng-show="(projetos.length > 0)" class="table">
+				<tr>
+					<th><a href="" data-ng-click="ordenarPor('folderName')">Projeto</a></th>
+					<th>In&iacute;cio</th>
+					<th>Situa&ccedil;&atilde;o</th>
+				</tr>
+				<tr data-ng-repeat="projeto in projetos | filter:criterioDeBusca |  orderBy:criterioDeOrdenacao:direcaoDaOrdenacao">
+					<td>
+						<div class="pull-left">
+						   <div class="input-group">
+						   		<a>{{projeto.folderName | uppercase}}</a>
+							</div>
+					        <div class="form-group">
+					            <div class="input-group date" data-ng-if="isUserCheckedInProject(projeto)">
+						            <!-- Date Picker -->                
+									<input class="form-control" id="date_picker" type="date" data-ng-model="now" data-ng-bind="convertToDate(now) | date:'dd/MM/yyyy'" name="date_checkin" placeholder="dd/mm/aaaa" data-ng-required="true" />
+					                 <span class="input-group-addon">
+					                 	<span class="glyphicon glyphicon-calendar"></span>
+					                 </span>
+						            <!-- Time Picker -->
+								    <input class="form-control" id="time_picker" type="time" data-ng-model="now" data-ng-bind="convertToTime(now) | date:'HH:mm'" name="hour_checkin" placeholder="hh:mm" data-ng-required="true" />
+					                <span class="input-group-addon">
+					                	<span class="glyphicon glyphicon-time"></span>
+					                </span>
+					            </div>
+					        </div>
+						</div>
+					</td>
+					<td>
+						<div data-ng-show="isUserCheckedInProject(projeto)">
+						  	{{projeto.startDate | date:'dd/MM/yyyy'}}
+		  				</div>
+					</td>
+					<td>
+						<div class="pull-right">
+						   <div class="input-group" data-ng-show="isUserCheckedInProject(projeto)">
+						   		<a class="btn btn-sm btn-danger" data-ng-click="">Check-in</a>
+							</div>		    
+							<div class="pull-right" data-ng-hide="isUserCheckedInProject(projeto)">
+							   	<a class="btn btn-sm btn-info" data-ng-click="checkIn(projeto)">Check-out</a>
+							</div>
+						</div>
+					</td>
+				</tr>		
+			</table>
+			<!--  message errors -->
+			<div data-ng-show="(projetoForm.date_checkin.$error.required && projetoForm.date_checkin.$dirty)" class="alert alert-danger">
+				Por favor, preencha data!
+			</div>
+			<div data-ng-show="(projetoForm.date_checkin.$error.date)" class="alert alert-danger">
+				O campo data deve ter o formato dd/mm/aaaa.
+			</div>
+			<div data-ng-show="(projetoForm.hour_checkin.$error.required && projetoForm.hour_checkin.$dirty)" class="alert alert-danger">
+				Por favor, preencha hora!
+			</div>
+			<div data-ng-show="(projetoForm.hour_checkin.$error.time)" class="alert alert-danger">
+				O campo hora deve ter o formato hh:mm.
+			</div>
+			<!--  message checkin inativo -->
+			<div data-ng-show="checkout" class="alert alert-danger">
+				Selecione um projeto para você atuar com checkin!
+			</div>
+			<!--  message success -->
+			<div data-ng-show="getChecked()" class="alert alert-success">
+				Checkin efetuado com sucesso!
+			</div>
+			<!--  submit button -->
+			<button id="submit_btn_id" type="submit" name="submit" class="btn btn-primary btn-block" data-ng-click="confirmar()" data-ng-disabled="projetoForm.$invalid">Confirmar</button>
+		</form>	
+	  </div>
+	</div>
+</div>
+
+</div>
+</div>
+

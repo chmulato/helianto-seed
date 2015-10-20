@@ -1,0 +1,52 @@
+<!-- <div class="col-md-12 "data-ng-show="isReportSection(-1)">
+		<table class="table table-hover">
+		  <tbody>
+		    <tr data-ng-class="{active: reportFolder.id==folder.id}" 
+		    	data-ng-click="setExternalId(0);listReports(folder.id,null,false)"
+	 			data-ng-repeat="folder in reportFolders" >
+		      <td class="h4" style="min-width:72px; width: 72px;">
+
+        <i data-ng-show="isExported(folder.exporterId)" class="fa fa-lock"></i>
+      </td>
+      <td class="">{{folder.folderCode}}
+        <h5>{{folder.folderName}}</h5>
+        <br/><span style="font-size: 70%; color: #aaa;">{{folder.countItems}} itens</span>
+      </td>
+      <td style="min-width:64px; width: 64px;">
+		<span class="badge alert-danger" data-ng-show="folder.countAlerts>0">{{folder.countAlerts}}</span>
+		<span class="badge alert-warning" data-ng-show="folder.countWarnings>0 && folder.countAlerts==0">{{folder.countWarnings}}</span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div> -->
+
+<div class="col-md-12"
+	data-ng-click="setExternalId(0);listReports(folder.id,null,false);setSectionTab(0);"
+	data-ng-repeat="folder in reportFolders.content" >
+	
+	<div class="row">
+		<!-- descrição básica do projeto -->
+		<div class="col-md-8">
+	    <div class="ui-bullet">
+	        <div class="size-h2 color-info" data-ng-hide="isProjectLate(folder)">
+	            <small><i class="glyphicon glyphicon-check"></i></small>
+	        </div>
+	        <div class="size-h2 color-warning" data-ng-show="isProjectLate(folder)">
+	            <small><i class="glyphicon glyphicon-alert"></i></small>
+	        </div>
+	        <div class="ui-bullet-content">
+	            <h4>{{folder.folderName}}</h4>
+	            <h6><small>{{folder.folderCode}}</small></h6>
+	            <p class="text-muted" data-ng-bind-html="folder.contentAsString | trustAsHtml"></p>
+	        </div>
+	    </div>
+		</div>
+		<!-- estatísticas do projeto -->
+		<div class="col-md-4">
+			<p>Total: {{folder.countItems}}</p>
+			<p>Iniciados: {{folder.countWarnings}}</p>
+			<p>Atrasados: {{folder.countAlerts}}</p>
+		</div>
+	</div>
+</div>

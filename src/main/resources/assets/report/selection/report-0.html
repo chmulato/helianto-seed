@@ -1,0 +1,135 @@
+<div class="col-md-6 col-xs-12" >
+    <!-- 
+     ! Descrição do projeto.
+     -->
+	<div class="pull-right">
+		<i class="fa fa-lock" data-ng-show="isExported(reportFolder.exporterId)"></i>
+		<div data-ng-hide="isExported(reportFolder.exporterId)" >
+			<a data-ng-click="openForm('report-folder')" class="btn btn-sm btn-primary">Editar</a>
+			<a data-ng-click="exportFolder()" class="btn btn-sm btn-primary">Exportar</a>
+		</div>
+	</div>	
+	<div data-ng-bind-html="reportFolder.contentAsString"></div>
+	<hr>
+	<div data-ng-bind-html="'<strong>Benefícios: </strong>'+reportFolder.benefits"></div>
+	<hr>
+	<div data-ng-bind-html="'<strong>Premissas: </strong>'+reportFolder.assumptions"></div>
+	<hr>
+	<div data-ng-bind-html="'<strong>Entregas: </strong>'+reportFolder.deliverables"></div>
+	<hr>
+	<div data-ng-bind-html="'<strong>Restrições: </strong>'+reportFolder.constraints"></div>
+</div>
+<div class="col-md-6 col-xs-12">		
+	<!-- 
+	 ! Fases do projeto
+	 -->
+	<div class="panel panel-default">
+	<div class="panel-body">Fases</div>
+	<table class="table">
+	<tr data-ng-repeat="reportPhase in reportPhases">
+	<td >{{reportPhase.literal}} {{reportPhase.phaseName}}</td>
+	<td>  
+		<span>{{reportPhase.scheduledStartDate | date:'dd'}} </span> 
+			<i class="fa fa-sign-in"></i>
+			<br />
+		<span>{{reportPhase.scheduledStartDate | date:'MMM'}}</span>
+	</td>
+	<td>
+		<span>{{reportPhase.scheduledEndDate | date:'dd'}} </span> 
+			<i class="fa fa-sign-out"></i>
+			<br />
+		<span>{{reportPhase.scheduledEndDate | date:'MMM'}}</span>				
+	</td>
+	<td > <button class="btn btn-default" data-ng-click="openReportPhase(reportPhase.id)"> Editar</button> </td>
+	<td>
+		<input data-ng-click="toggleSelectionPhase(reportPhase.literal);listReports(folderValue, null, true)"  type="checkbox"  data-ng-checked="phaseLiteralsContains(reportPhase.literal)" name="{{reportPhase.literal}}" > 	
+	</td>
+	</tr>
+	</table>
+	</div>	
+	<!-- 
+	 ! Equipe
+	 -->
+	<div class="panel panel-default">
+	<div class="panel-body">Equipe</div>
+	<div class="panel-body">
+	<div id="form-group-member" class="form-group row">
+		<div class="col-sm-12">
+			<div class="input-group">
+				<input id="member" type="text" required="required" 
+					name="member" data-ng-model="valueOnTypeAhead"
+					data-typeahead="member.userName for member in searchRemainingUsers($viewValue)"
+					data-typeahead-loading="loadingMembers"
+					data-typeahead-on-select='onSelect($item, $model, $label)'
+					placeholder="Digite o Nome ou email"
+					class="form-control"> <i data-ng-show="loadingMembers" class="glyphicon glyphicon-refresh"></i>
+				<span data-ng-hide="showStaffAddButton()" class="input-group-addon">
+					<i class="fa fa-angle-left"></i> Procurar</span>
+				<span data-ng-show="showStaffAddButton()" class="input-group-btn">
+					<button class="btn btn-primary" data-ng-click="newStaffMember(identityMember.identityId)"> Incluir</button>
+				</span>
+			</div>
+		</div>
+	</div>
+	</div>
+	<!-- tabela com a equipe -->
+	<ul class="list-group">
+	<li class="list-group-item" data-ng-repeat="staffMember in staffMembers">
+		<div class="media">
+			<button type="button" class="btn btn-xs btn-danger pull-right" data-toggle="modal"
+				data-ng-click="memberToDelete(staffMember)"
+				data-target="#deleteStaffModal">
+				<i class="fa fa-remove"></i>
+			</button>
+			<div class="media-left">
+				<img class="media-object img-circle" style="width: 45px"
+					data-ng-src="{{staffMember.identityImageUrl}}"
+					data-err-src="/images/user/gender64-N.png">
+			</div>
+			<div class="media-body">
+				<h4 class="media-heading">{{staffMember.identityDisplayName}}</h4>
+				{{staffMember.identityFirstName}} {{staffMember.identityLastName}}
+			</div>
+		</div>
+	</li>
+	</ul>
+	<div class="modal fade" id="deleteStaffModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Área de Risco</h4>
+				</div>
+				<div class="modal-body">
+					<div data-ng-show="message.error" class="alert alert-danger"
+						role="alert">{{message.errorMessage | i18n}}</div>
+					<div class="media">
+						<div class="media-left">
+							<img class="media-object img-circle" style="width: 45px"
+								data-ng-src="{{memberToDelete.identityImageUrl}}"
+								data-err-src="/images/user/gender64-N.png">
+						</div>
+						<div class="media-body">
+							<h4 class="media-heading">{{memberToDelete.identityDisplayName}}</h4>
+							{{memberToDelete.identityFirstName}} {{memberToDelete.identityLastName}}
+						</div>
+					</div>
+					<div class="alert alert-warning" role="alert">
+						Esta ação não poderá ser desfeita. Deseja realmente excluir o usuário acima do projeto?
+					</div>
+					<button type="button" class="btn btn-default"
+						data-ng-click="hideModal()">{{'CLOSE' | i18n}}</button>
+					<button type="button" class="btn btn-danger"
+						data-ng-click="deleteMember(memberToDelete.id)">Confirmar
+						Exclusão</button>
+				</div>
+
+			</div>
+		</div>
+	</div>	
+	</div>
+</div>

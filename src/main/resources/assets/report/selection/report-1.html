@@ -1,0 +1,124 @@
+<!-- 
+ ! Lado Tarefas
+ ! -->
+<div class="col-md-4 col-xs-12 ">
+	<div class="col-md-12">
+	      <div class="btn-group">
+		  <button type="button" class="btn btn-default">Fases</button>
+		  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+		    <span class="caret"></span>
+		    <span class="sr-only">Toggle Dropdown</span>
+		  </button>
+		  <ul class="dropdown-menu" role="menu">
+		    <li data-ng-repeat="reportPhase in reportPhases">
+			  {{'PHASE' | i18n}} {{reportItem.phase}} {{reportPhase.phaseName}}  
+				<input data-ng-click="toggleSelectionPhase(reportPhase.literal);listReports(folderValue, null, true)"  
+					type="checkbox"  
+					data-ng-checked="phaseLiteralsContains(reportPhase.literal)" 
+					name="{{reportPhase.literal}}" /> 	
+		    </li>
+		  </ul>
+		</div>	
+	</div>
+	<div class="col-md-12"><br></div>
+	<table class="table table-hover">
+	  <tbody>
+	    <tr data-ng-class="{active: reportItem.id==report.id}" 
+	    	data-ng-click="getReport(reportItem.id);listReviews(reportItem.id)"
+				data-ng-repeat="reportItem in reportList.content" >
+	      <td class="h4" style="min-width:72px; width: 72px;">
+	        <i class="{{reportItem.openingIcon}}"></i> |
+	        <i class="{{reportItem.closingIcon}}"></i>
+	      </td>
+	      <td class="mail-ontact"><a href="mail_detail.html">{{'PHASE' | i18n}} {{reportItem.phase}} {{reportItem.reportCode}}</a>
+	        <h5>{{reportItem.summary}}</h5>
+	      </td>
+	      <td style="min-width:64px; width: 64px;">
+	        <span>{{reportItem.issueDate | date:'dd'}} </span> 
+	        <i class="fa fa-sign-in"></i>
+	        <br />
+	        <span>{{reportItem.issueDate | date:'MMM'}}</span>
+	      </td>
+	      <td data-ng-hide="reportItem.closed" style="min-width:64px; width: 64px;">
+	        <span>{{reportItem.nextCheckDate | date:'dd'}} </span> 
+	        <i class="fa fa-sign-out"></i>
+	        <br />
+	        <span>{{reportItem.nextCheckDate | date:'MMM'}}</span>
+	      </td>
+	    </tr>
+	  </tbody>
+	</table>
+</div>
+<div class="col-md-6 col-xs-12" >
+  <div class="panel panel-default" data-ng-show="report.id>0" >
+  	<small class="pull-right">
+	<label   class="btn btn-sm btn-default active" >
+		{{report.nextCheckDate | date :'shortDate'}}
+	</label>
+	</small>		
+	<div class="h4">{{report.summary}}</div>
+	<div class="h4"><small>{{report.reportCode}}</small></div>
+	<div class="h5" >
+	<!--
+	 ! Botão [Editar]
+	 !-->
+	<small class="pull-right">
+	<button  data-ng-click="getReport(report.id, null, null, true)" class="btn btn-sm btn-primary active" role="button">
+		Editar
+	</button>
+	</small>
+	</div>
+	</div>
+</div>
+<!-- 
+ !
+ ! Lado Descrição 
+ !
+ ! -->
+<div class="col-md-8 col-xs-12" >
+		<!--
+		 ! Botão [Editar]
+		 !-->
+		<div class="row">
+		<div class="col-md-12" >
+		<small class="pull-right">
+		<button  data-ng-click="getReport(report.id, null, null, true)" class="btn btn-sm btn-primary active" role="button">
+			Editar
+		</button>
+		</small>
+		</div>
+		</div>
+		<!--
+		 ! Painel
+		 !-->
+        <div class="panel panel-default" >
+        	<!-- cabeçalho descrição-->
+            <div class="panel-heading">
+              <div class="h4">Descrição</div>
+            </div>
+        	<!-- dado pela categoria -->
+            <div class="panel-body" data-ng-show="customProperties.copyCategoryText=='beforeReportDesc'" style="background-color: #eee;" data-ng-bind-html="reportCategory.contentAsString">
+            <i class="fa fa-magic pull-right"></i>
+            </div>
+        	<!-- descrição -->
+            <div class="panel-body" data-ng-bind-html="report.taskDesc | trustAsHtml"></div>
+        	<!-- cabeçalho resultado -->
+            <div class="panel-heading">
+              <div class="h4">Resultado</div>
+            </div>
+        	<!-- dado pela categoria -->
+            <div class="panel-body" data-ng-show="customProperties.customCheckListMapBeforeReportResult!=undefined && customProperties.customCheckListMapBeforeReportResult!=null" style="background-color: #eee;">
+            <i class="fa fa-magic pull-right"></i>
+            	<div class="checkbox" data-ng-repeat="checkListItem in customProperties.customCheckListMapBeforeReportResult">
+            	<label for="customCheckListMapBeforeReportResult_{{$index}}" >
+            	<input type="checkbox" id="customCheckListMapBeforeReportResult_{{$index}}" data-ng-true-value="false"> {{checkListItem}}
+            	</label>
+            	</div>
+            </div>
+        	<!-- resultado -->
+            <div class="panel-body" data-ng-bind-html="report.contentAsString | trustAsHtml"></div> 
+          </div>
+        </div>
+        <div class="h5" data-ng-show="report.id>0 && isReportSection(0)">
+</div>
+

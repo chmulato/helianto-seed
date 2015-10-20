@@ -1,0 +1,44 @@
+<!--
+ ! 1.d. Report
+ !-->
+<div class="row">
+	<div class="col-md-2">
+		<img data-ng-src="/images/resolution/resolution64-{{report.resolution}}.png" class="img-circle" />
+	</div>
+	<div class="col-md-10">
+		<small class="pull-right">
+			<label   class="btn btn-sm btn-default active" >
+				{{report.nextCheckDate | date :'shortDate'}}
+			</label>
+		</small>		
+		<div class="h4">{{report.summary}}</div>
+		<div class="h4"><small>{{report.reportCode}}</small></div>
+		<div class="h5" >
+			<!--
+			 ! Botão [Editar]
+			 !-->
+			<small class="pull-right">
+			<button  ng-click="openReport(report.id)" class="btn btn-sm btn-primary active" role="button">
+				Editar
+			</button>
+			</small>
+		</div>
+	</div>
+	
+</div>
+
+<div role="tabpanel">
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#taskDesc" aria-controls="taskDesc" role="tab" data-toggle="tab">Descrição</a></li>
+    <li role="presentation"><a href="#content" aria-controls="content" role="tab" data-toggle="tab">Conteúdo</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="taskDesc"><div data-ng-bind-html="report.taskDesc"></div></div>
+    <div role="tabpanel" class="tab-pane" id="content"><div data-ng-bind-html="report.contentAsString"></div></div>
+  </div>
+
+</div>

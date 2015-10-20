@@ -1,0 +1,162 @@
+<div data-modal-header-wrapper>Projeto {{reportFolder.folderName}}</div>
+  		
+<div class="modal-body">
+<form id="form-update-report-folder" data-ng-submit="updateReportFolder()" class="form-horizontal" >
+	<div class="row">
+		<div class="col-md-8" >
+			<!--  Nome do projeto -->
+			<div id="form-group-folderName" class="form-group">
+				<label for="folderName" class="col-sm-3 control-label">Nome do Projeto</label>
+				<div class="col-sm-9">
+					<input id="folderName" type="text" required name="folderName" maxlength="64" data-ng-model="reportFolder.folderName" placeholder="" class="form-control" />
+				</div>
+			</div>	
+			<!--  Prefixo -->
+			<div id="form-group-patternPrefix" class="form-group">
+				<label for="patternPrefix" class="col-sm-3 control-label">Prefixo</label>
+				<div class="col-sm-4">				
+					<input id="numberPrefix" type="text" name="patternPrefix" required data-ng-model="reportFolder.patternPrefix" class="form-control" />			
+				</div>
+			</div>
+	
+			<!--  Situacao -->
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Situa&ccedil;&atilde;o</label>
+				<div class="col-md-6">
+					<select class="form-control" data-ng-model="reportFolder.resolution" >
+						<option value="TODO">Em an&aacute;lise</option>
+						<option value="DOING">Em andamento</option>
+						<option value="DONE">Encerrada</option>
+					</select>
+				</div>
+			</div>
+			
+			<!-- Data de inicio  -->
+			<div class="form-group" >
+				<label for="startDatePicker" class="col-md-3 control-label">Data de in&iacute;cio</label>
+				<div class="col-sm-6">
+					<div data-ng-click="open($event,1)" id="startDatePicker" class="input-group" >
+						<input type="text" class="form-control" data-ng-model="reportFolder.startDate" data-is-open="datePicker[1]" data-datepicker-options="dateOptions" data-datepicker-popup="shortDate" data-ng-required="true" data-close-text="Close" /> 
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+						</span>
+					</div>
+				</div>
+			</div>
+			
+			<!-- Previsto para  -->
+			<div class="form-group" >
+				<label for="endDatePicker" class="col-md-3 control-label">Previsto para</label>
+				<div class="col-sm-6">
+					<div data-ng-click="open($event,2)" id="endDatePicker" class="input-group">
+						<input type="text" class="form-control" data-ng-model="reportFolder.endDate" data-is-open="datePicker[2]" data-datepicker-options="dateOptions" data-datepicker-popup="shortDate" data-ng-required="true" data-close-text="Close" /> 
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+						</span>
+					</div>
+				</div>
+			</div>
+			
+			<!-- navegação para campos texto -->
+			<ul class="nav nav-tabs">
+			  <li role="presentation" data-ng-class="{'active':isProjectSection(0)}"><a data-ng-click="setProjectSection(0)">Objetivos</a></li>
+			  <li role="presentation" data-ng-class="{'active':isProjectSection(1)}"><a data-ng-click="setProjectSection(1)">Benef&iacute;cios</a></li>
+			  <li role="presentation" data-ng-class="{'active':isProjectSection(2)}"><a data-ng-click="setProjectSection(2)">Premissas</a></li>
+			  <li role="presentation" data-ng-class="{'active':isProjectSection(3)}"><a data-ng-click="setProjectSection(3)">Entregas</a></li>
+			  <li role="presentation" data-ng-class="{'active':isProjectSection(4)}"><a data-ng-click="setProjectSection(4)">Restri&ccedil;&otilde;es</a></li>
+			</ul>
+	
+			<div id="form-group-benefits" class="form-group" data-ng-show="isProjectSection(0)">
+				<div class="col-sm-12">
+					<textarea id="contentAsString" data-redactor name="contentAsString" class="form-control" data-ng-model="reportFolder.contentAsString" rows="10"></textarea>
+				</div>
+			</div>
+			<div id="form-group-benefits" class="form-group" data-ng-show="isProjectSection(1)">
+				<div class="col-sm-12">
+					<textarea id="benefits" data-redactor name="benefits" class="form-control" data-ng-model="reportFolder.benefits" rows="10"></textarea>
+				</div>
+			</div>
+			<div id="form-group-assumptions" class="form-group" data-ng-show="isProjectSection(2)">
+				<div class="col-sm-12">
+					<textarea id="assumptions" data-redactor name="assumptions" class="form-control" data-ng-model="reportFolder.assumptions" rows="10"></textarea>
+				</div>
+			</div>
+			<div id="form-group-deliverables" class="form-group" data-ng-show="isProjectSection(3)">
+				<div class="col-sm-12">
+					<textarea id="deliverables" data-redactor name="deliverables" class="form-control" data-ng-model="reportFolder.deliverables" rows="10"></textarea>
+				</div>
+			</div>
+			<div id="form-group-constraints" class="form-group" data-ng-show="isProjectSection(4)">
+				<div class="col-sm-12">
+					<textarea id="constraints" data-redactor name="constraints" class="form-control" data-ng-model="reportFolder.constraints" rows="10"></textarea>
+				</div>
+			</div>
+		</div>
+		<!-- col-md-8 -->
+		<!-- col-md-4 -->
+		<div class="col-md-4">
+			<div id="form-group-priority" class="form-group">
+				<label for="priority" class="col-sm-8 control-label">Categoria</label>
+			</div>	
+			<hr>
+			<div class="form-group" >	
+				<label for="actualEndDate" class="col-md-5 control-label">Conclu&iacute;do</label>
+					<div class="col-sm-7">
+					<div data-ng-click="open($event,3)" id="actualEndDate" class="input-group">
+						<input type="text" class="form-control" data-ng-model="reportFolder.actualEndDate" data-is-open="datePicker[3]" data-datepicker-options="dateOptions" data-datepicker-popup="shortDate" data-ng-required="false" data-close-text="Close" /> 
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+						</span>
+					</div>
+				</div>
+				<hr>
+		        <div data-tools-wrapper data-parsed-model="reportFolder.tools">
+		        </div>
+		 	    <div data-tech-wrapper data-parsed-model="reportFolder.tools">
+		 	    </div>
+				<div id="form-group-tecnologiaempregada" class="form-group">
+					<label for="tecnologiaempregada" class="col-sm-8 control-label">T&eacute;cnologia Empregada</label>
+				</div>
+				<hr>
+				<div class="form-group">
+					<div class="col-sm-12">
+						<label class="checkbox"> 
+							<input type="checkbox" name="android" data-ng-model="reportFolder.android" id="android" value="0" checked="checked">Android
+						</label> 
+					</div>
+					<div class="col-sm-12">
+						<label class="checkbox"> 
+							<input type="checkbox" name="pdv" data-ng-model="reportFolder.pdv" id="pdv" value="1">PDV
+						</label> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 text-left" for="folderOther">Outros</label>
+					<div class="col-md-7">
+						<input type="text" id="outros" name="folderName" maxlength="64" data-ng-model="reportFolder.folderOther" placeholder="" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched">
+					</div>
+				</div>
+			</div>	
+			<hr>
+		</div>	
+	</div>
+	<!-- row -->
+	<hr />
+	<!-- ! Submit row !-->
+	<div class="row">
+		<div class="col-md-12">
+			<!-- ! Submit button !-->
+			<div class="pull-right"> 
+				<button type="submit" name="submit" value="0" class="btn btn-primary">Salvar Projeto</button>
+				<a data-dismiss="modal" class="btn btn-default">Fechar</a>
+			</div>
+		</div>
+	</div>
+</form>
+</div>

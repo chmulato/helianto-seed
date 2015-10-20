@@ -1,0 +1,85 @@
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	<span class="h4 modal-title" id="modalLabel" > {{'EXPORT' | i18n}} : {{reportFolder.folderName}}</span>
+	
+</div><!-- modal-header-->
+  		
+<div class="modal-body">
+<form  data-ng-submit="saveExport()" id=""
+	class="form-horizontal" role="form">
+
+	<div class="row">
+		<!-- Entidades ainda não selecionadas -->
+		<div class="col-md-8" data-ng-show="entityList.content.length>0">	
+		 <div class="h3"> exportar para : </div>
+		</div>
+		<div class="col-md-8" data-ng-repeat="entity in entityList.content" >
+			<div class="col-md-1">
+				<input data-ng-click="toggleSelection(entity.id)"  type="checkbox" 
+				id="item-" name="{{entity.id}}" > 
+			</div>
+			<div class="btn col-md-11">
+				<div class="media">
+					<div class="media-top media-left">
+						<img style="width: 80px;" data-ng-src="{{entity.externalLogoUrl}}"></img>
+					</div>
+					<div class="media-body media-left">
+				   		<div class="h4 text-left" style="white-space: normal;">
+				    			{{entity.entityAlias}}
+				    	</div>
+				    </div>
+				</div>						
+			</div>
+		</div>	
+		<div class="col-md-8" data-ng-show="entityListExported.content.length>0">	
+		 <div class="h3">J&aacute; exportado para : </div>
+		</div>
+		<div class="col-md-8" data-ng-repeat="entity in entityListExported.content" data-ng-init="toggleSelection(entity.id)">
+			<div class="col-md-1">
+				<input data-ng-click="toggleSelection(entity.id)"  type="checkbox" 
+				id="item-" name="{{entity.id}}" checked="checked"> 
+			</div>
+			<div class="btn col-md-11">
+				<div class="media">
+					<div class="media-top media-left">
+						<img style="width: 80px;" data-ng-src="{{entity.externalLogoUrl}}"></img>
+					</div>
+					<div class="media-body media-left">
+				   		<div class="h4 text-left" style="white-space: normal;">
+				    			{{entity.entityAlias}}
+				    	</div>
+				    </div>
+				</div>						
+			</div>
+		</div>
+		<!-- col-md-8 -->
+		<div class="col-md-4">
+			<div ng-show="message.exist" class="alert alert-danger" role="alert"> 
+						  C&oacute;digo Existente.
+						<a href ng-click="selectReportFolder(message.id,0)" class="btn btn-sm btn-primary">
+							Abrir pasta
+						</a>
+			</div>
+			<div ng-show="message.error" class="alert alert-danger" role="alert">Erro ao salvar pasta
+			</div>
+		</div><!--col-md-4  -->	 
+		
+
+	</div>
+	<!-- row -->
+
+	<hr />
+
+	<!-- ! Submit row !-->
+	<div class="row">
+		<div class="col-md-12">
+			<!-- ! Submit button !-->
+			<div class="pull-right"> 
+				<button type="submit" name="submit" value="0" class="btn btn-primary">Exportar Pasta</button>
+				<a data-dismiss="modal" class="btn btn-default">Fechar</a>
+			</div>
+		</div>
+	</div>
+	<!-- row -->
+</form>
+</div>
