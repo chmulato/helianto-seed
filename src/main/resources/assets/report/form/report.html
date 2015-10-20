@@ -8,7 +8,6 @@
 <div class="modal-body">
 <form method="POST" data-ng-submit="updateReport()" id="saveReport" class="form-horizontal" role="form">
 	<div class="row" >
-
 		<div class="col-md-8">
 			<div id="form-group-reportCode" class="form-group">
 				<label for="reportCode" class="col-sm-3 control-label">C&oacute;digo</label>
@@ -28,7 +27,7 @@
 		
 				<div class="col-sm-3">
 					<input type="hidden" name="issueDate" value="{{dateNow.getTime()}}" />
-						<input type="hidden" name="id" value="{{(report.id || 0)}}" />
+					<input type="hidden" name="id" value="{{(report.id || 0)}}" />
 					<input type="hidden" name="folderId" value="{{aggregate}}" />
 					<input type="hidden" name="categoryId" value="{{categoryId}}" />
 				</div>
@@ -38,7 +37,7 @@
 					<div data-ng-click="open($event,1)"
 					    id="nextCheckDatePicker"
 						class="input-group"
-						data-ng-init="nextCheckDate= ((report.nextCheckDate>0 ? report.nextCheckDate : dateNow.getTime()) | date:'shortDate')">
+						data-ng-init="nextCheckDate = ((report.nextCheckDate>0 ? report.nextCheckDate : dateNow.getTime()) | date:'shortDate')">
 						<input type="text" class="form-control" data-ng-model="nextCheckDate"
 							data-is-open="datePicker[1]" data-datepicker-options="dateOptions"
 							data-datepicker-popup="shortDate" data-ng-required="true"
@@ -54,7 +53,7 @@
 					<div data-ng-click="open($event,2)"
 					    id="scheduledEndDatePicker"
 						class="input-group"
-						data-ng-init="scheduledEndDate= (report.scheduledEndDate>0 ?report.scheduledEndDate:dateNow.getTime() | date:'shortDate')">
+						data-ng-init="scheduledEndDate = (report.scheduledEndDate>0 ?report.scheduledEndDate:dateNow.getTime() | date:'shortDate')">
 						<input type="text" class="form-control" data-ng-model="scheduledEndDate"
 							data-is-open="datePicker[2]" data-datepicker-options="dateOptions"
 							data-datepicker-popup="shortDate" data-ng-required="true"
@@ -65,24 +64,17 @@
 						</span>
 					</div>
 				</div>
-				
 			</div>
-
 			<div id="form-group-nextCheckDate" class="form-group">
-
-
 			</div>		
 			<div id="form-group-scheduledEndDate" class="form-group">
-				
 			</div>
-
 			<div id="form-group-summary" class="form-group">
 				<label for="summary" class="col-sm-3 control-label">Resumo</label>
 				<div class="col-sm-9">
 					<input id="summary" name="summary" class="form-control" data-ng-model="report.summary"/>
 				</div>
 			</div>
-
 			<div id="form-group-taskDesc" class="form-group">
 				<label for="taskDesc" class="col-sm-3 control-label">Descri&ccedil;&atilde;o</label>
 				<div class="col-sm-9">
@@ -99,7 +91,7 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label  class="col-sm-3 control-label">Relator</label>
+				<label class="col-sm-3 control-label">Relator</label>
 				<div class="input-group col-md-9" >
 					<select id="reporterId" 
 						class="form-control" name="reporterId" 
@@ -138,7 +130,6 @@
 					</div>	
 				</div>
 			</div>
-
 			<div id="form-group-priority" class="form-group">
 				<label for="priority" class="col-sm-3 control-label">Prioridade</label>
 				<div class="col-sm-9">
@@ -183,7 +174,7 @@
 				</div>
 			</div>
 			
-			<div data-ng-show="message.exist" class="alert alert-danger col-sm-12"  role="alert"> 
+			<div data-ng-show="message.exist" class="alert alert-danger col-sm-12" role="alert"> 
 				<div class="col-sm-7"> C&oacute;digo Existente.</div>
 				<div class="col-sm-5">
 					<a href data-ng-click="getReport(message.id)" data-dismiss="modal" class="btn btn-sm btn-primary">
@@ -191,17 +182,17 @@
 					</a>
 				</div>
 			</div>
-			<div data-ng-show="message.filled" class="alert alert-danger col-sm-12"  role="alert"> 
+			<div data-ng-show="message.filled" class="alert alert-danger col-sm-12" role="alert"> 
 				<div class="col-sm-12">N&uacute;mero m&aacute;ximo de Tarefas nesta pasta atingido </div>
 				
 			</div>
 			
 			<div data-ng-show="message.error" class="alert alert-danger col-sm-12"  role="alert"> 
-				<div class="col-sm-12"> Erro grave! saia e entre novamente no Sistema. </div>
+				<div class="col-sm-12">Erro grave! saia e entre novamente no Sistema. </div>
 				
 			</div>
 			
-			<div data-ng-show="message.exist" class="alert alert-danger"  role="alert"> 
+			<div data-ng-show="message.exist" class="alert alert-danger" role="alert"> 
 						  C&oacute;digo Existente.
 						<a href data-ng-click="getReport(message.id)" data-dismiss="modal" class="btn btn-sm btn-primary">
 							Abrir Tarefa

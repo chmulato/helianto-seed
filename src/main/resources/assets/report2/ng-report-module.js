@@ -6,8 +6,8 @@
 //		}
 //
 //	})
-	app.controller('ReportController', ['$scope', '$window', '$http', '$resource' , 'genericServices', 'securityServices'
-	                              	                                  , function($scope, $window, $http, $resource, genericServices, securityServices) {
+	app.controller('ReportController', ['$scope', '$window', '$http', '$resource' , 'genericServices'
+	                              	    , function($scope, $window, $http, $resource, genericServices) {
 	
 		var baseUrl = '/api/report/';
 		$scope.graphResource = $resource(baseUrl + "/graph");
@@ -19,16 +19,6 @@
 //		$scope.burnUpExecution = [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 17 }, { x: 3, y: 42 } ];
 		$scope.renderer = 'line';
 		
-		securityServices.getCategoryMap();
-		$scope.showMenuItem =  function(code){
-			return securityServices.showMenuItem(code);
-		}
-		$scope.isAuthorized = function(role, ext){
-			return securityServices.isAuthorized(role, ext);
-		}
-		$scope.logout = function(){
-			return securityServices.logout();
-		}
 		$http.get('/app/home/entity').success(function(data, status, headers, config) {
 			return 	$scope.authorizedEntity = data;
 		})
@@ -821,38 +811,6 @@
 	}])
 	;
 
-	/**
-	 * View Controller
-	 */
-	app.controller('ViewController', ['$scope', '$http', 'securityServices', function($scope, $http, securityServices) {
-		
-		/**
-		 * Abas
-		 */
-		$scope.sectionTab = 1;
-		$scope.setSectionTab = function(value) {
-			this.sectionTab = value;
-	    };
-	    $scope.isSectionTabSet = function(value) {
-	      return this.sectionTab === value;
-	    };
-
-		/**
-		 * Autorização
-		 */
-		$scope.authList =[];
-		defineAuthorities();
-		function defineAuthorities(){
-			securityServices.getAuthorizedRoles(null).success(function(data, status, headers, config) {
-				$scope.authList = data.content;
-			});
-		}
-		$scope.isAuthorized =function(role, ext){
-			return securityServices.isAuthorized($scope.authList, role, ext);
-		}
-		
-	}]);
-	
 	/**
 	 * Prime control
 	 */

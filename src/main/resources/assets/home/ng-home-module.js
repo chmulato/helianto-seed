@@ -10,8 +10,8 @@
 			, { save: { method: 'PUT'}, create: {method: 'POST' }, remove:{method:'DELETE'}});
 		return service;
 	}])
-	.controller('HomeController', ['$scope', '$window', '$http', 'resources' , 'genericServices', 'securityServices'
-	                                  , function($scope, $window, $http, resources, genericServices, securityServices) {
+	.controller('HomeController', ['$scope', '$window', '$http', 'resources' , 'genericServices'
+	                                  , function($scope, $window, $http, resources, genericServices) {
 	
 		$scope.baseName = "home";
 		

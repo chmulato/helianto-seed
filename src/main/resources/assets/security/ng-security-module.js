@@ -1,30 +1,17 @@
 (function() {
 	app = angular.module('security', ['ui.bootstrap', 'app.services']);
 	
-	app.controller('SecurityController', ['$scope', '$window', '$http', '$resource' , 'genericServices', 'securityServices'
-	                                  , function($scope, $window, $http, $resource, genericServices, securityServices) {
+	app.controller('SecurityController', ['$scope', '$window', '$http', '$resource' , 'genericServices'
+	                                  , function($scope, $window, $http, $resource, genericServices) {
 	
 		$scope.baseName = "home";
 		$scope.menuName = "home";
 		$scope.email = email!='undefined'?email:'' ;
 		
-		/**
-		 * Autorização
-		 */
-		$scope.authList =[];
-		defineAuthorities();
-		function defineAuthorities(){
-			securityServices.getAuthorizedRoles(null).success(function(data, status, headers, config) {
-				$scope.authList = data.content;
-			});
-		}
 		$scope.cannotChangePassword = true;
 		$scope.$watch('[password,cpassword]', function () { 
 			$scope.cannotChangePassword = !genericServices.verifyPassword($scope.password, $scope.cpassword);
 		}, true);
-		$scope.isAuthorized =function(role, ext){
-			return securityServices.isAuthorized($scope.authList, role, ext);
-		}
 		$scope.loginResource = $resource("/login/",{ username:"@username", password: "@password", rememberme:"@rememberme"},{
 			login : { method:'POST',  headers : {'Content-Type': 'application/x-www-form-urlencoded'}}
 		});
